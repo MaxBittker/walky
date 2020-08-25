@@ -66,7 +66,6 @@ window.addEventListener("keydown", event => {
   if (event.keyCode === 40) {
     vy = speed;
   }
-  console.log(event.keyCode);
 });
 window.addEventListener("keyup", event => {
   if (event.keyCode === 37) {
@@ -81,7 +80,6 @@ window.addEventListener("keyup", event => {
   if (event.keyCode === 40) {
     vy = 0;
   }
-  console.log(event.keyCode);
 });
 function tick() {
   if (targetX != null) {
