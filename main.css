@@ -7,6 +7,8 @@ body {
     rgb(251, 231, 231) 3px,
     rgb(224, 231, 226) 6px
   ); */
+  width: 100vw;
+  height: 100vh;
 }
 * {
   color: #333;
@@ -14,8 +16,27 @@ body {
   /* border: 1px red solid; */
 }
 
+img {
+  position: absolute;
+  z-index: 1;
+}
+#chair {
+  width: 100px;
+
+  left: 20%;
+  top: 65%;
+}
+
+#fern {
+  height: 300px;
+  left: 25%;
+  top: 25%;
+  z-index: 1;
+}
+
 #walker {
   position: absolute;
   width: 100px;
   height: 100px;
+  z-index: 2;
 }
