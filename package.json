@@ -1,20 +1,18 @@
 {
-  "name": "clear-pipes",
+  "name": "walky",
   "version": "1.0.0",
-  "description": "visualize dataa flow demo",
+  "description": "walk and collage",
   "main": "index.js",
   "dependencies": {
     "@types/matter-js": "^0.14.4",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
-    "@types/two.js": "^0.7.2",
     "assets": "^3.0.1",
     "matter-js": "^0.14.2",
     "morphdom": "^2.6.1",
     "parcel": "^1.12.4",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "two.js": "^0.7.0-stable.1"
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
@@ -33,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MaxBittker/clear-pipes.git"
+    "url": "git+https://github.com/MaxBittker/walky.git"
   },
   "author": "",
   "license": "ISC",
