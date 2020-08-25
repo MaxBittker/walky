@@ -23,6 +23,33 @@ window.addEventListener("click", event => {
   targetY = event.pageY;
 });
 
+
+window.addEventListener("touchmove", event => {
+
+  // event. preventDefault();
+  const touches = event.targetTouches;
+
+  for (let i = 0; i < touches.length; i++) {
+    targetX = touches[i].pageX;
+    targetY = touches[i].pageY;
+  
+  }
+
+});
+
+window.addEventListener("touchstart", event => {
+
+  // event. preventDefault();
+  const touches = event.targetTouches;
+
+  for (let i = 0; i < touches.length; i++) {
+    targetX = touches[i].pageX;
+    targetY = touches[i].pageY;
+  
+  }
+
+});
+
 let speed = 2
 window.addEventListener("keydown", event => {
   targetX = null;
