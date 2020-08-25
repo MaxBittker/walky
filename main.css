@@ -1,0 +1,21 @@
+body {
+  font-family: "Libre Franklin", sans-serif;
+  /* background-size: 12px 12px;
+  background-image: radial-gradient(
+    circle,
+    rgb(248, 218, 191) 1px,
+    rgb(251, 231, 231) 3px,
+    rgb(224, 231, 226) 6px
+  ); */
+}
+* {
+  color: #333;
+  margin: 0;
+  /* border: 1px red solid; */
+}
+
+#walker {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+}
