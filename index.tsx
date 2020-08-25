@@ -22,20 +22,22 @@ window.addEventListener("click", event => {
   targetX = event.pageX;
   targetY = event.pageY;
 });
+
+let speed = 2
 window.addEventListener("keydown", event => {
   targetX = null;
   targetY = null;
   if (event.keyCode === 37) {
-    vx = -3;
+    vx = -speed;
   }
   if (event.keyCode === 38) {
-    vy = -3;
+    vy = -speed;
   }
   if (event.keyCode === 39) {
-    vx = 3;
+    vx = speed;
   }
   if (event.keyCode === 40) {
-    vy = 3;
+    vy = speed;
   }
   console.log(event.keyCode);
 });
@@ -57,12 +59,12 @@ window.addEventListener("keyup", event => {
 function tick() {
   if (targetX != null) {
     if( Math.abs(targetX-x)>10){
-      vx = 3 * (targetX < x ? -1 : 1);
+      vx = speed * (targetX < x ? -1 : 1);
     }else{
       vx = 0;
     }
     if( Math.abs(targetY-y)>10 ){
-     vy = 3 * (targetY < y ? -1 : 1);
+     vy = speed * (targetY < y ? -1 : 1);
     }else{
       vy = 0
     }
