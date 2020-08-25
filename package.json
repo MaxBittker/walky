@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "parcel develop index.html",
-    "build": "parcel build index.html  -d docs --public-url /clear-pipes/"
+    "build": "parcel build index.html  -d docs --public-url /walky/"
   },
   "repository": {
     "type": "git",
