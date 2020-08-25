@@ -25,18 +25,18 @@ img {
 
   left: 20%;
   top: 65%;
+  z-index: 2;
 }
 
 #fern {
   height: 300px;
   left: 25%;
   top: 25%;
-  z-index: 1;
 }
 
 #walker {
   position: absolute;
   width: 100px;
   height: 100px;
-  z-index: 2;
+  z-index: 10;
 }

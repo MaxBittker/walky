@@ -1,9 +1,10 @@
 import * as React from "react";
 import * as ReactDOMServer from "react-dom/server";
-import image from "./assets/walk1.gif";
+import walk from "./assets/walk1.gif";
+import stand from "./assets/stand1.gif";
 
 let imageHTML = ReactDOMServer.renderToStaticMarkup(
-  <img id="walker" src={image}></img>
+  <img id="walker" src={walk}></img>
 );
 let wd = document.getElementById("window");
 
@@ -81,6 +82,7 @@ window.addEventListener("keyup", event => {
     vy = 0;
   }
 });
+let wasMoving = false;
 function tick() {
   if (targetX != null) {
     if( Math.abs(targetX-x)>10){
@@ -98,10 +100,20 @@ function tick() {
   x += vx;
   y += vy;
 
-
+  let moving = false;
+  if(Math.abs(vx)>0.01 || Math.abs(vy)>0.01){
+    moving = true
+  }
+  console.log(moving);
   walker.style = `left: ${x}; top: ${y};   transform: translate(-50%, -50%) scaleX(${
     vx < 0 ? -1 : 1
   });`;
+  let newsrc = moving ? walk : stand;
+  if(wasMoving!== moving){
+  
+      walker.src = newsrc;
+      wasMoving = moving;
+  }
   window.requestAnimationFrame(tick);
 }
 
