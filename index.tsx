@@ -9,6 +9,7 @@ import * as Matter from "matter-js";
 let Vector = Matter.Vector;
 
 let frame = { x: window.innerWidth, y: window.innerHeight };
+let facing = true;
 let center = Vector.div(frame, 2);
 let pos: Matter.Vector = { x: 200, y: 200 };
 let camera: Matter.Vector = { x: 200, y: 200 };
@@ -102,7 +103,7 @@ function render() {
         style={{
           left: relPos.x,
           top: relPos.y,
-          transform: `translate(-50%, -75%) scaleX(${velocity.x < 0 ? -1 : 1})`
+          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`
         }}
       ></img>
 
@@ -126,7 +127,7 @@ function render() {
 }
 window.addEventListener("keyup", event => {
   if (event.keyCode === 37) {
-    velocity.x = -0.000000001;
+    velocity.x = -0;
   }
   if (event.keyCode === 38) {
     velocity.y = -0;
@@ -154,6 +155,12 @@ function tick() {
 
   pos = Vector.add(pos, velocity);
 
+  if (velocity.x < -0.1) {
+    facing = true;
+  }
+  if (velocity.x > 0.1) {
+    facing = false;
+  }
   let distanceFromPos = Vector.magnitude(Vector.sub(pos, camera));
 
   let camera_speed = speed;
