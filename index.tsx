@@ -160,7 +160,7 @@ function tick() {
   if (distanceFromPos < Vector.magnitude(frame) / 20) {
     camera_speed = 0;
   }
-  camera_speed *= distanceFromPos / 400;
+  camera_speed *= distanceFromPos / (Vector.magnitude(frame) / 6);
   let directionTowardsPos = Vector.normalise(Vector.sub(pos, camera));
   camera = Vector.add(camera, Vector.mult(directionTowardsPos, camera_speed));
 
