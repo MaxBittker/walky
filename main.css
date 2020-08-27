@@ -9,6 +9,7 @@ body {
   ); */
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 * {
   color: #333;
@@ -19,19 +20,7 @@ body {
 img {
   position: absolute;
   z-index: 1;
-}
-#chair {
-  width: 100px;
-
-  left: 20%;
-  top: 65%;
-  z-index: 2;
-}
-
-#fern {
-  height: 300px;
-  left: 25%;
-  top: 25%;
+  /* transform: translate(-50%, -50%); */
 }
 
 #walker {
@@ -39,4 +28,5 @@ img {
   width: 100px;
   height: 100px;
   z-index: 10;
+  filter: contrast(120%);
 }

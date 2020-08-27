@@ -3,25 +3,26 @@ import ReactDOM from "react-dom";
 import * as ReactDOMServer from "react-dom/server";
 import walk from "./assets/walk1.gif";
 import stand from "./assets/stand1.gif";
+import chair from "./assets/Classroom+Chair.jpg";
+import fern from "./assets/fern.jpg";
 import * as Matter from "matter-js";
 let Vector = Matter.Vector;
 
-// let imageHTML = ReactDOMServer.renderToStaticMarkup(
-//   <img id="walker" src={walk}></img>
-// );
-// let wd = document.getElementById("window");
-
-// wd.innerHTML = imageHTML;
-// let walker = document.getElementById("walker");
-
+let frame = { x: window.innerWidth, y: window.innerHeight };
+let center = Vector.div(frame, 2);
 let pos: Matter.Vector = { x: 200, y: 200 };
 let camera: Matter.Vector = { x: 200, y: 200 };
 let velocity: Matter.Vector = { x: 0, y: 0 };
 
 let target: Matter.Vector = null;
 
+function convertTarget(t: Matter.Vector) {
+  return Vector.sub(Vector.add(t, camera), center);
+}
 window.addEventListener("click", event => {
-  target = { x: event.pageX, y: event.pageY };
+  let eventPos = { x: event.pageX, y: event.pageY };
+
+  target = convertTarget(eventPos);
 });
 
 window.addEventListener("touchmove", event => {
@@ -29,7 +30,7 @@ window.addEventListener("touchmove", event => {
   const touches = event.targetTouches;
 
   for (let i = 0; i < touches.length; i++) {
-    target = { x: touches[i].pageX, y: touches[i].pageY };
+    target = convertTarget({ x: touches[i].pageX, y: touches[i].pageY });
   }
 });
 
@@ -38,7 +39,7 @@ window.addEventListener("touchstart", event => {
   const touches = event.targetTouches;
 
   for (let i = 0; i < touches.length; i++) {
-    target = { x: touches[i].pageX, y: touches[i].pageY };
+    target = convertTarget({ x: touches[i].pageX, y: touches[i].pageY });
   }
 });
 
@@ -58,26 +59,49 @@ window.addEventListener("keydown", event => {
     velocity.y = speed;
   }
 });
-
+let imgs = [
+  {
+    url: chair,
+    pos: { x: 20, y: 300 }
+  },
+  {
+    url: fern,
+    pos: { x: 600, y: 500 }
+  }
+];
 function render() {
   let moving = false;
   if (Math.abs(velocity.x) > 0.01 || Math.abs(velocity.y) > 0.01) {
     moving = true;
   }
   let newsrc = moving ? walk : stand;
+  let relPos = Vector.add(Vector.sub(pos, camera), center);
 
   const element = (
     <React.Fragment>
-      <h2>It is {new Date().toLocaleTimeString()}.</h2>
       <img
         id="walker"
         src={newsrc}
         style={{
-          left: pos.x,
-          top: pos.y,
-          transform: `translate(-50%, -50%) scaleX(${velocity.x < 0 ? -1 : 1})`
+          left: relPos.x,
+          top: relPos.y,
+          transform: `translate(-50%, -75%) scaleX(${velocity.x < 0 ? -1 : 1})`
         }}
       ></img>
+
+      {imgs.map(({ url, pos }, i) => {
+        let relPos = Vector.sub(pos, camera);
+        return (
+          <img
+            key={i}
+            src={url}
+            style={{
+              left: relPos.x,
+              top: relPos.y
+            }}
+          />
+        );
+      })}
     </React.Fragment>
   );
   ReactDOM.render(element, document.getElementById("window"));
@@ -111,6 +135,13 @@ function tick() {
   }
 
   pos = Vector.add(pos, velocity);
+
+  let distanceFromPos = Vector.magnitude(Vector.sub(pos, camera));
+
+  if (distanceFromPos > Vector.magnitude(frame) / 8) {
+    let directionTowardsPos = Vector.normalise(Vector.sub(pos, camera));
+    camera = Vector.add(camera, Vector.mult(directionTowardsPos, speed));
+  }
 
   render();
 
