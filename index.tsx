@@ -62,13 +62,30 @@ window.addEventListener("keydown", event => {
 let imgs = [
   {
     url: chair,
-    pos: { x: 20, y: 300 }
+    pos: { x: 20, y: 305 },
+    scale: 0.2
   },
   {
     url: fern,
-    pos: { x: 600, y: 500 }
+    pos: { x: 300, y: 200 },
+    scale: 0.9
   }
 ];
+function nrandom() {
+  return Math.random() - 0.5;
+}
+for (var i = 0; i < 15; i++) {
+  imgs.push({
+    url: chair,
+    pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
+    scale: nrandom() * 2
+  });
+  imgs.push({
+    url: fern,
+    pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
+    scale: Math.random()
+  });
+}
 function render() {
   let moving = false;
   if (Math.abs(velocity.x) > 0.01 || Math.abs(velocity.y) > 0.01) {
@@ -89,7 +106,7 @@ function render() {
         }}
       ></img>
 
-      {imgs.map(({ url, pos }, i) => {
+      {imgs.map(({ url, pos, scale }, i) => {
         let relPos = Vector.sub(pos, camera);
         return (
           <img
@@ -97,7 +114,8 @@ function render() {
             src={url}
             style={{
               left: relPos.x,
-              top: relPos.y
+              top: relPos.y,
+              transform: `scale(${scale}) `
             }}
           />
         );
@@ -138,10 +156,13 @@ function tick() {
 
   let distanceFromPos = Vector.magnitude(Vector.sub(pos, camera));
 
-  if (distanceFromPos > Vector.magnitude(frame) / 8) {
-    let directionTowardsPos = Vector.normalise(Vector.sub(pos, camera));
-    camera = Vector.add(camera, Vector.mult(directionTowardsPos, speed));
+  let camera_speed = speed;
+  if (distanceFromPos < Vector.magnitude(frame) / 20) {
+    camera_speed = 0;
   }
+  camera_speed *= distanceFromPos / 400;
+  let directionTowardsPos = Vector.normalise(Vector.sub(pos, camera));
+  camera = Vector.add(camera, Vector.mult(directionTowardsPos, camera_speed));
 
   render();
 

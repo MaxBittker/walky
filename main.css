@@ -20,6 +20,7 @@ body {
 img {
   position: absolute;
   z-index: 1;
+  mix-blend-mode: multiply;
   /* transform: translate(-50%, -50%); */
 }
 
@@ -29,4 +30,5 @@ img {
   height: 100px;
   z-index: 10;
   filter: contrast(120%);
+  mix-blend-mode: normal;
 }
