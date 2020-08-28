@@ -49,6 +49,7 @@ function processUpdate(packet: any) {
   let state = getState();
   if (type == PacketTypes.agentUpdate) {
     state.agents = Object.values(data);
+    console.log(state.agents[0].lastUpdated - Date.now());
   } else if (type == PacketTypes.entityUpdate) {
     state.entities = Object.values(data);
   }
