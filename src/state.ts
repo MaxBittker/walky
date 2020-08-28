@@ -16,7 +16,7 @@ let state: StateLayout = {
     target: undefined,
     facing: true,
     moving: false,
-    lastUpdated: Date.now(),
+    lastUpdated: 0,
     color: Math.random() * 360
   },
   camera: { x: 200, y: 200 },
