@@ -64,6 +64,7 @@ function clockSync(pingData: PingLayout) {
   console.log("ping: " + pingMs);
   let state = getState();
   state.tick = pingData.tick + pingMs / (16 * 2);
+  state.me.lastUpdated = state.tick;
 }
 
 function processUpdate(packet: PacketLayout) {
