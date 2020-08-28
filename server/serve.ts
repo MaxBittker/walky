@@ -36,6 +36,9 @@ wsServer.on("request", function(request) {
       uuid = data.uuid;
       agentState[uuid] = data;
     } else if (type == PacketTypes.entityUpdate) {
+      if (Object.keys(entityState).length > 30) {
+        return;
+      }
       let data = packet.data as EntityLayout;
       entityState[data.uuid] = data;
       sendEntityUpdate();
@@ -52,6 +55,7 @@ function sendEntityUpdate() {
     type: PacketTypes.entityUpdate,
     data: entityState
   });
+  console.log("sending entities");
   openConnections.forEach((connection: websocket.connection) => {
     connection.sendUTF(packet);
   });

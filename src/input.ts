@@ -48,7 +48,7 @@ function startInput() {
   let up = false;
   let right = false;
   let down = false;
-
+  let keypoll: number;
   window.addEventListener("keydown", event => {
     if (event.keyCode === 37) {
       left = true;
@@ -62,6 +62,7 @@ function startInput() {
     if (event.keyCode === 40) {
       down = true;
     }
+    keypoll = window.setInterval(pollKeys, 16);
   });
   window.addEventListener("keyup", event => {
     if (event.keyCode === 37) {
@@ -79,6 +80,7 @@ function startInput() {
   });
   function pollKeys() {
     if (!(left || right || up || down)) {
+      window.clearInterval(keypoll);
       return;
     }
     let velocity = { x: 0, y: 0 };
@@ -96,10 +98,9 @@ function startInput() {
     }
 
     let state = getState();
-    let keyTarget = Vector.add(state.me.pos, Vector.mult(velocity, 5));
+    let keyTarget = Vector.add(state.me.pos, Vector.mult(velocity, 25));
     state.me.target = keyTarget;
   }
-  window.setInterval(pollKeys, 16);
 }
 
 export { startInput };
