@@ -7,6 +7,9 @@ import { getState } from "./src/state";
 
 startInput();
 let i = 0;
+
+let debug = document.getElementById("debug");
+
 function tick() {
   let state = getState();
   let { me, agents } = state;
@@ -16,17 +19,18 @@ function tick() {
   // console.log("agents:");
   state.agents = agents.map(agent => updateAgent(agent, state.tick));
 
+  debug.innerHTML = state.tick;
   updateCamera();
   render();
   if (i % 10 == 0) {
     sendUpdate();
   }
-  if (i % 100 == 0) {
+  if (i % 60 == 0) {
     requestClockSync();
   }
 
   i++;
-  window.setTimeout(tick, 1000 / 16);
+  window.setTimeout(tick, 1000 / 60);
 }
 // tick();
 window.requestAnimationFrame(tick);

@@ -33,3 +33,8 @@ img {
   filter: contrast(120%);
   mix-blend-mode: normal;
 }
+#debug {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
