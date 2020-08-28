@@ -21,6 +21,7 @@ img {
   position: absolute;
   z-index: 1;
   mix-blend-mode: multiply;
+  pointer-events: none;
   /* transform: translate(-50%, -50%); */
 }
 

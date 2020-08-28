@@ -1,10 +1,12 @@
 import * as Matter from "matter-js";
 
 interface EntityLayout {
+  uuid: string;
   url: string;
   pos: Matter.Vector;
   scale: number;
 }
+
 interface AgentLayout {
   uuid: string;
   pos: Matter.Vector;
@@ -24,11 +26,12 @@ interface StateLayout {
 }
 
 enum PacketTypes {
-  agentUpdate = 1
+  agentUpdate = 1,
+  entityUpdate = 2
 }
 interface PacketLayout {
   type: PacketTypes;
-  data: AgentLayout;
+  data: AgentLayout | EntityLayout;
 }
 
 export { StateLayout, EntityLayout, AgentLayout, PacketTypes, PacketLayout };

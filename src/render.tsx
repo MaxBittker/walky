@@ -32,7 +32,6 @@ function renderAgent(agent: AgentLayout) {
 }
 function render() {
   const { camera, entities, me, agents } = getState();
-
   const element = (
     <React.Fragment>
       {agents.map(renderAgent)}

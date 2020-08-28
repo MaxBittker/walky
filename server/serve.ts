@@ -1,7 +1,12 @@
 // Node.js WebSocket server script
 import * as http from "http";
 import * as websocket from "websocket";
-import { AgentLayout, PacketTypes, PacketLayout } from "../src/types";
+import {
+  AgentLayout,
+  PacketTypes,
+  PacketLayout,
+  EntityLayout
+} from "../src/types";
 import { updateAgent } from "../src/movement";
 const server = http.createServer();
 server.listen(9898);
@@ -9,7 +14,8 @@ const wsServer = new websocket.server({
   httpServer: server
 });
 
-let state: { [uuid: string]: AgentLayout } = {};
+let agentState: { [uuid: string]: AgentLayout } = {};
+let entityState: { [uuid: string]: EntityLayout } = {};
 
 let openConnections = new Set<websocket.connection>();
 
@@ -21,35 +27,51 @@ wsServer.on("request", function(request) {
     if (!message.utf8Data) {
       return;
     }
+
     let packet: PacketLayout = JSON.parse(message.utf8Data);
-    let { type, data } = packet;
+    let { type } = packet;
 
     if (type == PacketTypes.agentUpdate) {
+      let data = packet.data as AgentLayout;
       uuid = data.uuid;
-      state[uuid] = data;
-      console.log(state);
+      agentState[uuid] = data;
+    } else if (type == PacketTypes.entityUpdate) {
+      let data = packet.data as EntityLayout;
+      entityState[data.uuid] = data;
+      sendEntityUpdate();
     }
   });
   connection.on("close", function(reasonCode, description) {
     openConnections.delete(connection);
-    delete state[uuid];
+    delete agentState[uuid];
     console.log("Client has disconnected.");
   });
 });
-
-function sendUpdate() {
-  let new_data = JSON.stringify(state);
-  openConnections.forEach((connection: websocket.connection) => {
-    connection.sendUTF(new_data);
+function sendEntityUpdate() {
+  let packet = JSON.stringify({
+    type: PacketTypes.entityUpdate,
+    data: entityState
   });
-  setTimeout(sendUpdate, 16 * 2);
+  openConnections.forEach((connection: websocket.connection) => {
+    connection.sendUTF(packet);
+  });
 }
-sendUpdate();
+function sendAgentUpdate() {
+  let packet = JSON.stringify({
+    type: PacketTypes.agentUpdate,
+    data: agentState
+  });
+  openConnections.forEach((connection: websocket.connection) => {
+    connection.sendUTF(packet);
+  });
+  setTimeout(sendAgentUpdate, 16 * 2);
+}
+sendAgentUpdate();
 
 function tick() {
-  for (var key in state) {
-    let agent = state[key];
-    state[key] = updateAgent(agent);
+  for (var key in agentState) {
+    let agent = agentState[key];
+    agentState[key] = updateAgent(agent);
   }
   setTimeout(tick, 16);
 }
