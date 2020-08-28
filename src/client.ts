@@ -4,7 +4,7 @@ import { nrandom } from "./utils";
 import { v4 as uuidv4 } from "uuid";
 import chair from "./../assets/Classroom+Chair.jpg";
 import fern from "./../assets/fern.jpg";
-const ws = new WebSocket("ws://localhost:9898/");
+const ws = new WebSocket("ws://159.203.112.6:9898/");
 
 ws.onopen = function() {
   console.log("WebSocket Client Connected");
