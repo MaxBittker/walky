@@ -31,12 +31,13 @@ function renderAgent(agent: AgentLayout) {
   );
 }
 function render() {
-  const { camera, entities, me, agents } = getState();
+  const { camera, entities, me, agents, center } = getState();
   const element = (
     <React.Fragment>
       {agents.map(renderAgent)}
       {entities.map(({ url, pos, scale }, i) => {
-        let relPos = Vector.sub(pos, camera);
+        let relPos = Vector.add(Vector.sub(pos, camera), center);
+
         return (
           <img
             key={i}
