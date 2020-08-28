@@ -1,8 +1,16 @@
 import { getState } from "./state";
-import { convertTarget } from "./utils";
+import * as Matter from "matter-js";
+let Vector = Matter.Vector;
+
+function convertTarget(t: Matter.Vector) {
+  const { camera, center } = getState();
+  return Vector.sub(Vector.add(t, camera), center);
+}
+
 function startInput() {
   window.addEventListener("click", event => {
-    console.log("click");
+    event.preventDefault();
+
     let state = getState();
     let eventPos = { x: event.pageX, y: event.pageY };
     state.me.target = convertTarget(eventPos);

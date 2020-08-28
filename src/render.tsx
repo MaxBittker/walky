@@ -1,15 +1,18 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
-// import * as ReactDOMServer from "react-dom/server";
 import walk from "./../assets/walk1.gif";
 import stand from "./../assets/stand1.gif";
 import * as Matter from "matter-js";
-import { getState, AgentLayout } from "./state";
+import { getState } from "./state";
+import { AgentLayout } from "./types";
 let Vector = Matter.Vector;
 
 function renderAgent(agent: AgentLayout) {
-  let { pos, moving, facing } = agent;
-  let { camera, center } = getState();
+  let { camera, center, me } = getState();
+  if (agent.uuid == me.uuid) {
+    agent = me;
+  }
+  let { pos, moving, facing, color } = agent;
 
   let newsrc = moving ? walk : stand;
   let relPos = Vector.add(Vector.sub(pos, camera), center);
@@ -21,6 +24,7 @@ function renderAgent(agent: AgentLayout) {
       style={{
         left: relPos.x,
         top: relPos.y,
+        filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
         transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`
       }}
     ></img>
@@ -31,7 +35,6 @@ function render() {
 
   const element = (
     <React.Fragment>
-      {renderAgent(me)}
       {agents.map(renderAgent)}
       {entities.map(({ url, pos, scale }, i) => {
         let relPos = Vector.sub(pos, camera);

@@ -3,7 +3,7 @@ import * as Matter from "matter-js";
 interface EntityLayout {
   url: string;
   pos: Matter.Vector;
-  scale: Number;
+  scale: number;
 }
 interface AgentLayout {
   uuid: string;
@@ -11,7 +11,8 @@ interface AgentLayout {
   target?: Matter.Vector;
   facing: Boolean;
   moving: Boolean;
-  color?: Number;
+  color?: number;
+  lastUpdated: number;
 }
 interface StateLayout {
   me: AgentLayout;

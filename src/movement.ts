@@ -1,11 +1,11 @@
 import * as Matter from "matter-js";
-import { getState } from "./state";
+import { AgentLayout } from "./types";
+import { elapsedMillis } from "./utils";
 let Vector = Matter.Vector;
 
 let speed = 2;
-function moveAgent() {
-  let state = getState();
-  const { target, pos } = state.me;
+function updateAgent(agent: AgentLayout) {
+  const { target, pos, lastUpdated } = agent;
   let velocity = { x: 0, y: 0 };
   if (target != null) {
     if (Math.abs(target.x - pos.x) > 10) {
@@ -20,19 +20,23 @@ function moveAgent() {
     }
   }
 
-  state.me.pos = Vector.add(pos, velocity);
-
+  agent.pos = Vector.add(
+    pos,
+    Vector.mult(velocity, elapsedMillis(lastUpdated) / 16)
+  );
+  agent.lastUpdated = Date.now();
   if (velocity.x < -0.1) {
-    state.me.facing = true;
+    agent.facing = true;
   }
   if (velocity.x > 0.1) {
-    state.me.facing = false;
+    agent.facing = false;
   }
 
-  state.me.moving = false;
+  agent.moving = false;
   if (Math.abs(velocity.x) > 0.01 || Math.abs(velocity.y) > 0.01) {
-    state.me.moving = true;
+    agent.moving = true;
   }
+  return agent;
 }
 
-export { moveAgent, speed };
+export { updateAgent, speed };

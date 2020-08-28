@@ -2,6 +2,7 @@
 import * as http from "http";
 import * as websocket from "websocket";
 import { AgentLayout, PacketTypes, PacketLayout } from "../src/types";
+import { updateAgent } from "../src/movement";
 const server = http.createServer();
 server.listen(9898);
 const wsServer = new websocket.server({
@@ -44,3 +45,12 @@ function sendUpdate() {
   setTimeout(sendUpdate, 16 * 2);
 }
 sendUpdate();
+
+function tick() {
+  for (var key in state) {
+    let agent = state[key];
+    state[key] = updateAgent(agent);
+  }
+  setTimeout(tick, 16);
+}
+tick();

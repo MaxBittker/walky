@@ -16,6 +16,7 @@ ws.onmessage = function(e) {
 function processUpdate(data: any) {
   let state = getState();
   console.log(data);
+
   state.agents = Object.values(data);
 
   // console.log(data);
