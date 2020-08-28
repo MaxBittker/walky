@@ -12,7 +12,7 @@ function tick() {
   let { me, agents } = state;
 
   state.me = updateAgent(me);
-  state.agents = agents.map(updateAgent);
+  // state.agents = agents.map(updateAgent);
 
   updateCamera();
   render();
