@@ -2,7 +2,7 @@ import { render } from "./src/render";
 import { startInput } from "./src/input";
 import { updateCamera } from "./src/camera";
 import { updateAgent } from "./src/movement";
-import { sendUpdate } from "./src/client";
+import { sendUpdate, requestClockSync } from "./src/client";
 import { getState } from "./src/state";
 
 startInput();
@@ -11,14 +11,18 @@ function tick() {
   let state = getState();
   let { me, agents } = state;
 
-  state.me = updateAgent(me);
-  // state.agents = agents.map(updateAgent);
+  state.me = updateAgent(me, state.tick);
+  state.tick += 1;
+  // console.log("agents:");
+  state.agents = agents.map(agent => updateAgent(agent, state.tick));
 
   updateCamera();
   render();
-  if (i == 10) {
+  if (i % 10 == 0) {
     sendUpdate();
-    i = 0;
+  }
+  if (i % 100 == 0) {
+    requestClockSync();
   }
 
   i++;

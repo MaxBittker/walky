@@ -1,9 +1,10 @@
 import { getState } from "./state";
-import { PacketTypes, PacketLayout, AgentLayout } from "./types";
+import { PacketTypes, PacketLayout, AgentLayout, PingLayout } from "./types";
 import { nrandom } from "./utils";
 import { v4 as uuidv4 } from "uuid";
 import chair from "./../assets/Classroom+Chair.jpg";
 import fern from "./../assets/fern.jpg";
+// const ws = new WebSocket("ws://localhost:9898/");
 const ws = new WebSocket("ws://159.203.112.6:9898/");
 
 ws.onopen = function() {
@@ -32,26 +33,50 @@ ws.onopen = function() {
     ws.send(JSON.stringify(packet1));
     ws.send(JSON.stringify(packet2));
   }
+  requestClockSync();
 };
 
 ws.onmessage = function(e) {
-  console.log(e.data);
+  // console.log(e.data);
 
   let packet = JSON.parse(e.data);
 
   processUpdate(packet);
 };
 
-function processUpdate(packet: any) {
+function requestClockSync() {
+  if (ws.readyState != ws.OPEN) {
+    return;
+  }
+  let pingPacket: PacketLayout = {
+    type: PacketTypes.ping,
+    data: {
+      pingtime: Date.now(),
+      tick: getState().tick
+    }
+  };
+  ws.send(JSON.stringify(pingPacket));
+}
+function clockSync(pingData: PingLayout) {
+  let pingMs = Date.now() - pingData.pingtime;
+  console.log("ping: " + pingMs);
+  let state = getState();
+  state.tick = pingData.tick;
+}
+
+function processUpdate(packet: PacketLayout) {
   let { type, data } = packet;
-  console.log(packet);
+  // console.log(packet);
 
   let state = getState();
   if (type == PacketTypes.agentUpdate) {
     state.agents = Object.values(data);
-    console.log(state.agents[0].lastUpdated - Date.now());
+    // console.log(data);
+    // console.log(state.agents[0].lastUpdated - Date.now());
   } else if (type == PacketTypes.entityUpdate) {
     state.entities = Object.values(data);
+  } else if (type == PacketTypes.pong) {
+    clockSync(data as PingLayout);
   }
 }
 
@@ -67,4 +92,4 @@ function sendUpdate() {
   ws.send(JSON.stringify(packet));
 }
 
-export { sendUpdate };
+export { sendUpdate, requestClockSync };

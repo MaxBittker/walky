@@ -1,4 +1,5 @@
 import * as Matter from "matter-js";
+import { string } from "prop-types";
 
 interface EntityLayout {
   uuid: string;
@@ -17,6 +18,7 @@ interface AgentLayout {
   lastUpdated: number;
 }
 interface StateLayout {
+  tick: number;
   me: AgentLayout;
   camera: Matter.Vector;
   frame: Matter.Vector;
@@ -27,11 +29,25 @@ interface StateLayout {
 
 enum PacketTypes {
   agentUpdate = 1,
-  entityUpdate = 2
+  entityUpdate = 2,
+  ping = 3,
+  pong = 4
+}
+
+interface PingLayout {
+  pingtime: number;
+  tick: number;
 }
 interface PacketLayout {
   type: PacketTypes;
-  data: AgentLayout | EntityLayout;
+  data: AgentLayout | EntityLayout | PingLayout;
 }
 
-export { StateLayout, EntityLayout, AgentLayout, PacketTypes, PacketLayout };
+export {
+  StateLayout,
+  EntityLayout,
+  AgentLayout,
+  PacketTypes,
+  PacketLayout,
+  PingLayout
+};

@@ -5,7 +5,8 @@ import {
   AgentLayout,
   PacketTypes,
   PacketLayout,
-  EntityLayout
+  EntityLayout,
+  PingLayout
 } from "../src/types";
 import { updateAgent } from "../src/movement";
 const server = http.createServer();
@@ -14,6 +15,7 @@ const wsServer = new websocket.server({
   httpServer: server
 });
 
+let t = 0;
 let agentState: { [uuid: string]: AgentLayout } = {};
 let entityState: { [uuid: string]: EntityLayout } = {};
 
@@ -30,8 +32,17 @@ wsServer.on("request", function(request) {
 
     let packet: PacketLayout = JSON.parse(message.utf8Data);
     let { type } = packet;
-
-    if (type == PacketTypes.agentUpdate) {
+    if (type == PacketTypes.ping) {
+      let { pingtime, tick } = packet.data as PingLayout;
+      let pongPacket = {
+        type: PacketTypes.pong,
+        data: {
+          pingtime,
+          tick: t
+        }
+      };
+      connection.sendUTF(JSON.stringify(pongPacket));
+    } else if (type == PacketTypes.agentUpdate) {
       let data = packet.data as AgentLayout;
       uuid = data.uuid;
       agentState[uuid] = data;
@@ -68,15 +79,17 @@ function sendAgentUpdate() {
   openConnections.forEach((connection: websocket.connection) => {
     connection.sendUTF(packet);
   });
-  setTimeout(sendAgentUpdate, 16 * 2);
+  setTimeout(sendAgentUpdate, 1000 / 30);
 }
 sendAgentUpdate();
 
-function tick() {
+function doTick() {
+  t++;
+
   for (var key in agentState) {
     let agent = agentState[key];
-    agentState[key] = updateAgent(agent);
+    agentState[key] = updateAgent(agent, t);
   }
-  setTimeout(tick, 16);
+  setTimeout(doTick, 1000 / 60);
 }
-tick();
+doTick();

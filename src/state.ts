@@ -9,6 +9,7 @@ let Vector = Matter.Vector;
 let uuid = uuidv4().slice(0, 8);
 
 let state: StateLayout = {
+  tick: 0,
   me: {
     uuid,
     pos: { x: 200, y: 200 },
