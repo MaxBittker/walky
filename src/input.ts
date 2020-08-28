@@ -5,7 +5,7 @@ function startInput() {
     console.log("click");
     let state = getState();
     let eventPos = { x: event.pageX, y: event.pageY };
-    state.target = convertTarget(eventPos);
+    state.me.target = convertTarget(eventPos);
   });
 
   window.addEventListener("touchmove", event => {
@@ -15,7 +15,7 @@ function startInput() {
 
     const touches = event.targetTouches;
     for (let i = 0; i < touches.length; i++) {
-      state.target = convertTarget({
+      state.me.target = convertTarget({
         x: touches[i].pageX,
         y: touches[i].pageY
       });
@@ -29,7 +29,7 @@ function startInput() {
     const touches = event.targetTouches;
 
     for (let i = 0; i < touches.length; i++) {
-      state.target = convertTarget({
+      state.me.target = convertTarget({
         x: touches[i].pageX,
         y: touches[i].pageY
       });

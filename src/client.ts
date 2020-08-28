@@ -1,31 +1,36 @@
-import { v4 as uuidv4 } from "uuid";
-
-let uuid = uuidv4();
+import { getState } from "./state";
+import { PacketTypes, PacketLayout, AgentLayout } from "./types";
 
 const ws = new WebSocket("ws://localhost:9898/");
 
 ws.onopen = function() {
   console.log("WebSocket Client Connected");
-  ws.send("Hi this is web client.");
+  //   ws.send("Hi this is web client.");
 };
 
 ws.onmessage = function(e) {
-  console.log("Received: '" + e.data + "'");
-};
+  let data = JSON.parse(e.data);
 
-function sendUpdate() {
-  // if (ws.readyState != ws.OPEN) {
-  //   return;
-  // }
-  // let data = {
-  //   uuid: {
-  //     pos,
-  //     target,
-  //     facing,
-  //     moving
-  //   }
-  // };
-  // ws.send(JSON.stringify(data));
+  processUpdate(data);
+};
+function processUpdate(data: any) {
+  let state = getState();
+  console.log(data);
+  state.agents = Object.values(data);
+
+  // console.log(data);
 }
 
-export sendUpdate();
+function sendUpdate() {
+  if (ws.readyState != ws.OPEN) {
+    return;
+  }
+
+  let packet = {
+    type: PacketTypes.agentUpdate,
+    data: getState().me
+  };
+  ws.send(JSON.stringify(packet));
+}
+
+export { sendUpdate };

@@ -5,7 +5,8 @@ let Vector = Matter.Vector;
 
 function updateCamera() {
   let state = getState();
-  const { pos, camera, frame } = state;
+  const { me, camera, frame } = state;
+  let { pos } = me;
   let distanceFromPos = Vector.magnitude(Vector.sub(pos, camera));
 
   let camera_speed = speed;

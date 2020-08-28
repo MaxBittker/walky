@@ -2,8 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "serve.ts",
   "scripts": {
+    "start": "ts-node serve.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,6 +12,7 @@
   "dependencies": {
     "@types/uuid": "^8.3.0",
     "@types/websocket": "^1.0.1",
+    "ts-node": "^9.0.0",
     "websocket": "^1.0.31"
   }
 }

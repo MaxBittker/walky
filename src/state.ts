@@ -2,36 +2,26 @@ import * as Matter from "matter-js";
 import chair from "./../assets/Classroom+Chair.jpg";
 import fern from "./../assets/fern.jpg";
 import { nrandom } from "./utils";
+import { v4 as uuidv4 } from "uuid";
+import { StateLayout } from "./types";
+
 let Vector = Matter.Vector;
 
-interface EntityLayout {
-  url: String;
-  pos: Matter.Vector;
-  scale: Number;
-}
-
-interface StateLayout {
-  facing: Boolean;
-  moving: Boolean;
-  pos: Matter.Vector;
-  velocity: Matter.Vector;
-  target?: Matter.Vector;
-  camera: Matter.Vector;
-  frame: Matter.Vector;
-  center: Matter.Vector;
-  entities: EntityLayout[];
-}
+let uuid = uuidv4().slice(0, 8);
 
 let state: StateLayout = {
-  facing: true,
-  moving: false,
-  pos: { x: 200, y: 200 },
-  velocity: { x: 0, y: 0 },
-  target: undefined,
+  me: {
+    uuid,
+    pos: { x: 200, y: 200 },
+    target: undefined,
+    facing: true,
+    moving: false
+  },
   camera: { x: 200, y: 200 },
   frame: { x: 0, y: 0 },
   center: { x: 0, y: 0 },
-  entities: []
+  entities: [],
+  agents: []
 };
 
 state.entities = [
