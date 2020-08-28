@@ -26,7 +26,7 @@ function tick() {
   }
 
   i++;
-  window.requestAnimationFrame(tick);
+  window.setTimeout(tick, 1000 / 16);
 }
-
+// tick();
 window.requestAnimationFrame(tick);
