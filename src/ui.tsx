@@ -49,7 +49,7 @@ class UI extends React.Component {
   }
 
   render() {
-    let { file } = this.state;
+    // let { file } = this.state;
     return (
       <div className="items">
         <input
@@ -59,7 +59,7 @@ class UI extends React.Component {
           style={{ display: "none" }}
           onChange={e => this.imageUpload(e)}
         />
-        {file && <img src={URL.createObjectURL(file)} />}
+        {/* {file && <img src={URL.createObjectURL(file)} />} */}
         <span id="add-image" onClick={imagePrompt}>
           +
         </span>
