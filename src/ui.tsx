@@ -26,7 +26,9 @@ function uploadImage(file: File) {
     });
 }
 
-function imagePrompt() {
+function imagePrompt(event: React.MouseEvent) {
+  event.preventDefault();
+  event.stopPropagation();
   let el = document.getElementById("imgupload");
   el.click();
 }
@@ -37,8 +39,6 @@ class UI extends React.Component {
     this.state = { file: null };
   }
   imageUpload(e: React.ChangeEvent) {
-    e.preventDefault();
-    e.stopPropagation();
     console.log(e.target.files);
     let files = e.target.files;
     if (files.length == 0) {
