@@ -43,9 +43,12 @@ function render() {
             key={i}
             src={url}
             style={{
-              left: relPos.x,
-              top: relPos.y,
-              transform: `scale(${scale}) `,
+              //   left: relPos.x,
+              //   top: relPos.y,
+              //   transform: `scale(${scale}) `,
+              left: 0,
+              top: 0,
+              transform: `translate(${relPos.x}px,${relPos.y}px ) scale(${scale}) `,
               filter: `hue-rotate(${i}deg)`
             }}
           />
