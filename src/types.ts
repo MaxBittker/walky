@@ -1,5 +1,6 @@
 import * as Matter from "matter-js";
 import { string } from "prop-types";
+import { type } from "os";
 
 interface EntityLayout {
   uuid: string;
@@ -38,9 +39,14 @@ interface PingLayout {
   pingtime: number;
   tick: number;
 }
+
 interface PacketLayout {
   type: PacketTypes;
-  data: AgentLayout | EntityLayout | PingLayout;
+  data:
+    | { [uuid: string]: AgentLayout }
+    | AgentLayout
+    | EntityLayout
+    | PingLayout;
 }
 
 export {

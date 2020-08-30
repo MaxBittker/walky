@@ -4,7 +4,9 @@ import { nrandom } from "./utils";
 import { v4 as uuidv4 } from "uuid";
 import chair from "./../assets/Classroom+Chair.jpg";
 import fern from "./../assets/fern.jpg";
-let ws = new WebSocket("ws://159.203.112.6:9898/");
+// let ws = new WebSocket("ws://159.203.112.6:9898/");
+let ws = new WebSocket("ws://localhost:9898/");
+
 ws.onerror = () => {
   ws = new WebSocket("ws://localhost:9898/");
 };
@@ -59,6 +61,7 @@ function requestClockSync() {
   };
   ws.send(JSON.stringify(pingPacket));
 }
+
 function clockSync(pingData: PingLayout) {
   let pingMs = Date.now() - pingData.pingtime;
   console.log("ping: " + pingMs);
@@ -69,14 +72,26 @@ function clockSync(pingData: PingLayout) {
   state.me.lastUpdated = state.tick;
 }
 
+function processAgents(agentMap: { [uuid: string]: AgentLayout }) {
+  let state = getState();
+  let new_agents = agentMap;
+
+  state.agents = state.agents.filter(a => new_agents[a.uuid]);
+  state.agents.forEach(a => {
+    a.target = new_agents[a.uuid].target;
+    delete new_agents[a.uuid];
+  });
+
+  state.agents = [...state.agents, ...Object.values(new_agents)];
+}
+
 function processUpdate(packet: PacketLayout) {
   let { type, data } = packet;
   // console.log(packet);
 
   let state = getState();
   if (type == PacketTypes.agentUpdate) {
-    state.agents = Object.values(data);
-    // console.log(data);
+    processAgents(data as { [uuid: string]: AgentLayout });
     // console.log(state.agents[0].lastUpdated - Date.now());
   } else if (type == PacketTypes.entityUpdate) {
     state.entities = Object.values(data);
