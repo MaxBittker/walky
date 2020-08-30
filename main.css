@@ -23,7 +23,7 @@ img {
   mix-blend-mode: multiply;
   pointer-events: none;
   user-select: none;
-  transition: transform 0.1s;
+  transition: transform 0.05s;
   /* transform: translate(-50%, -50%); */
 }
 
