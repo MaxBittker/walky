@@ -43,7 +43,7 @@ function startEndpoints(entityUpload: any) {
         .toString()
         .slice(2, 7);
 
-      let ext = path.extname(req.file.originalname).toLowerCase();
+      let ext = ".jpg";
       let file_name_uuid = `${uuid}${ext}`;
       let rel_path = path.join(`./uploads`, file_name_uuid);
       const targetPath = path.join(__dirname, rel_path);
