@@ -8,7 +8,7 @@ function startEndpoints(entityUpload: any) {
   const app = express();
   const httpServer = http.createServer(app);
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 4000;
 
   app.use(express.static("../docs"));
   app.use("/files", express.static("./uploads"));
