@@ -6,24 +6,45 @@ import { getState } from "./state";
 // import { AgentLayout } from "./types";
 // let Vector = Matter.Vector;
 
-function uploadImage(file: File) {
-  const formData = new FormData();
-  formData.append("image-upload", file);
-  let { me } = getState();
-  formData.append("position", JSON.stringify(me.pos));
-  formData.append("owner", me.uuid);
+import { readAndCompressImage } from "browser-image-resizer";
 
-  fetch("/upload", {
-    method: "POST",
-    body: formData
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
+const config = {
+  quality: 0.5,
+  maxWidth: 800,
+  maxHeight: 600,
+  autoRotate: true,
+  debug: true
+};
+
+// Note: A single file comes from event.target.files on <input>
+
+function uploadImage(file: File) {
+  readAndCompressImage(file, config).then((resizedImage: File) => {
+    // Upload file to some Web API
+    const formData = new FormData();
+    formData.append("image-upload", resizedImage);
+    let { me } = getState();
+    formData.append("position", JSON.stringify(me.pos));
+    formData.append("owner", me.uuid);
+
+    fetch("/upload", {
+      method: "POST",
+      body: formData
     })
-    .catch(error => {
-      console.error(error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    // return fetch(url, options);
+  });
+  // .then(result => {
+  // TODO: Handle the result
+  // console.log(result);
+  // });
 }
 
 function imagePrompt(event: React.MouseEvent) {
