@@ -31,6 +31,8 @@ function imagePrompt(event: React.MouseEvent) {
   event.stopPropagation();
   let el = document.getElementById("imgupload");
   el.click();
+  let state = getState();
+  state.me.target = undefined;
 }
 
 class UI extends React.Component {
@@ -39,8 +41,6 @@ class UI extends React.Component {
     this.state = { file: null };
   }
   imageUpload(e: React.ChangeEvent) {
-    e.preventDefault();
-    e.stopPropagation();
     console.log(e.target.files);
     let files = e.target.files;
     if (files.length == 0) {
