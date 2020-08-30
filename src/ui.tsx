@@ -38,6 +38,7 @@ class UI extends React.Component {
   }
   imageUpload(e: React.ChangeEvent) {
     e.preventDefault();
+    e.stopPropagation();
     console.log(e.target.files);
     let files = e.target.files;
     if (files.length == 0) {
