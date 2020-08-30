@@ -43,11 +43,12 @@ function startEndpoints(entityUpload: any) {
         .toString()
         .slice(2, 7);
 
-      let file_name_uuid = `${uuid}.png`;
+      let ext = path.extname(req.file.originalname).toLowerCase();
+      let file_name_uuid = `${uuid}${ext}`;
       let rel_path = path.join(`./uploads`, file_name_uuid);
       const targetPath = path.join(__dirname, rel_path);
 
-      if (path.extname(req.file.originalname).toLowerCase() === ".png") {
+      if (ext === ".png" || ext == ".jpg" || ext == ".jpeg") {
         fs.rename(tempPath, targetPath, err => {
           if (err) return handleError(err, res);
           res
@@ -63,11 +64,12 @@ function startEndpoints(entityUpload: any) {
         );
       } else {
         fs.unlink(tempPath, err => {
+          console.log(ext);
           if (err) return handleError(err, res);
           res
             .status(403)
             .contentType("text/plain")
-            .end("Only .png files are allowed!");
+            .end("Only .png, jpg, and jpeg files are allowed!");
         });
       }
     }
