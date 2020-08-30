@@ -48,7 +48,7 @@ function render() {
               //   transform: `scale(${scale}) `,
               left: 0,
               top: 0,
-              transform: `translate(${relPos.x}px,${relPos.y}px ) scale(${scale}) `,
+              transform: `translate(${relPos.x}px,${relPos.y}px ) translate(-50%, -50%) scale(${scale}) `,
               filter: `hue-rotate(${i}deg)`
             }}
           />

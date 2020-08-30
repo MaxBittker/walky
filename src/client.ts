@@ -1,11 +1,11 @@
 import { getState } from "./state";
 import { PacketTypes, PacketLayout, AgentLayout, PingLayout } from "./types";
 import { nrandom } from "./utils";
-import { v4 as uuidv4 } from "uuid";
-import chair from "./../assets/Classroom+Chair.jpg";
-import fern from "./../assets/fern.jpg";
-let ws = new WebSocket("ws://159.203.112.6:9898/");
-// let ws = new WebSocket("ws://localhost:9898/");
+// import { v4 as uuidv4 } from "uuid";
+// import chair from "./../assets/Classroom+Chair.jpg";
+// import fern from "./../assets/fern.jpg";
+// let ws = new WebSocket("ws://159.203.112.6:9898/");
+let ws = new WebSocket("ws://localhost:9898/");
 
 ws.onerror = () => {
   ws = new WebSocket("ws://localhost:9898/");
@@ -15,28 +15,28 @@ ws.onopen = function() {
   console.log("WebSocket Client Connected");
   //   ws.send("Hi this is web client.");
 
-  for (var i = 0; i < 3; i++) {
-    let packet1 = {
-      type: PacketTypes.entityUpdate,
-      data: {
-        uuid: uuidv4().slice(0, 10),
-        url: chair,
-        pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
-        scale: nrandom() * 2
-      }
-    };
-    let packet2 = {
-      type: PacketTypes.entityUpdate,
-      data: {
-        uuid: uuidv4().slice(0, 10),
-        url: fern,
-        pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
-        scale: Math.random()
-      }
-    };
-    ws.send(JSON.stringify(packet1));
-    ws.send(JSON.stringify(packet2));
-  }
+  // for (var i = 0; i < 3; i++) {
+  //   let packet1 = {
+  //     type: PacketTypes.entityUpdate,
+  //     data: {
+  //       uuid: uuidv4().slice(0, 10),
+  //       url: chair,
+  //       pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
+  //       scale: nrandom() * 2
+  //     }
+  //   };
+  //   let packet2 = {
+  //     type: PacketTypes.entityUpdate,
+  //     data: {
+  //       uuid: uuidv4().slice(0, 10),
+  //       url: fern,
+  //       pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
+  //       scale: Math.random()
+  //     }
+  //   };
+  //   ws.send(JSON.stringify(packet1));
+  //   ws.send(JSON.stringify(packet2));
+  // }
   requestClockSync();
 };
 

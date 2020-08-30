@@ -1,0 +1,2 @@
+body{font-family:Libre Franklin,sans-serif;width:100vw;height:100vh;overflow:hidden}*{color:#333;margin:0}img{z-index:1;mix-blend-mode:multiply;pointer-events:none;user-select:none}#walker,img{position:absolute}#walker{width:100px;height:100px;z-index:10;filter:contrast(120%);mix-blend-mode:normal}#debug{right:0}#debug,#ui{position:absolute;bottom:0}#ui{left:0;z-index:66;transform:rotate(5deg)}#add-image{font-size:90px;line-height:80%;padding:5px;font-weight:100;color:#336;filter:drop-shadow(0 0 6px #884)}
+/*# sourceMappingURL=/main.9f2770ea.css.map */
