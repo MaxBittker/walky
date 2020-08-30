@@ -11,9 +11,9 @@ import { readAndCompressImage } from "browser-image-resizer";
 const config = {
   quality: 0.5,
   maxWidth: 800,
-  maxHeight: 600,
-  autoRotate: true,
-  debug: true
+  maxHeight: 800,
+  autoRotate: false,
+  debug: false
 };
 
 // Note: A single file comes from event.target.files on <input>
