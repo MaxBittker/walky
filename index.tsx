@@ -1,11 +1,13 @@
 import { render } from "./src/render";
+import { startUI } from "./src/ui";
+
 import { startInput } from "./src/input";
 import { updateCamera } from "./src/camera";
 import { updateAgent } from "./src/movement";
 import { sendUpdate, requestClockSync } from "./src/client";
 import { getState } from "./src/state";
-
 startInput();
+startUI();
 let i = 0;
 
 let debug = document.getElementById("debug");

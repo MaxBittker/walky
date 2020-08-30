@@ -9,7 +9,7 @@ function convertTarget(t: Matter.Vector) {
 
 function startInput() {
   window.addEventListener("click", event => {
-    event.preventDefault();
+    // event.preventDefault();
 
     let state = getState();
     let eventPos = { x: event.pageX, y: event.pageY };
