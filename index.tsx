@@ -21,7 +21,7 @@ function tick() {
   // console.log("agents:");
   state.agents = agents.map(agent => updateAgent(agent, state.tick));
 
-  debug.innerHTML = state.tick;
+  // debug.innerHTML = state.tick;
   updateCamera();
   render();
   if (i % 10 == 0) {
