@@ -21,7 +21,7 @@ function updateAgent(agent: AgentLayout, tick: number) {
 
   let elapsedticks = tick - lastUpdated;
   //   console.log(elapsedticks);
-  elapsedticks = Math.min(elapsedticks, 10);
+  elapsedticks = Math.min(elapsedticks, 50);
   //   console.log(tick, lastUpdated);
   agent.pos = Vector.add(pos, Vector.mult(velocity, elapsedticks));
   agent.lastUpdated = tick;

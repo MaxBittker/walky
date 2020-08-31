@@ -12,12 +12,17 @@ let i = 0;
 
 let debug = document.getElementById("debug");
 
+let lasttick = Date.now();
 function tick() {
   let state = getState();
   let { me, agents } = state;
 
+  let elapsedMillis = Date.now() - lasttick;
+  let millisPerTick = 1000 / 60;
+  let elapsedTicks = elapsedMillis / millisPerTick;
+  state.tick += elapsedTicks;
+
   state.me = updateAgent(me, state.tick);
-  state.tick += 1;
   // console.log("agents:");
   state.agents = agents.map(agent => updateAgent(agent, state.tick));
 
@@ -32,7 +37,9 @@ function tick() {
   }
 
   i++;
-  window.setTimeout(tick, 1000 / 60);
+
+  lasttick = Date.now();
+  window.requestAnimationFrame(tick);
 }
 // tick();
 window.requestAnimationFrame(tick);

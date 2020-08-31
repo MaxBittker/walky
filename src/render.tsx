@@ -42,12 +42,11 @@ function render() {
       >
         {entities.map(({ url, pos, scale }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
-          console.log(url);
           return (
             <img
               key={i}
-              src={url}
-              // src={"http://159.203.112.6:4000" + url}
+              // src={url}
+              src={"http://159.203.112.6:4000" + url}
               style={{
                 left: pos.x,
                 top: pos.y,
