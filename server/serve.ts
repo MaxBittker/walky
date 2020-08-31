@@ -38,7 +38,7 @@ function entityUpload(
     uuid,
     url,
     pos: position,
-    scale: 0.5
+    scale: 1.0
   };
   sendEntityUpdate();
 }

@@ -11,9 +11,9 @@ import { readAndCompressImage } from "browser-image-resizer";
 
 const config = {
   quality: 0.4,
-  maxWidth: 800,
-  maxHeight: 800,
-  autoRotate: false,
+  maxWidth: 500,
+  maxHeight: 500,
+  autoRotate: true,
   debug: false
 };
 
