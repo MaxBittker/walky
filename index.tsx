@@ -27,7 +27,7 @@ function tick() {
   state.agents = agents.map(agent => updateAgent(agent, state.tick));
 
   // debug.innerHTML = state.tick;
-  updateCamera();
+  updateCamera(elapsedTicks);
   render();
   if (i % 10 == 0) {
     sendUpdate();

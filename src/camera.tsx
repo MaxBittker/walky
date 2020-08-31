@@ -3,7 +3,7 @@ import { getState } from "./state";
 import { speed } from "./movement";
 let Vector = Matter.Vector;
 
-function updateCamera() {
+function updateCamera(elapsedTicks: number) {
   let state = getState();
   const { me, camera, frame } = state;
   let { pos } = me;
@@ -16,6 +16,7 @@ function updateCamera() {
   camera_speed *= distanceFromPos / (Vector.magnitude(frame) / 6);
   let directionTowardsPos = Vector.normalise(Vector.sub(pos, camera));
 
+  camera_speed *= elapsedTicks;
   state.camera = Vector.add(
     camera,
     Vector.mult(directionTowardsPos, camera_speed)
