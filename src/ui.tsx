@@ -5,11 +5,12 @@ import { getState } from "./state";
 // import { getState } from "./state";
 // import { AgentLayout } from "./types";
 // let Vector = Matter.Vector;
+import add from "./../assets/add.gif";
 
 import { readAndCompressImage } from "browser-image-resizer";
 
 const config = {
-  quality: 0.5,
+  quality: 0.4,
   maxWidth: 800,
   maxHeight: 800,
   autoRotate: false,
@@ -89,9 +90,8 @@ class UI extends React.Component {
           onChange={e => this.imageUpload(e)}
         />
         {/* {file && <img src={URL.createObjectURL(file)} />} */}
-        <span id="add-image" onClick={imagePrompt}>
-          +
-        </span>
+        <img src={add} id="add-image" onClick={imagePrompt} />
+        {/* </span> */}
       </div>
     );
   }

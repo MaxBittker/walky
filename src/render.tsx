@@ -1,6 +1,6 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
-import walk from "./../assets/walk1.gif";
+import walk from "./../assets/walk2.gif";
 import stand from "./../assets/stand1.gif";
 import * as Matter from "matter-js";
 import { getState } from "./state";
