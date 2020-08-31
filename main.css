@@ -1,4 +1,5 @@
-body {
+body,
+#window {
   font-family: "Libre Franklin", sans-serif;
   /* background-size: 12px 12px;
   background-image: radial-gradient(
