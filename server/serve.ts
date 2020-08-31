@@ -124,4 +124,4 @@ function doTick() {
   }
   setTimeout(doTick, 1000 / 60);
 }
-doTick();
+// doTick();

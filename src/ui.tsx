@@ -30,6 +30,7 @@ function uploadImage(file: File) {
     // Upload file to some Web API
     const formData = new FormData();
     formData.append("image-upload", resizedImage);
+
     let { me } = getState();
     formData.append("position", JSON.stringify(me.pos));
     formData.append("owner", me.uuid);
