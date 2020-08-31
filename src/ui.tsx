@@ -16,7 +16,13 @@ const config = {
   debug: false
 };
 
-// Note: A single file comes from event.target.files on <input>
+// // Note: A single file comes from event.target.files on <input>
+// document.getElementById("window").addEventListener("drop", e => {
+//   e.stopPropagation();
+//   e.preventDefault();
+
+//   uploadImage(e.dataTransfer.files);
+// });
 
 function uploadImage(file: File) {
   readAndCompressImage(file, config).then((resizedImage: File) => {

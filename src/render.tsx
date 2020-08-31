@@ -32,28 +32,32 @@ function renderAgent(agent: AgentLayout) {
 }
 function render() {
   const { camera, entities, me, agents, center } = getState();
+  const cameraPos = Vector.sub(center, camera);
   const element = (
     <React.Fragment>
       {agents.map(renderAgent)}
-      {entities.map(({ url, pos, scale }, i) => {
-        let relPos = Vector.add(Vector.sub(pos, camera), center);
-
-        return (
-          <img
-            key={i}
-            src={url}
-            style={{
-              //   left: relPos.x,
-              //   top: relPos.y,
-              //   transform: `scale(${scale}) `,
-              left: 0,
-              top: 0,
-              transform: `translate(${relPos.x}px,${relPos.y}px ) translate(-50%, -50%) scale(${scale}) `,
-              filter: `hue-rotate(${i}deg)`
-            }}
-          />
-        );
-      })}
+      <div
+        id="entities"
+        style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
+      >
+        {entities.map(({ url, pos, scale }, i) => {
+          // let relPos = Vector.add(Vector.sub(pos, camera), center);
+          console.log(url);
+          return (
+            <img
+              key={i}
+              src={url}
+              // src={"http://159.203.112.6:4000" + url}
+              style={{
+                left: pos.x,
+                top: pos.y,
+                transform: `translate(-50%, -50%) scale(${scale}) `,
+                filter: `hue-rotate(${i}deg)`
+              }}
+            />
+          );
+        })}
+      </div>
     </React.Fragment>
   );
   ReactDOM.render(element, document.getElementById("window"));
