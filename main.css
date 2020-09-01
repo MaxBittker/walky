@@ -23,7 +23,7 @@ body {
   }
 }
 #entities {
-  transition: transform 100ms;
+  /* transition: transform 100ms; */
 }
 
 * {
