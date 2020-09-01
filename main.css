@@ -22,6 +22,9 @@ body {
     /* overscroll-behavi3or-y: none; */
   }
 }
+#entities {
+  transition: transform 100ms;
+}
 
 * {
   color: #333;

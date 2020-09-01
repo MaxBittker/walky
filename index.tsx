@@ -32,9 +32,9 @@ function tick() {
   if (i % 10 == 0) {
     sendUpdate();
   }
-  if (i % 60 == 0) {
-    requestClockSync();
-  }
+  // if (i % 60 == 0) {
+  // requestClockSync();
+  // }
 
   i++;
 

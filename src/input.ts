@@ -102,6 +102,11 @@ function startInput() {
     if (event.keyCode === 40) {
       down = false;
     }
+
+    if (!(left || right || up || down)) {
+      let state = getState();
+      state.me.target = state.me.pos;
+    }
   });
   function pollKeys() {
     if (!(left || right || up || down)) {

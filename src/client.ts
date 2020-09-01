@@ -12,38 +12,12 @@ ws.onerror = () => {
 
 ws.onopen = function() {
   console.log("WebSocket Client Connected");
-  //   ws.send("Hi this is web client.");
 
-  // for (var i = 0; i < 3; i++) {
-  //   let packet1 = {
-  //     type: PacketTypes.entityUpdate,
-  //     data: {
-  //       uuid: uuidv4().slice(0, 10),
-  //       url: chair,
-  //       pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
-  //       scale: nrandom() * 2
-  //     }
-  //   };
-  //   let packet2 = {
-  //     type: PacketTypes.entityUpdate,
-  //     data: {
-  //       uuid: uuidv4().slice(0, 10),
-  //       url: fern,
-  //       pos: { x: nrandom() * 2000, y: nrandom() * 2000 },
-  //       scale: Math.random()
-  //     }
-  //   };
-  //   ws.send(JSON.stringify(packet1));
-  //   ws.send(JSON.stringify(packet2));
-  // }
   requestClockSync();
 };
 
 ws.onmessage = function(e) {
-  // console.log(e.data);
-
   let packet = JSON.parse(e.data);
-
   processUpdate(packet);
 };
 
@@ -63,10 +37,7 @@ function requestClockSync() {
 
 function clockSync(pingData: PingLayout) {
   let pingMs = Date.now() - pingData.pingtime;
-  // console.log("ping: " + pingMs);
   let state = getState();
-  // console.log("old/new " + state.tick, pingData.tick + pingMs / (16 * 2));
-
   state.tick = pingData.tick + pingMs / (16 * 2);
   state.me.lastUpdated = state.tick;
 }
@@ -75,12 +46,16 @@ function processAgents(agentMap: { [uuid: string]: AgentLayout }) {
   let state = getState();
   let new_agents = agentMap;
 
+  // remove agents who aren't in the map
   state.agents = state.agents.filter(a => new_agents[a.uuid]);
+
+  // for each agent, get the new target from the server
   state.agents.forEach(a => {
     a.target = new_agents[a.uuid].target;
     delete new_agents[a.uuid];
   });
-
+  // if an agent wasn't seen before, add it;
+  //  (maybe set its clock to match local)
   state.agents = [...state.agents, ...Object.values(new_agents)];
 }
 

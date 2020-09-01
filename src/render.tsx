@@ -25,6 +25,7 @@ function renderAgent(agent: AgentLayout) {
     <img
       id="walker"
       src={newsrc}
+      key={agent.uuid}
       style={{
         left: relPos.x,
         top: relPos.y,
