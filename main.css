@@ -35,8 +35,8 @@ body {
 img {
   position: absolute;
   z-index: 1;
-  /* mix-blend-mode: difference; */
-  mix-blend-mode: multiply;
+  mix-blend-mode: difference;
+  /* mix-blend-mode: exclusion; */
   pointer-events: none;
   user-select: none;
   /* transition: transform 0.05s; */
@@ -50,6 +50,12 @@ img {
   z-index: 10;
   filter: contrast(120%);
   mix-blend-mode: normal;
+}
+.speech {
+  font-size: 50px;
+  position: absolute;
+  z-index: 10;
+  transform: translate(-50%, -130px);
 }
 #debug {
   position: absolute;

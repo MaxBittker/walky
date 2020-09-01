@@ -16,23 +16,37 @@ function renderAgent(agent: AgentLayout) {
   if (agent.uuid == me.uuid) {
     agent = me;
   }
-  let { pos, moving, facing, color } = agent;
+  let { pos, moving, facing, color, word } = agent;
 
   let newsrc = moving ? walk : stand;
   let relPos = Vector.add(Vector.sub(pos, camera), center);
 
   return (
-    <img
-      id="walker"
-      src={newsrc}
-      key={agent.uuid}
-      style={{
-        left: relPos.x,
-        top: relPos.y,
-        filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
-        transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`
-      }}
-    ></img>
+    <React.Fragment>
+      <h1
+        className="speech"
+        key={"w" + agent.uuid}
+        style={{
+          left: relPos.x,
+          top: relPos.y
+          // filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
+          // transform: `translate(-50%, -75%)`
+        }}
+      >
+        {word}
+      </h1>
+      <img
+        id="walker"
+        src={newsrc}
+        key={agent.uuid}
+        style={{
+          left: relPos.x,
+          top: relPos.y,
+          filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
+          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`
+        }}
+      ></img>
+    </React.Fragment>
   );
 }
 function render() {

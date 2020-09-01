@@ -16,6 +16,7 @@ interface AgentLayout {
   facing: Boolean;
   moving: Boolean;
   color?: number;
+  word?: string;
   lastUpdated: number;
 }
 interface StateLayout {

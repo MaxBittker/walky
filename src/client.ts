@@ -52,6 +52,7 @@ function processAgents(agentMap: { [uuid: string]: AgentLayout }) {
   // for each agent, get the new target from the server
   state.agents.forEach(a => {
     a.target = new_agents[a.uuid].target;
+    a.word = new_agents[a.uuid].word;
     delete new_agents[a.uuid];
   });
   // if an agent wasn't seen before, add it;
