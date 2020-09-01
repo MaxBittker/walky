@@ -66,6 +66,7 @@ img {
   bottom: 0;
   z-index: 66;
   transform: rotate(5deg);
+  mix-blend-mode: normal;
 
   pointer-events: initial;
   margin: 15px;
