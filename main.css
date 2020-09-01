@@ -1,6 +1,5 @@
 html,
-body,
-#window {
+body {
   font-family: "Libre Franklin", sans-serif;
   /* background-size: 12px 12px;
   background-image: radial-gradient(
@@ -16,6 +15,7 @@ body,
 
   user-select: none;
 }
+/* #window  */
 @media screen and (max-width: 700px) {
   body {
     transform: scale(0.5);
