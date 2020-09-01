@@ -10,15 +10,14 @@ body {
   ); */
   width: 100vw;
   height: 100vh;
-  overflow: visible;
+  overflow: hidden;
   overscroll-behavior-y: none;
-
   user-select: none;
 }
 /* #window  */
-@media screen and (max-width: 700px) {
-  body {
-    transform: scale(0.5);
+@media screen and (max-width: 600px) {
+  #window {
+    zoom: 0.6;
     /* overflow: hidden; */
     /* overscroll-behavi3or-y: none; */
   }

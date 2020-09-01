@@ -2,15 +2,40 @@ import { getState } from "./state";
 import * as Matter from "matter-js";
 let Vector = Matter.Vector;
 
+let zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
+window.onresize = () => {
+  zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
+};
+
 function convertTarget(t: Matter.Vector) {
   const { camera, center } = getState();
-  return Vector.sub(Vector.add(t, camera), center);
+  // let zCamera = Vector.div(camera, zoom);
+  let zCenter = center;
+  let zPos = Vector.div(t, zoom);
+  // console.log(t);
+  return Vector.sub(Vector.add(zPos, camera), zCenter);
 }
-
+let mouseDown = false;
 function startInput() {
   window.addEventListener("click", event => {
     // event.preventDefault();
 
+    let state = getState();
+    let eventPos = { x: event.pageX, y: event.pageY };
+    state.me.target = convertTarget(eventPos);
+  });
+  window.addEventListener("mousedown", event => {
+    mouseDown = true;
+  });
+  window.addEventListener("mouseup", event => {
+    mouseDown = false;
+  });
+  window.addEventListener("mouseleave", event => {
+    mouseDown = false;
+  });
+  window.addEventListener("mousemove", event => {
+    // event.preventDefault();
+    if (!mouseDown) return;
     let state = getState();
     let eventPos = { x: event.pageX, y: event.pageY };
     state.me.target = convertTarget(eventPos);

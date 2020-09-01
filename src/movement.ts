@@ -2,7 +2,7 @@ import * as Matter from "matter-js";
 import { AgentLayout } from "./types";
 let Vector = Matter.Vector;
 
-let speed = 2;
+let speed = 3;
 function updateAgent(agent: AgentLayout, tick: number) {
   const { target, pos, lastUpdated } = agent;
   let velocity = { x: 0, y: 0 };

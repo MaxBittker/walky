@@ -17,6 +17,7 @@ function updateCamera(elapsedTicks: number) {
   let directionTowardsPos = Vector.normalise(Vector.sub(pos, camera));
 
   camera_speed *= elapsedTicks;
+  // state.camera = { x: 0, y: 0 };
   state.camera = Vector.add(
     camera,
     Vector.mult(directionTowardsPos, camera_speed)

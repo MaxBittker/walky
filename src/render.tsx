@@ -7,6 +7,10 @@ import { getState } from "./state";
 import { AgentLayout } from "./types";
 let Vector = Matter.Vector;
 
+let zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
+window.onresize = () => {
+  zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
+};
 function renderAgent(agent: AgentLayout) {
   let { camera, center, me } = getState();
   if (agent.uuid == me.uuid) {
@@ -42,15 +46,16 @@ function render() {
       >
         {entities.map(({ url, pos, scale }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
+          let relPos = pos;
           return (
             <img
               key={i}
               // src={url}
               src={"http://159.203.112.6:4000" + url}
               style={{
-                left: pos.x,
-                top: pos.y,
-                transform: `translate(-50%, -50%) scale(${scale}) `,
+                left: relPos.x,
+                top: relPos.y,
+                transform: `translate(-50%, -50%) scale(${scale * zoom}) `,
                 filter: `hue-rotate(${i}deg)`
               }}
             />

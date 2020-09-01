@@ -63,7 +63,7 @@ function requestClockSync() {
 
 function clockSync(pingData: PingLayout) {
   let pingMs = Date.now() - pingData.pingtime;
-  console.log("ping: " + pingMs);
+  // console.log("ping: " + pingMs);
   let state = getState();
   // console.log("old/new " + state.tick, pingData.tick + pingMs / (16 * 2));
 
