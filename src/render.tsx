@@ -2,6 +2,7 @@ import * as React from "react";
 import ReactDOM = require("react-dom");
 import walk from "./../assets/walk2.gif";
 import stand from "./../assets/stand1.gif";
+import bubble from "./../assets/bubble.png";
 import * as Matter from "matter-js";
 import { getState } from "./state";
 import { AgentLayout } from "./types";
@@ -23,6 +24,18 @@ function renderAgent(agent: AgentLayout) {
 
   return (
     <React.Fragment>
+      {/* {!word && (
+        <img
+          className="bubble"
+          src={bubble}
+          style={{
+            left: relPos.x,
+            top: relPos.y
+            // filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
+            // transform: `translate(-50%, -75%)`
+          }}
+        ></img>
+      )} */}
       <h1
         className="speech"
         key={"w" + agent.uuid}
@@ -66,7 +79,7 @@ function render() {
             <img
               key={i}
               // src={url}
-              src={"http://159.203.112.6:4000" + url}
+              src={window.location.origin + url}
               style={{
                 left: relPos.x,
                 top: relPos.y,
