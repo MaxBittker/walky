@@ -12,6 +12,7 @@ body,
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  user-select: none;
 }
 @media screen and (max-width: 700px) {
   body {
@@ -49,17 +50,21 @@ img {
   bottom: 0;
 }
 #ui {
-  position: absolute;
+  /* position: absolute;
   left: 0;
   bottom: 0;
-  z-index: 66;
+  z-index: 66; */
   /* user-select: none; */
-  transform: rotate(5deg);
 }
 #add-image {
   /* font-size: 90px; */
   /* line-height: 80%; */
-  position: relative;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 66;
+  transform: rotate(5deg);
+
   pointer-events: initial;
   margin: 15px;
   width: 80px;
