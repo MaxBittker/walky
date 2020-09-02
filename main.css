@@ -100,3 +100,6 @@ img {
 #add-image:hover {
   filter: drop-shadow(0px 0px 5px #44f);
 }
+#fake-input {
+  visibility: hidden;
+}

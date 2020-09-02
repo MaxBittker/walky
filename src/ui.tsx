@@ -58,9 +58,6 @@ function uploadImage(file: File) {
 function imagePrompt(event: React.MouseEvent) {
   event.preventDefault();
   event.stopPropagation();
-  document.getElementById("fake-input").focus();
-  return;
-
   let el = document.getElementById("imgupload");
   el.click();
   let state = getState();
@@ -80,6 +77,13 @@ class UI extends React.Component {
     }
     uploadImage(files[0]);
     this.setState({ file: files[0] });
+  }
+  openKB(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    document.getElementById("fake-input").focus();
+    return;
   }
 
   render() {
