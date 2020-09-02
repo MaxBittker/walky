@@ -58,6 +58,9 @@ function uploadImage(file: File) {
 function imagePrompt(event: React.MouseEvent) {
   event.preventDefault();
   event.stopPropagation();
+  document.getElementById("fake-input").focus();
+  return;
+
   let el = document.getElementById("imgupload");
   el.click();
   let state = getState();
