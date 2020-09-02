@@ -6,10 +6,13 @@ body {
   height: 100vh;
   overflow: hidden;
   overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+
   user-select: none;
 }
 #window {
   overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
 }
 @media screen and (max-width: 600px) {
   #window {
