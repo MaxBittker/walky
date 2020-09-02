@@ -87,6 +87,7 @@ function startInput() {
       me.word += key;
     }
     if (key == "Backspace" || key == "Delete") {
+      event.preventDefault();
       me.word = me.word.slice(0, me.word.length - 1);
     }
     if (keyCode === 37) {
