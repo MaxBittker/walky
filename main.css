@@ -1,27 +1,21 @@
 html,
 body {
   font-family: "Libre Franklin", sans-serif;
-  /* background-size: 12px 12px;
-  background-image: radial-gradient(
-    circle,
-    rgb(248, 218, 191) 1px,
-    rgb(251, 231, 231) 3px,
-    rgb(224, 231, 226) 6px
-  ); */
+
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   overscroll-behavior-y: none;
   user-select: none;
 }
-/* #window  */
+#window {
+  overscroll-behavior-y: none;
+}
 @media screen and (max-width: 600px) {
   #window {
     zoom: 0.6;
-    overflow: hidden;
-    overscroll-behavior-y: none;
     /* overflow: hidden; */
-    /* overscroll-behavi3or-y: none; */
+    /* overscroll-behavior-y: none; */
   }
 }
 #entities {
@@ -58,6 +52,7 @@ img {
   position: absolute;
   z-index: 10;
   transform: translate(-50%, -130px);
+  filter: drop-shadow(0px 0px 2px #fff);
 }
 .bubble {
   width: 120px;

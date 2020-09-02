@@ -9,9 +9,10 @@ import { AgentLayout } from "./types";
 let Vector = Matter.Vector;
 
 let zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
-window.onresize = () => {
+window.addEventListener("resize", () => {
   zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
-};
+});
+
 function renderAgent(agent: AgentLayout) {
   let { camera, center, me } = getState();
   if (agent.uuid == me.uuid) {
@@ -78,8 +79,8 @@ function render() {
           return (
             <img
               key={i}
-              // src={url}
-              src={window.location.origin + url}
+              // src={window.location.origin + url}
+              src={"http://walky.space" + url}
               style={{
                 left: relPos.x,
                 top: relPos.y,

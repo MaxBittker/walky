@@ -3,9 +3,9 @@ import * as Matter from "matter-js";
 let Vector = Matter.Vector;
 
 let zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
-window.onresize = () => {
+window.addEventListener("resize", () => {
   zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
-};
+});
 
 function convertTarget(t: Matter.Vector) {
   const { camera, center } = getState();

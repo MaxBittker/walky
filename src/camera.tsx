@@ -2,10 +2,14 @@ import * as Matter from "matter-js";
 import { getState } from "./state";
 import { speed } from "./movement";
 let Vector = Matter.Vector;
+
+// the 0 is weird.
 let zoom = window.innerWidth <= 600 ? 0.6 : 0.0;
-window.onresize = () => {
+
+window.addEventListener("resize", () => {
   zoom = window.innerWidth <= 600 ? 0.6 : 0.0;
-};
+});
+
 function updateCamera(elapsedTicks: number) {
   let state = getState();
   const { me, camera, frame, center } = state;

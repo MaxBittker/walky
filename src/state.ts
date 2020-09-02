@@ -31,10 +31,11 @@ state.entities = [];
 function resize() {
   state.frame = { x: window.innerWidth, y: window.innerHeight };
   state.center = Vector.div(state.frame, 2);
+  console.log("resize");
 }
 resize();
 window.state = state;
-window.onresize = resize;
+window.addEventListener("resize", resize);
 
 function getState() {
   return state;
