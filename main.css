@@ -1,6 +1,5 @@
 html,
-body,
-#window {
+body {
   font-family: "Libre Franklin", sans-serif;
   /* background-size: 12px 12px;
   background-image: radial-gradient(
@@ -19,6 +18,8 @@ body,
 @media screen and (max-width: 600px) {
   #window {
     zoom: 0.6;
+    overflow: hidden;
+    overscroll-behavior-y: none;
     /* overflow: hidden; */
     /* overscroll-behavi3or-y: none; */
   }
