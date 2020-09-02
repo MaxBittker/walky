@@ -83,8 +83,7 @@ function render() {
               style={{
                 left: relPos.x,
                 top: relPos.y,
-                transform: `translate(-50%, -50%) scale(${scale * zoom}) `,
-                filter: `hue-rotate(${i}deg)`
+                transform: `translate(-50%, -50%) scale(${scale * zoom}) `
               }}
             />
           );
