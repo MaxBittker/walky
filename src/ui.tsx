@@ -75,6 +75,8 @@ class UI extends React.Component {
     window.deleteImage = (uuid: string) => {
       this.setState({ deleteMode: false });
       window.deleteMode = false;
+      let state = getState();
+      state.me.target = undefined;
       sendEntityUpdate(uuid);
     };
   }
