@@ -71,13 +71,11 @@ wsServer.on("request", function(request) {
       uuid = data.uuid;
       agentState[uuid] = data;
     } else if (type == PacketTypes.entityUpdate) {
-      // deprecated;
-      // if (Object.keys(entityState).length > 30) {
-      //   return;
-      // }
-      // let data = packet.data as EntityLayout;
-      // entityState[data.uuid] = data;
-      // sendEntityUpdate();
+      // deletion;
+      let data = packet.data as EntityLayout;
+      delete entityState[data.uuid];
+      console.log("deleting: " + data);
+      sendEntityUpdate();
     }
   });
   connection.on("close", function(reasonCode, description) {

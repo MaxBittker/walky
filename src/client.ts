@@ -87,4 +87,17 @@ function sendUpdate() {
   ws.send(JSON.stringify(packet));
 }
 
-export { sendUpdate, requestClockSync };
+function sendEntityUpdate(uuid: string) {
+  if (ws.readyState != ws.OPEN) {
+    return;
+  }
+
+  let packet = {
+    type: PacketTypes.entityUpdate,
+    data: { uuid }
+  };
+  console.log("deleting: " + uuid);
+  ws.send(JSON.stringify(packet));
+}
+
+export { sendUpdate, requestClockSync, sendEntityUpdate };

@@ -71,16 +71,18 @@ function render() {
       {agents.map(renderAgent)}
       <div
         id="entities"
+        className={window.deleteMode ? "deleting" : ""}
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
-        {entities.map(({ url, pos, scale }, i) => {
+        {entities.map(({ url, pos, scale, uuid }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
           let relPos = pos;
           return (
             <img
               key={i}
-              // src={window.location.origin + url}
-              src={"http://walky.space" + url}
+              onClick={() => window.deleteImage(uuid)}
+              src={window.location.origin + url}
+              // src={"http://walky.space" + url}
               style={{
                 left: relPos.x,
                 top: relPos.y,
