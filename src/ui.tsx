@@ -79,12 +79,13 @@ class UI extends React.Component {
       state.me.target = undefined;
       sendEntityUpdate(uuid);
     };
-    document.body.addEventListener("mousedown", () => {
-      window.setTimeout(() => {
-        this.setState({ deleteMode: false });
-        window.deleteMode = false;
-      }, 500);
-    });
+    // document.body.addEventListener("mousedown", () => {
+    //   if(delete)
+    //   window.setTimeout(() => {
+    //     this.setState({ deleteMode: false });
+    //     window.deleteMode = false;
+    //   }, 500);
+    // });
   }
   imageUpload(e: React.ChangeEvent) {
     console.log(e.target.files);
