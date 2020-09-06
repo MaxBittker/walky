@@ -79,6 +79,12 @@ class UI extends React.Component {
       state.me.target = undefined;
       sendEntityUpdate(uuid);
     };
+    document.body.addEventListener("mousedown", () => {
+      window.setTimeout(() => {
+        this.setState({ deleteMode: false });
+        window.deleteMode = false;
+      }, 50);
+    });
   }
   imageUpload(e: React.ChangeEvent) {
     console.log(e.target.files);
@@ -126,11 +132,11 @@ class UI extends React.Component {
         <img src={add} className="tool" id="add-image" onClick={imagePrompt} />
         <img
           src={subtract}
-          className={"tool " + (window.deleteMode ? "active" : "")}
+          className={"tool " + (this.state.deleteMode ? "active" : "")}
           id="subtract-image"
           onClick={e => this.enterDeleteMode(e)}
         />
-        {this.state.deleteMode && "click to delete"}
+        {/* {this.state.deleteMode && "click to delete"} */}
         {/* </span> */}
       </div>
     );

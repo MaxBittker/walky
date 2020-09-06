@@ -74,7 +74,6 @@ wsServer.on("request", function(request) {
       // deletion;
       let data = packet.data as EntityLayout;
       delete entityState[data.uuid];
-      console.log("deleting: " + data);
       sendEntityUpdate();
     }
   });
