@@ -83,7 +83,7 @@ class UI extends React.Component {
       window.setTimeout(() => {
         this.setState({ deleteMode: false });
         window.deleteMode = false;
-      }, 50);
+      }, 500);
     });
   }
   imageUpload(e: React.ChangeEvent) {
