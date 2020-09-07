@@ -77,6 +77,13 @@ function startInput() {
   window.addEventListener("keydown", event => {
     let { key, keyCode } = event;
     let { me } = getState();
+    if (key == "Control") {
+      console.log("focusing");
+      document.getElementById("fake-input").focus();
+    }
+    if (event.getModifierState("Control")) {
+      return;
+    }
     if (!me.word) {
       me.word = "";
     }

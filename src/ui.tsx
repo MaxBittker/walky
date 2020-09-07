@@ -18,13 +18,33 @@ const config = {
   debug: false
 };
 
-// // Note: A single file comes from event.target.files on <input>
-// document.getElementById("window").addEventListener("drop", e => {
-//   e.stopPropagation();
-//   e.preventDefault();
+// const target = document.getElementById('window');
 
-//   uploadImage(e.dataTransfer.files);
-// });
+let fakeInput = document.getElementById("fake-input");
+
+fakeInput.addEventListener("paste", e => {
+  e.preventDefault();
+  uploadImage(e.clipboardData.files[0]);
+});
+
+// Note: A single file comes from event.target.files on <input>
+document.body.addEventListener("drop", e => {
+  e.stopPropagation();
+  e.preventDefault();
+
+  uploadImage(e.dataTransfer.files[0]);
+});
+document.body.addEventListener("dragenter", event => {
+  event.stopPropagation();
+  event.preventDefault();
+});
+document.body.addEventListener("dragover", event => {
+  event.stopPropagation();
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "copy";
+});
+// ondragover="event.stopPropagation(); event.preventDefault(); handleDragOver(event);"
+// ondrop="event.stopPropagation(); event.preventDefault(); handleDrop(event);">
 
 function uploadImage(file: File) {
   readAndCompressImage(file, config).then((resizedImage: File) => {

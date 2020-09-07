@@ -118,5 +118,5 @@ img {
   filter: drop-shadow(1px 1px 5px #f44);
 }
 #fake-input {
-  visibility: hidden;
+  opacity: 0;
 }
