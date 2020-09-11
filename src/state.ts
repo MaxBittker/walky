@@ -31,6 +31,7 @@ state.entities = [];
 function resize() {
   state.frame = { x: window.innerWidth, y: window.innerHeight };
   state.center = Vector.div(state.frame, 2);
+  // console.log("resized!");
 }
 resize();
 window.state = state;

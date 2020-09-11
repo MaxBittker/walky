@@ -31,6 +31,7 @@ function updateCamera(elapsedTicks: number) {
     camera,
     Vector.mult(directionTowardsPos, camera_speed)
   );
+  // state.camera = { x: 0, y: 0 };
 }
 
 export { updateCamera };

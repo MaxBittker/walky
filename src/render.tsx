@@ -8,10 +8,10 @@ import { getState } from "./state";
 import { AgentLayout } from "./types";
 let Vector = Matter.Vector;
 
-let zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
-window.addEventListener("resize", () => {
-  zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
-});
+// let zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
+// window.addEventListener("resize", () => {
+//   zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
+// });
 
 function renderAgent(agent: AgentLayout) {
   let { camera, center, me } = getState();
@@ -89,7 +89,7 @@ function render() {
               style={{
                 left: relPos.x,
                 top: relPos.y,
-                transform: `translate(-50%, -50%) scale(${scale * zoom}) `
+                transform: `translate(-50%, -50%) scale(${scale}) `
               }}
             />
           );
