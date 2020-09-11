@@ -31,7 +31,7 @@ fakeInput.addEventListener("paste", e => {
 document.body.addEventListener("drop", e => {
   e.stopPropagation();
   e.preventDefault();
-
+  console.log(e.dataTransfer.getData("URL"));
   uploadImage(e.dataTransfer.files[0]);
 });
 document.body.addEventListener("dragenter", event => {
@@ -99,13 +99,14 @@ class UI extends React.Component {
       state.me.target = undefined;
       sendEntityUpdate(uuid);
     };
-    // document.body.addEventListener("mousedown", () => {
-    //   if(delete)
-    //   window.setTimeout(() => {
-    //     this.setState({ deleteMode: false });
-    //     window.deleteMode = false;
-    //   }, 500);
-    // });
+    document.body.addEventListener("click", () => {
+      if (window.deleteMode) {
+        window.setTimeout(() => {
+          this.setState({ deleteMode: false });
+          window.deleteMode = false;
+        }, 5);
+      }
+    });
   }
   imageUpload(e: React.ChangeEvent) {
     console.log(e.target.files);

@@ -80,7 +80,10 @@ function render() {
           return (
             <img
               key={i}
-              onClick={() => window.deleteImage(uuid)}
+              onClick={e => {
+                e.stopPropagation();
+                window.deleteImage(uuid);
+              }}
               src={window.location.origin + url}
               // src={"http://walky.space" + url}
               style={{
