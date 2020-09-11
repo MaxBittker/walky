@@ -91,6 +91,10 @@ img {
   z-index: 66; */
   /* user-select: none; */
 }
+
+#items {
+  user-select: none;
+}
 #add-image {
   left: 0;
   bottom: 0;
