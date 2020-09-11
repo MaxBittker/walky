@@ -90,11 +90,13 @@ class UI extends React.Component {
   constructor(props: any) {
     super(props);
     window.deleteMode = false;
+    document.body.className = "";
     this.state = { file: null, deleteMode: false };
 
     window.deleteImage = (uuid: string) => {
       this.setState({ deleteMode: false });
       window.deleteMode = false;
+      document.body.className = "";
       let state = getState();
       state.me.target = undefined;
       sendEntityUpdate(uuid);
@@ -104,6 +106,7 @@ class UI extends React.Component {
         window.setTimeout(() => {
           this.setState({ deleteMode: false });
           window.deleteMode = false;
+          document.body.className = "";
         }, 5);
       }
     });
@@ -127,6 +130,7 @@ class UI extends React.Component {
   enterDeleteMode(e: React.MouseEvent) {
     if (this.state.deleteMode) {
       window.deleteMode = false;
+      document.body.className = "";
       this.setState({ deleteMode: false });
       return;
     }
@@ -136,6 +140,7 @@ class UI extends React.Component {
     let state = getState();
     state.me.target = undefined;
     window.deleteMode = true;
+    document.body.className = "deleting";
     this.setState({ deleteMode: true });
   }
 

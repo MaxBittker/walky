@@ -84,8 +84,8 @@ function render() {
                 e.stopPropagation();
                 window.deleteImage(uuid);
               }}
-              src={window.location.origin + url}
-              // src={"http://walky.space" + url}
+              // src={window.location.origin + url}
+              src={"http://walky.space" + url}
               style={{
                 left: relPos.x,
                 top: relPos.y,
