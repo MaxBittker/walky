@@ -122,3 +122,14 @@ img {
 #fake-input {
   opacity: 0;
 }
+
+#chat-image {
+  left: 200;
+  bottom: 0;
+  /* filter: drop-shadow(0px 0px 5px #444); */
+}
+@media screen and (min-width: 600px) {
+  #chat-image {
+    display: none;
+  }
+}

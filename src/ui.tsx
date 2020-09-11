@@ -5,6 +5,7 @@ import { getState } from "./state";
 // import { AgentLayout } from "./types";
 // let Vector = Matter.Vector;
 import add from "./../assets/add.gif";
+import chat from "./../assets/bubble.png";
 import subtract from "./../assets/subtract.gif";
 
 import { readAndCompressImage } from "browser-image-resizer";
@@ -22,10 +23,10 @@ const config = {
 
 let fakeInput = document.getElementById("fake-input");
 
-fakeInput.addEventListener("paste", e => {
-  e.preventDefault();
-  uploadImage(e.clipboardData.files[0]);
-});
+// fakeInput.addEventListener("paste", e => {
+//   e.preventDefault();
+//   uploadImage(e.clipboardData.files[0]);
+// });
 
 // Note: A single file comes from event.target.files on <input>
 document.body.addEventListener("drop", e => {
@@ -162,6 +163,15 @@ class UI extends React.Component {
           className={"tool " + (this.state.deleteMode ? "active" : "")}
           id="subtract-image"
           onClick={e => this.enterDeleteMode(e)}
+        />
+
+        <img
+          src={chat}
+          className="tool"
+          id="chat-image"
+          onClick={e => {
+            fakeInput.focus();
+          }}
         />
         {/* {this.state.deleteMode && "click to delete"} */}
         {/* </span> */}
