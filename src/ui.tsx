@@ -5,7 +5,7 @@ import { getState } from "./state";
 // import { AgentLayout } from "./types";
 // let Vector = Matter.Vector;
 import add from "./../assets/add.gif";
-import chat from "./../assets/bubble.png";
+import chat from "./../assets/chat.gif";
 import subtract from "./../assets/subtract.gif";
 
 import { readAndCompressImage } from "browser-image-resizer";
