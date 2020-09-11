@@ -95,6 +95,9 @@ img {
 #items {
   user-select: none;
 }
+#items img {
+  user-select: none;
+}
 #add-image {
   left: 0;
   bottom: 0;
