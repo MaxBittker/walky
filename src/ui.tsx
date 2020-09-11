@@ -170,6 +170,8 @@ class UI extends React.Component {
           className="tool"
           id="chat-image"
           onClick={e => {
+            let state = getState();
+            state.me.target = undefined;
             fakeInput.focus();
           }}
         />
