@@ -194,7 +194,7 @@ class UI extends React.Component {
               <span style={{ textDecoration: "underline" }}>sky.</span>
             </h1>
             <br></br>
-            <p>(updated 9/9)</p>
+            <p>(updated 9/12)</p>
           </div>
         )}
       </div>
