@@ -30,6 +30,11 @@ body {
   /* transition: transform 100ms; */
 }
 
+#entities img {
+  box-shadow: 4px 4px 12px black;
+  mix-blend-mode: normal;
+}
+
 * {
   color: #333;
   margin: 0;
@@ -148,6 +153,7 @@ img {
   }
 }
 #info {
+  box-shadow: 4px 4px 12px black;
   position: absolute;
   z-index: 99;
   left: 3em;

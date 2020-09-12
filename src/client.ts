@@ -69,7 +69,7 @@ function processUpdate(packet: PacketLayout) {
     processAgents(data as { [uuid: string]: AgentLayout });
     // console.log(state.agents[0].lastUpdated - Date.now());
   } else if (type == PacketTypes.entityUpdate) {
-    state.entities = Object.values(data);
+    state.entities = Object.values(data).sort((a, b) => a.iid - b.iid);
   } else if (type == PacketTypes.pong) {
     clockSync(data as PingLayout);
   }

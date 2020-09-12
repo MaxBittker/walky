@@ -7,6 +7,7 @@ interface EntityLayout {
   url: string;
   pos: Matter.Vector;
   scale: number;
+  iid: number;
 }
 
 interface AgentLayout {

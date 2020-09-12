@@ -3,7 +3,6 @@ import * as fs from "fs";
 import * as http from "http";
 import * as express from "express";
 import * as multer from "multer";
-
 function startEndpoints(entityUpload: any) {
   const app = express();
   const httpServer = http.createServer(app);

@@ -22,6 +22,7 @@ const wsServer = new websocket.server({
 console.log("LISTENING!");
 
 let t = 0;
+let iid = 1;
 let agentState: { [uuid: string]: AgentLayout } = {};
 let entityState: { [uuid: string]: EntityLayout } = {};
 
@@ -38,8 +39,10 @@ function entityUpload(
     uuid,
     url,
     pos: position,
-    scale: 1.0
+    scale: 1.0,
+    iid
   };
+  iid++;
   sendEntityUpdate();
 }
 startEndpoints(entityUpload);
