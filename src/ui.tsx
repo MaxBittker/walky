@@ -188,7 +188,6 @@ class UI extends React.Component {
               }}
               src={X}
             ></img>
-            <h2>Catch of the day:</h2>
             <h1>
               Please post images of the{" "}
               <span style={{ textDecoration: "underline" }}>sky.</span>

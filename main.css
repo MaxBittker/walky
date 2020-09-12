@@ -168,8 +168,8 @@ img {
 }
 #close {
   position: absolute;
-  right: 2em;
-  top: 2em;
+  right: 1.5em;
+  top: 1.5em;
   width: 32px;
   height: 32px;
   pointer-events: all;
