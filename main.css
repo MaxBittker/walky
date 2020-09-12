@@ -147,3 +147,25 @@ img {
     display: none;
   }
 }
+#info {
+  position: absolute;
+  z-index: 99;
+  left: 3em;
+  top: 3em;
+  right: 3em;
+  padding: 2em;
+  font-size: 2vh;
+  max-width: 700px;
+  margin: auto;
+  background-color: white;
+  border: 5px dashed #444;
+}
+#close {
+  position: absolute;
+  right: 2em;
+  top: 2em;
+  width: 32px;
+  height: 32px;
+  pointer-events: all;
+  cursor: pointer;
+}

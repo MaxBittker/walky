@@ -5,6 +5,7 @@ import { getState } from "./state";
 // import { AgentLayout } from "./types";
 // let Vector = Matter.Vector;
 import add from "./../assets/add.gif";
+import X from "./../assets/delete.ico";
 import chat from "./../assets/chat.gif";
 import subtract from "./../assets/subtract.gif";
 
@@ -92,7 +93,7 @@ class UI extends React.Component {
     super(props);
     window.deleteMode = false;
     document.body.className = "";
-    this.state = { file: null, deleteMode: false };
+    this.state = { file: null, deleteMode: false, infoOpen: true };
 
     window.deleteImage = (uuid: string) => {
       this.setState({ deleteMode: false });
@@ -113,7 +114,6 @@ class UI extends React.Component {
     });
   }
   imageUpload(e: React.ChangeEvent) {
-    console.log(e.target.files);
     let files = e.target.files;
     if (files.length == 0) {
       return;
@@ -146,7 +146,7 @@ class UI extends React.Component {
   }
 
   render() {
-    // let { file } = this.state;
+    let { infoOpen } = this.state;
     return (
       <div className="items">
         <input
@@ -176,8 +176,27 @@ class UI extends React.Component {
             fakeInput.focus();
           }}
         />
-        {/* {this.state.deleteMode && "click to delete"} */}
-        {/* </span> */}
+        {infoOpen && (
+          <div id="info">
+            <img
+              alt="ok"
+              id="close"
+              onClick={e => {
+                e.stopPropagation();
+
+                this.setState({ infoOpen: false });
+              }}
+              src={X}
+            ></img>
+            <h2>Catch of the day:</h2>
+            <h1>
+              Please post images of the{" "}
+              <span style={{ textDecoration: "underline" }}>sky.</span>
+            </h1>
+            <br></br>
+            <p>(updated 9/9)</p>
+          </div>
+        )}
       </div>
     );
   }
