@@ -24,7 +24,7 @@ body {
 @media screen and (max-width: 600px) {
   #window {
     zoom: 0.6;
-    overflow: scroll;
+    overflow: visible;
 
     /* overflow: hidden; */
     /* overscroll-behavior-y: none; */
