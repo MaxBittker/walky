@@ -93,7 +93,7 @@ class UI extends React.Component {
     super(props);
     window.deleteMode = false;
     document.body.className = "";
-    this.state = { file: null, deleteMode: false, infoOpen: true };
+    this.state = { file: null, deleteMode: false, infoOpen: false };
 
     window.deleteImage = (uuid: string) => {
       this.setState({ deleteMode: false });

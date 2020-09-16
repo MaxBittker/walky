@@ -74,6 +74,13 @@ function render() {
         className={window.deleteMode ? "deleting" : ""}
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
+        <div id="info">
+          <h2>
+            Please post images of{" "}
+            <span style={{ textDecoration: "underline" }}> plants.</span>
+          </h2>
+          <p style={{ float: "right" }}>(updated 9/15)</p>
+        </div>
         {entities.map(({ url, pos, scale, uuid }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
           let relPos = pos;
