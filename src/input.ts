@@ -156,4 +156,4 @@ function startInput() {
   }
 }
 
-export { startInput };
+export { startInput, convertTarget };

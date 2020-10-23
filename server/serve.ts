@@ -74,9 +74,16 @@ wsServer.on("request", function(request) {
       uuid = data.uuid;
       agentState[uuid] = data;
     } else if (type == PacketTypes.entityUpdate) {
-      // deletion;
       let data = packet.data as EntityLayout;
-      delete entityState[data.uuid];
+      if (data.pos) {
+        // movement;
+        iid++;
+        entityState[data.uuid].pos = data.pos;
+        entityState[data.uuid].iid = iid;
+      } else {
+        // deletion;
+        delete entityState[data.uuid];
+      }
       sendEntityUpdate();
     }
   });

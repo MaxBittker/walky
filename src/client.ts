@@ -87,7 +87,28 @@ function sendUpdate() {
   ws.send(JSON.stringify(packet));
 }
 
-function sendEntityUpdate(uuid: string) {
+function sendEntityUpdate(i_uuid: string) {
+  if (ws.readyState != ws.OPEN) {
+    return;
+  }
+
+  const { entities } = getState();
+
+  let ent = entities.find(({ uuid }) => uuid === i_uuid);
+  if (!ent) {
+    console.log("bad entity update: " + i_uuid);
+    return;
+  }
+  let packet = {
+    type: PacketTypes.entityUpdate,
+    data: ent
+  };
+
+  console.log("updating: " + i_uuid);
+  ws.send(JSON.stringify(packet));
+}
+
+function sendEntityDelete(uuid: string) {
   if (ws.readyState != ws.OPEN) {
     return;
   }
@@ -100,4 +121,4 @@ function sendEntityUpdate(uuid: string) {
   ws.send(JSON.stringify(packet));
 }
 
-export { sendUpdate, requestClockSync, sendEntityUpdate };
+export { sendUpdate, requestClockSync, sendEntityDelete, sendEntityUpdate };
