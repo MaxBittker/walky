@@ -83,7 +83,8 @@ function render() {
         <div id="info">
           <h2>
             Please post{" "}
-            <span style={{ textDecoration: "underline" }}>spooky stuff</span>
+            <span style={{ textDecoration: "underline" }}>moderately</span>{" "}
+            spooky stuff.
           </h2>
           <p style={{ float: "right" }}>(updated 10/23)</p>
         </div>
