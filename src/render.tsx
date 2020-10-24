@@ -82,7 +82,7 @@ function render() {
       >
         <div id="info">
           <h2>Please post spooky or autumnal photos >:)</h2>
-          <p style={{ float: "right" }}>(updated 10/23)</p>
+          <p style={{ float: "right" }}>(updated 10/24)</p>
         </div>
         {entities.map(({ url, pos, scale, uuid }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
