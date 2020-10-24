@@ -1,7 +1,7 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
-import walk from "./../assets/walk2.gif";
-import stand from "./../assets/stand1.gif";
+import walk from "./../assets/evil_walk.gif";
+import stand from "./../assets/evil_stand.gif";
 // import bubble from "./../assets/bubble.png";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
@@ -81,10 +81,7 @@ function render() {
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
         <div id="info">
-          <h2>
-            Please post the spookiest photo in your camera roll / downloads
-            folder.
-          </h2>
+          <h2>Please post spooky or autumnal photos from your camera roll.</h2>
           <p style={{ float: "right" }}>(updated 10/23)</p>
         </div>
         {entities.map(({ url, pos, scale, uuid }, i) => {
