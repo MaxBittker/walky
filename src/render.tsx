@@ -82,9 +82,8 @@ function render() {
       >
         <div id="info">
           <h2>
-            Please post{" "}
-            <span style={{ textDecoration: "underline" }}>moderately</span>{" "}
-            spooky stuff.
+            Please post the spookiest photo in your camera roll / downloads
+            folder.
           </h2>
           <p style={{ float: "right" }}>(updated 10/23)</p>
         </div>
