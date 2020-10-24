@@ -81,7 +81,7 @@ function render() {
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
         <div id="info">
-          <h2>Please post spooky or autumnal photos from your camera roll.</h2>
+          <h2>Please post spooky or autumnal photos >:)</h2>
           <p style={{ float: "right" }}>(updated 10/23)</p>
         </div>
         {entities.map(({ url, pos, scale, uuid }, i) => {
