@@ -1,5 +1,6 @@
 import { getState } from "./state";
 import * as Matter from "matter-js";
+import { start_audio } from "./audio";
 let Vector = Matter.Vector;
 
 let zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
@@ -19,6 +20,7 @@ let mouseDown = false;
 function startInput() {
   window.addEventListener("click", event => {
     // event.preventDefault();
+    start_audio();
 
     let state = getState();
     let eventPos = { x: event.pageX, y: event.pageY };

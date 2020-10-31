@@ -6,11 +6,13 @@ import { updateCamera } from "./src/camera";
 import { updateAgent } from "./src/movement";
 import { sendUpdate, requestClockSync } from "./src/client";
 import { getState } from "./src/state";
+import { attenuate } from "./src/audio";
+
 startInput();
 startUI();
 let i = 0;
 
-let debug = document.getElementById("debug");
+// let debug = document.getElementById("debug");
 
 let lasttick = Date.now();
 function tick() {
@@ -23,6 +25,7 @@ function tick() {
   state.tick += elapsedTicks;
 
   state.me = updateAgent(me, state.tick);
+  attenuate();
   // console.log("agents:");
   state.agents = agents.map(agent => updateAgent(agent, state.tick));
 

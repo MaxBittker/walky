@@ -1,5 +1,5 @@
-function nrandom() {
-  return Math.random() - 0.5;
+function nrandom(s = 1) {
+  return (Math.random() - 0.5) * s;
 }
 
 export { nrandom };
