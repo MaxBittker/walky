@@ -1,7 +1,7 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
-import walk from "./../assets/evil_walk.gif";
-import stand from "./../assets/evil_stand.gif";
+import walk from "./../assets/ear_walk.gif";
+import stand from "./../assets/ear_stand.gif";
 // import bubble from "./../assets/bubble.png";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
@@ -67,10 +67,16 @@ function renderAgent(agent: AgentLayout, i: number) {
   );
 }
 function render() {
-  const { camera, entities, me, agents, center } = getState();
+  const { camera, entities, me, agents, center, audios } = getState();
   const cameraPos = Vector.sub(center, camera);
   const element = (
     <React.Fragment>
+      {/* <div
+        id="background"
+        style={{
+          backgroundPosition: `${cameraPos.x * 0.5}px,${cameraPos.y * 0.5}px `
+        }}
+      ></div> */}
       {agents.map(renderAgent)}
       <div
         id="entities"
@@ -84,7 +90,26 @@ function render() {
           <h2>Please post spooky or autumnal photos >:)</h2>
           <p style={{ float: "right" }}>(updated 10/24)</p>
         </div>
-        {entities.map(({ url, pos, scale, uuid }, i) => {
+        {audios.map(({ url, pos }, i) => {
+          // let relPos = Vector.add(Vector.sub(pos, camera), center);
+          let relPos = pos;
+          return (
+            <h1
+              key={i}
+              className="photo"
+              style={{
+                position: "absolute",
+                left: relPos.x,
+                top: relPos.y,
+                transform: `translate(-50%, -50%)`
+              }}
+            >
+              .
+            </h1>
+          );
+        })}
+
+        {entities.slice(0, 10).map(({ url, pos, scale, uuid }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
           let relPos = pos;
           return (
@@ -101,7 +126,7 @@ function render() {
               style={{
                 left: relPos.x,
                 top: relPos.y,
-                transform: `translate(-50%, -50%) scale(${scale}) `
+                transform: `translate(-50%, -50%) scale(${scale * 0.1}) `
               }}
             />
           );

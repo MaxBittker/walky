@@ -23,6 +23,7 @@ let state: StateLayout = {
   frame: { x: 0, y: 0 },
   center: { x: 0, y: 0 },
   entities: [],
+  audios: [],
   agents: []
 };
 

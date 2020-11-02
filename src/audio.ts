@@ -9,7 +9,7 @@ function randomSound() {
   return ambient_sounds[Math.floor(Math.random() * ambient_sounds.length)];
 }
 
-let radius = 2000;
+let radius = 4000;
 function randomSoundEntity() {
   let sound = randomSound();
   return {
@@ -19,7 +19,7 @@ function randomSoundEntity() {
 }
 let sounds = [];
 
-for (var i = 0; i < 100; i++) {
+for (var i = 0; i < 80; i++) {
   sounds.push(randomSoundEntity());
 }
 
@@ -31,9 +31,10 @@ const audioContext = new AudioContext();
 
 class Source {
   pos: Matter.Vector;
-  url: String;
+  url: string;
   playing: boolean;
   activated: boolean;
+  loaded: boolean;
   audioElement: HTMLAudioElement;
   track: MediaElementAudioSourceNode;
   lowpass: BiquadFilterNode;
@@ -45,8 +46,6 @@ class Source {
 
     // get the audio element
     this.audioElement = new Audio();
-    this.audioElement.crossOrigin = "anonymous";
-    this.audioElement.src = url;
 
     this.audioElement.addEventListener(
       "ended",
@@ -66,18 +65,27 @@ class Source {
 
     this.gain = audioContext.createGain();
 
-    this.track
-      .connect(this.lowpass)
-      .connect(this.gain)
-      .connect(audioContext.destination);
-
     this.activated = false;
     this.playing = false;
+    this.loaded = false;
   }
-
+  load() {
+    if (!this.loaded) {
+      console.log("loading");
+      this.audioElement.crossOrigin = "anonymous";
+      this.audioElement.src = this.url;
+      this.loaded = true;
+    }
+  }
   start() {
-    if (!this.activated) {
+    if (this.loaded && !this.activated) {
       let playPromise = this.audioElement.play();
+
+      this.track
+        .connect(this.lowpass)
+        .connect(this.gain)
+        .connect(audioContext.destination);
+
       playPromise.then(() => {
         this.activated = true;
         this.playing = true;
@@ -85,8 +93,14 @@ class Source {
     }
   }
   play() {
-    if (!this.playing && this.activated) {
+    if (this.loaded && !this.playing && this.activated) {
       let playPromise = this.audioElement.play();
+
+      this.track
+        .connect(this.lowpass)
+        .connect(this.gain)
+        .connect(audioContext.destination);
+
       playPromise.then(() => {
         this.playing = true;
       });
@@ -95,6 +109,11 @@ class Source {
   pause() {
     if (this.playing) {
       this.audioElement.pause();
+
+      this.track.disconnect(this.lowpass);
+      this.lowpass.disconnect(this.gain);
+      this.gain.disconnect(audioContext.destination);
+
       this.playing = false;
     }
   }
@@ -109,6 +128,9 @@ class Source {
     this.gain.gain.value = Math.min(gain, 0.8);
     this.lowpass.frequency.value = Math.min(cutoff, 22000);
 
+    if (gain > 0.05) {
+      this.load();
+    }
     if (gain < 0.1) {
       this.pause();
     } else {
@@ -118,6 +140,10 @@ class Source {
 }
 
 let sources = sounds.map(({ pos, url }) => new Source(pos, url));
+
+let state = getState();
+
+state.audios = sources;
 
 function start_audio() {
   if (audioContext.state === "suspended") {
@@ -129,6 +155,10 @@ function start_audio() {
 function attenuate() {
   let { me } = getState();
   let { pos } = me;
-  sources.forEach(s => s.attenuate(pos));
+  sources.forEach(s => {
+    if (Math.random() > 0.8) {
+      s.attenuate(pos);
+    }
+  });
 }
-export { start_audio, attenuate };
+export { start_audio, attenuate, Source };
