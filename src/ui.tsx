@@ -18,7 +18,7 @@ const config = {
   maxWidth: 500,
   maxHeight: 500,
   autoRotate: true,
-  debug: false
+  debug: false,
 };
 
 // const target = document.getElementById('window');
@@ -31,17 +31,17 @@ let fakeInput = document.getElementById("fake-input");
 // });
 
 // Note: A single file comes from event.target.files on <input>
-document.body.addEventListener("drop", e => {
+document.body.addEventListener("drop", (e) => {
   e.stopPropagation();
   e.preventDefault();
   console.log(e.dataTransfer.getData("URL"));
   uploadImage(e.dataTransfer.files[0]);
 });
-document.body.addEventListener("dragenter", event => {
+document.body.addEventListener("dragenter", (event) => {
   event.stopPropagation();
   event.preventDefault();
 });
-document.body.addEventListener("dragover", event => {
+document.body.addEventListener("dragover", (event) => {
   event.stopPropagation();
   event.preventDefault();
   event.dataTransfer.dropEffect = "copy";
@@ -61,14 +61,14 @@ function uploadImage(file: File) {
 
     fetch("/upload", {
       method: "POST",
-      body: formData
+      body: formData,
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         console.log(data);
         add;
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
 
@@ -98,7 +98,7 @@ class UI extends React.Component {
       file: null,
       deleteMode: false,
       moveMode: false,
-      infoOpen: false
+      infoOpen: false,
     };
 
     window.deleteImage = (uuid: string) => {
@@ -176,6 +176,8 @@ class UI extends React.Component {
   }
   render() {
     let { infoOpen } = this.state;
+    const urlParams = new URLSearchParams(window.location.search);
+    let ismax = urlParams.get("u") == "max";
     return (
       <div className="items">
         <input
@@ -183,28 +185,37 @@ class UI extends React.Component {
           id="imgupload"
           accept="image/*"
           style={{ display: "none" }}
-          onChange={e => this.imageUpload(e)}
+          onChange={(e) => this.imageUpload(e)}
         />
         {/* {file && <img src={URL.createObjectURL(file)} />} */}
-        <img src={add} className="tool" id="add-image" onClick={imagePrompt} />
-        <img
+        {ismax && (
+          <img
+            src={add}
+            className="tool"
+            id="add-image"
+            onClick={imagePrompt}
+          />
+        )}
+        {/* <img
           src={move}
           className={"tool " + (this.state.moveMode ? "active" : "")}
           id="move"
           onClick={e => this.enterMoveMode(e)}
-        />
-        <img
-          src={subtract}
-          className={"tool " + (this.state.deleteMode ? "active" : "")}
-          id="subtract-image"
-          onClick={e => this.enterDeleteMode(e)}
-        />
+        /> */}
+        {ismax && (
+          <img
+            src={subtract}
+            className={"tool " + (this.state.deleteMode ? "active" : "")}
+            id="subtract-image"
+            onClick={(e) => this.enterDeleteMode(e)}
+          />
+        )}
 
         <img
           src={chat}
           className="tool"
           id="chat-image"
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation();
             let state = getState();
             state.me.target = undefined;
@@ -216,7 +227,7 @@ class UI extends React.Component {
             <img
               alt="ok"
               id="close"
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
 
                 this.setState({ infoOpen: false });
