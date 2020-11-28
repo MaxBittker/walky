@@ -5,7 +5,7 @@ import seedrandom from "seedrandom";
 import ambient_sounds from "../scraper/ambient_sounds.json";
 
 // const rng = seedrandom("hello.");
-const rng = seedrandom("1");
+const rng = seedrandom("2");
 
 function randomSound() {
   return ambient_sounds[Math.floor(rng() * ambient_sounds.length)];

@@ -6706,13 +6706,6 @@
     ]
   },
   {
-    "id_audio": ["13218"],
-    "name_audio": ["Different Guns, AK47, M16, M60"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/b/7/8/b78f0cf1c8ac1dd389809a0c807c6d76.mp3"
-    ]
-  },
-  {
     "id_audio": ["6858"],
     "name_audio": ["dj decent"],
     "url_audio": [
@@ -6731,20 +6724,6 @@
     "name_audio": ["Emergency Alarm"],
     "url_audio": [
       "https://xml.ambient-mixer.com/audio/e/f/8/ef8f0369168f397ba21bdeebd3b95372.mp3"
-    ]
-  },
-  {
-    "id_audio": ["17972"],
-    "name_audio": ["Explosions"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/1/5/b/15bf280e28b1515eb4c423bff54fbe90.mp3"
-    ]
-  },
-  {
-    "id_audio": ["7456"],
-    "name_audio": ["explosions and gunshots"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/a/9/3/a93d37872ac26c13267ea7a06c5faf2d.mp3"
     ]
   },
   {
