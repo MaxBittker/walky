@@ -45,7 +45,7 @@ function renderAgent(agent: AgentLayout, i: number) {
         key={"w" + agent.uuid}
         style={{
           left: relPos.x,
-          top: relPos.y
+          top: relPos.y,
           // filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
           // transform: `translate(-50%, -75%)`
         }}
@@ -60,7 +60,7 @@ function renderAgent(agent: AgentLayout, i: number) {
           left: relPos.x,
           top: relPos.y,
           filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
-          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`
+          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`,
         }}
       ></img>
     </React.Fragment>
@@ -82,29 +82,32 @@ function render() {
         id="entities"
         className={classNames({
           deleting: window.deleteMode,
-          moving: window.moveMode
+          moving: window.moveMode,
         })}
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
         <div id="info">
-          <h2>Please post spooky or autumnal photos >:)</h2>
-          <p style={{ float: "right" }}>(updated 10/24)</p>
+          <h2>Welcome!</h2>
+          {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
+          <p style={{ float: "right" }}>
+            the space may contain loud or scary noises today
+          </p>
         </div>
-        {audios.map(({ url, pos }, i) => {
+        {audios.map(({ url, pos, name }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
           let relPos = pos;
           return (
             <h1
               key={i}
-              className="photo"
+              className="photo audio"
               style={{
                 position: "absolute",
                 left: relPos.x,
                 top: relPos.y,
-                transform: `translate(-50%, -50%)`
+                transform: `translate(-50%, -50%)`,
               }}
             >
-              .
+              {name}
             </h1>
           );
         })}
@@ -115,7 +118,7 @@ function render() {
           return (
             <img
               key={i}
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
                 window.deleteMode && window.deleteImage(uuid);
               }}
@@ -126,7 +129,7 @@ function render() {
               style={{
                 left: relPos.x,
                 top: relPos.y,
-                transform: `translate(-50%, -50%) scale(${scale * 0.1}) `
+                transform: `translate(-50%, -50%) scale(${scale * 4}) `,
               }}
             />
           );
@@ -155,10 +158,12 @@ function dragElement(elmnt) {
       return uuid === e.target.getAttribute("uuid").toString();
     });
     let ent = entities[i];
-
+    if (!ent) {
+      return;
+    }
     let convertedMouse = convertTarget({
       x: e.clientX,
-      y: e.clientY
+      y: e.clientY,
     });
     grabPos = Vector.sub(ent.pos, convertedMouse);
     activeUUID = e.target.getAttribute("uuid").toString();
@@ -187,7 +192,7 @@ function dragElement(elmnt) {
 
     let convertedMouse = convertTarget({
       x: e.clientX,
-      y: e.clientY
+      y: e.clientY,
     });
     ent.pos = Vector.add(grabPos, convertedMouse);
 

@@ -1,20 +1,26 @@
 import * as Matter from "matter-js";
 let Vector = Matter.Vector;
 import { getState } from "./state";
-import { nrandom } from "./utils";
-
+import seedrandom from "seedrandom";
 import ambient_sounds from "../scraper/ambient_sounds.json";
 
+// const rng = seedrandom("hello.");
+const rng = seedrandom("1");
+
 function randomSound() {
-  return ambient_sounds[Math.floor(Math.random() * ambient_sounds.length)];
+  return ambient_sounds[Math.floor(rng() * ambient_sounds.length)];
+}
+function n_rng(s = 1) {
+  return (rng() - 0.5) * s;
 }
 
-let radius = 4000;
+let radius = 6000;
 function randomSoundEntity() {
   let sound = randomSound();
   return {
-    pos: { x: nrandom(radius), y: nrandom(radius) },
-    url: sound["url_audio"][0]
+    pos: { x: n_rng(radius), y: n_rng(radius) },
+    url: sound["url_audio"][0],
+    name: sound["name_audio"][0],
   };
 }
 let sounds = [];
@@ -32,6 +38,7 @@ const audioContext = new AudioContext();
 class Source {
   pos: Matter.Vector;
   url: string;
+  name: string;
   playing: boolean;
   activated: boolean;
   loaded: boolean;
@@ -40,10 +47,10 @@ class Source {
   lowpass: BiquadFilterNode;
   gain: GainNode;
 
-  constructor(pos: Matter.Vector, url: string) {
+  constructor(pos: Matter.Vector, url: string, name: string) {
     this.pos = pos;
     this.url = url;
-
+    this.name = name;
     // get the audio element
     this.audioElement = new Audio();
 
@@ -125,7 +132,7 @@ class Source {
     let gain = 0.8 / safe_distance;
     let cutoff = 2000 / Math.pow(distance, 1.5);
 
-    this.gain.gain.value = Math.min(gain, 0.8);
+    this.gain.gain.value = Math.min(gain, 0.7);
     this.lowpass.frequency.value = Math.min(cutoff, 22000);
 
     if (gain > 0.05) {
@@ -139,7 +146,7 @@ class Source {
   }
 }
 
-let sources = sounds.map(({ pos, url }) => new Source(pos, url));
+let sources = sounds.map(({ pos, url, name }) => new Source(pos, url, name));
 
 let state = getState();
 
@@ -149,13 +156,13 @@ function start_audio() {
   if (audioContext.state === "suspended") {
     audioContext.resume();
   }
-  sources.forEach(s => s.start());
+  sources.forEach((s) => s.start());
 }
 
 function attenuate() {
   let { me } = getState();
   let { pos } = me;
-  sources.forEach(s => {
+  sources.forEach((s) => {
     if (Math.random() > 0.8) {
       s.attenuate(pos);
     }
