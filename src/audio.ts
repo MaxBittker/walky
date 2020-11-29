@@ -129,10 +129,10 @@ class Source {
     let distance = Math.pow(Vector.magnitude(delta), 1.5) / 3500;
     let safe_distance = Math.max(distance, 1);
     distance = Math.max(distance, 0.01);
-    let gain = 0.8 / safe_distance;
+    let gain = 0.7 / safe_distance;
     let cutoff = 2000 / Math.pow(distance, 1.5);
 
-    this.gain.gain.value = Math.min(gain, 0.7);
+    this.gain.gain.value = Math.min(gain, 0.6);
     this.lowpass.frequency.value = Math.min(cutoff, 22000);
 
     if (gain > 0.05) {
