@@ -14,7 +14,7 @@ function n_rng(s = 1) {
   return (rng() - 0.5) * s;
 }
 
-let radius = 6000;
+let radius = 9000;
 function randomSoundEntity() {
   let sound = randomSound();
   return {
@@ -25,11 +25,11 @@ function randomSoundEntity() {
 }
 let sounds = [];
 
-for (var i = 0; i < 80; i++) {
+for (var i = 0; i < 120; i++) {
   sounds.push(randomSoundEntity());
 }
 
-console.log(sounds);
+// console.log(sounds);
 
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 
@@ -51,6 +51,8 @@ class Source {
     this.pos = pos;
     this.url = url;
     this.name = name;
+    console.log(name);
+    console.log(url);
     // get the audio element
     this.audioElement = new Audio();
 

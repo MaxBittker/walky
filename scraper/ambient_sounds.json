@@ -6734,48 +6734,6 @@
     ]
   },
   {
-    "id_audio": ["17975"],
-    "name_audio": ["Future Weapon - Electro Gun"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/a/a/5/aa575ccdc7dac6afdbd7a0b633d89098.mp3"
-    ]
-  },
-  {
-    "id_audio": ["17976"],
-    "name_audio": ["Future Weapon - Impulse Gun 1"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/7/3/a/73a4cbdad718cce238c567f23f9dac04.mp3"
-    ]
-  },
-  {
-    "id_audio": ["17977"],
-    "name_audio": ["Future Weapon - Impulse Gun 2"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/7/1/e/71ec8bb5cfddab6dbf8abe9352b4f80c.mp3"
-    ]
-  },
-  {
-    "id_audio": ["17978"],
-    "name_audio": ["Future Weapon - Impulse Gun 3"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/d/b/5/db5b055dda737bd613a1289adca4d4f7.mp3"
-    ]
-  },
-  {
-    "id_audio": ["17973"],
-    "name_audio": ["Future Weapons - BFG"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/d/8/e/d8ecc89e6127f22035be12784820c0d6.mp3"
-    ]
-  },
-  {
-    "id_audio": ["17974"],
-    "name_audio": ["Future Weapons - Bio Gun"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/6/a/8/6a80f54c149078c0d41b7d0b4194ecc7.mp3"
-    ]
-  },
-  {
     "id_audio": ["4084"],
     "name_audio": ["Game Over"],
     "url_audio": [
@@ -18289,20 +18247,6 @@
     "name_audio": ["Hey Ho"],
     "url_audio": [
       "https://xml.ambient-mixer.com/audio/9/2/0/9205df69fa8180dfed100e8280a36ced.mp3"
-    ]
-  },
-  {
-    "id_audio": ["7780"],
-    "name_audio": ["Hey Jude"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/f/8/e/f8ec729b1ccbda4e19ff3d36c2e5598d.mp3"
-    ]
-  },
-  {
-    "id_audio": ["14974"],
-    "name_audio": ["hobbit drinking song medley"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/0/c/f/0cf64e40d37f277bf1711ad73369df37.mp3"
     ]
   },
   {
@@ -45628,20 +45572,6 @@
     ]
   },
   {
-    "id_audio": ["16556"],
-    "name_audio": ["Crying  - Nurse Please Help"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/7/d/9/7d980166e4f296f8f473ba86ed2fb880.mp3"
-    ]
-  },
-  {
-    "id_audio": ["16553"],
-    "name_audio": ["Crying - Woman Crying it Hurts"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/a/2/1/a214c8d074a80efce59aae9e67662250.mp3"
-    ]
-  },
-  {
     "id_audio": ["2559"],
     "name_audio": ["Crying child"],
     "url_audio": [
@@ -45655,13 +45585,7 @@
       "https://xml.ambient-mixer.com/audio/1/f/c/1fcf29d75f46bd5b727f9a99205eedf6.mp3"
     ]
   },
-  {
-    "id_audio": ["16554"],
-    "name_audio": ["Crying Why Are You Doing This"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/0/a/4/0a4417556c1a8288305cedf626973e90.mp3"
-    ]
-  },
+
   {
     "id_audio": ["8899"],
     "name_audio": ["Cuban men arguing over sports"],
@@ -46180,13 +46104,7 @@
       "https://xml.ambient-mixer.com/audio/f/c/9/fc90969790163f697cbc0f16b512786a.mp3"
     ]
   },
-  {
-    "id_audio": ["9907"],
-    "name_audio": ["Girl crying"],
-    "url_audio": [
-      "https://xml.ambient-mixer.com/audio/c/3/4/c34aece54826e043056c302a7b7d661b.mp3"
-    ]
-  },
+
   {
     "id_audio": ["17236"],
     "name_audio": ["Girl Fighting Noises"],
