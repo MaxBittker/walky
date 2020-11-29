@@ -14,7 +14,7 @@ function n_rng(s = 1) {
   return (rng() - 0.5) * s;
 }
 
-let radius = 9000;
+let radius = 10000;
 function randomSoundEntity() {
   let sound = randomSound();
   return {
@@ -25,7 +25,7 @@ function randomSoundEntity() {
 }
 let sounds = [];
 
-for (var i = 0; i < 120; i++) {
+for (var i = 0; i < 130; i++) {
   sounds.push(randomSoundEntity());
 }
 

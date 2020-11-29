@@ -90,7 +90,7 @@ function render() {
           <h2>Welcome!</h2>
           {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
           <p style={{ float: "right" }}>
-            the space may contain loud or scary noises today
+            The space may contain loud or scary noises today.
           </p>
         </div>
         {audios.map(({ url, pos, name }, i) => {
