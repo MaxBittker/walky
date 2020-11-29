@@ -47,7 +47,10 @@ body {
 }
 
 #entities {
+  transform: translateZ(0);
+
   /* transition: transform 100ms; */
+  will-change: transform;
 }
 
 #entities img {
@@ -241,7 +244,9 @@ img {
 }
 
 .audio {
+  position: absolute;
   opacity: 0.2;
   font-size: 60px;
   filter: blur(25px);
+  position: "absolute";
 }

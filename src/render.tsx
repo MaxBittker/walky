@@ -101,7 +101,6 @@ function render() {
               key={i}
               className="photo audio"
               style={{
-                position: "absolute",
                 left: relPos.x,
                 top: relPos.y,
                 transform: `translate(-50%, -50%)`,
@@ -154,13 +153,15 @@ function dragElement(elmnt) {
     e.preventDefault();
 
     const { entities } = getState();
-    let i = entities.findIndex(({ uuid }) => {
-      return uuid === e.target.getAttribute("uuid").toString();
-    });
-    let ent = entities[i];
-    if (!ent) {
+    let myUUID = e.target.getAttribute("uuid");
+    if (!myUUID) {
       return;
     }
+    let i = entities.findIndex(({ uuid }) => {
+      return uuid === myUUID.toString();
+    });
+    let ent = entities[i];
+
     let convertedMouse = convertTarget({
       x: e.clientX,
       y: e.clientY,
