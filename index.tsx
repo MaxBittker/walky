@@ -1,5 +1,6 @@
 import { render } from "./src/render";
 import { startUI } from "./src/ui";
+import "regenerator-runtime/runtime";
 
 import { startInput } from "./src/input";
 import { updateCamera } from "./src/camera";
@@ -27,7 +28,7 @@ function tick() {
   state.me = updateAgent(me, state.tick);
   attenuate();
   // console.log("agents:");
-  state.agents = agents.map(agent => updateAgent(agent, state.tick));
+  state.agents = agents.map((agent) => updateAgent(agent, state.tick));
 
   // debug.innerHTML = state.tick;
   updateCamera(elapsedTicks);

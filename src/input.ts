@@ -18,7 +18,7 @@ function convertTarget(t: Matter.Vector) {
 }
 let mouseDown = false;
 function startInput() {
-  window.addEventListener("click", event => {
+  window.addEventListener("click", (event) => {
     // event.preventDefault();
     start_audio();
 
@@ -26,16 +26,16 @@ function startInput() {
     let eventPos = { x: event.pageX, y: event.pageY };
     state.me.target = convertTarget(eventPos);
   });
-  window.addEventListener("mousedown", event => {
+  window.addEventListener("mousedown", (event) => {
     mouseDown = true;
   });
-  window.addEventListener("mouseup", event => {
+  window.addEventListener("mouseup", (event) => {
     mouseDown = false;
   });
-  window.addEventListener("mouseleave", event => {
+  window.addEventListener("mouseleave", (event) => {
     mouseDown = false;
   });
-  window.addEventListener("mousemove", event => {
+  window.addEventListener("mousemove", (event) => {
     // event.preventDefault();
     if (!mouseDown) return;
     let state = getState();
@@ -43,7 +43,7 @@ function startInput() {
     state.me.target = convertTarget(eventPos);
   });
 
-  window.addEventListener("touchmove", event => {
+  window.addEventListener("touchmove", (event) => {
     event.preventDefault();
 
     let state = getState();
@@ -52,13 +52,13 @@ function startInput() {
     for (let i = 0; i < touches.length; i++) {
       state.me.target = convertTarget({
         x: touches[i].pageX,
-        y: touches[i].pageY
+        y: touches[i].pageY,
       });
     }
   });
 
-  window.addEventListener("touchstart", event => {
-    event.preventDefault();
+  window.addEventListener("touchstart", (event) => {
+    // event.preventDefault();
     let state = getState();
 
     const touches = event.targetTouches;
@@ -66,7 +66,7 @@ function startInput() {
     for (let i = 0; i < touches.length; i++) {
       state.me.target = convertTarget({
         x: touches[i].pageX,
-        y: touches[i].pageY
+        y: touches[i].pageY,
       });
     }
   });
@@ -76,7 +76,7 @@ function startInput() {
   let right = false;
   let down = false;
   let keypoll: number;
-  window.addEventListener("keydown", event => {
+  window.addEventListener("keydown", (event) => {
     let { key, keyCode } = event;
     let { me } = getState();
     if (key == "Control") {
@@ -113,7 +113,7 @@ function startInput() {
     }
     keypoll = window.setInterval(pollKeys, 16);
   });
-  window.addEventListener("keyup", event => {
+  window.addEventListener("keyup", (event) => {
     let { keyCode } = event;
     if (keyCode === 37) {
       left = false;

@@ -8,7 +8,7 @@ import {
   PacketTypes,
   PacketLayout,
   EntityLayout,
-  PingLayout
+  PingLayout,
 } from "../src/types";
 import { updateAgent } from "../src/movement";
 import { Vector } from "matter-js";
@@ -16,7 +16,7 @@ const server = http.createServer();
 
 server.listen(9898);
 const wsServer = new websocket.server({
-  httpServer: server
+  httpServer: server,
 });
 
 console.log("LISTENING!");
@@ -32,6 +32,7 @@ function entityUpload(
   uuid: string,
   url: string,
   position: Vector,
+  size: Vector,
   owner: string
 ) {
   console.log(url);
@@ -39,20 +40,21 @@ function entityUpload(
     uuid,
     url,
     pos: position,
+    size,
     scale: 1.0,
-    iid
+    iid,
   };
   iid++;
   sendEntityUpdate();
 }
 startEndpoints(entityUpload);
 
-wsServer.on("request", function(request) {
+wsServer.on("request", function (request) {
   const connection = request.accept(undefined, request.origin);
   let uuid: string;
   openConnections.add(connection);
   sendEntityUpdate(connection);
-  connection.on("message", function(message) {
+  connection.on("message", function (message: any) {
     if (!message.utf8Data) {
       return;
     }
@@ -65,8 +67,8 @@ wsServer.on("request", function(request) {
         type: PacketTypes.pong,
         data: {
           pingtime,
-          tick: t
-        }
+          tick: t,
+        },
       };
       connection.sendUTF(JSON.stringify(pongPacket));
     } else if (type == PacketTypes.agentUpdate) {
@@ -87,7 +89,7 @@ wsServer.on("request", function(request) {
       sendEntityUpdate();
     }
   });
-  connection.on("close", function(reasonCode, description) {
+  connection.on("close", function (reasonCode, description) {
     openConnections.delete(connection);
     delete agentState[uuid];
     console.log("Client has disconnected.");
@@ -97,7 +99,7 @@ wsServer.on("request", function(request) {
 function sendEntityUpdate(connection?: websocket.connection) {
   let packet = JSON.stringify({
     type: PacketTypes.entityUpdate,
-    data: entityState
+    data: entityState,
   });
   console.log("sending entities");
 
@@ -113,7 +115,7 @@ function sendEntityUpdate(connection?: websocket.connection) {
 function sendAgentUpdate() {
   let packet = JSON.stringify({
     type: PacketTypes.agentUpdate,
-    data: agentState
+    data: agentState,
   });
   openConnections.forEach((connection: websocket.connection) => {
     connection.sendUTF(packet);

@@ -6,6 +6,7 @@ import stand from "./../assets/ear_stand.gif";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
 import * as Matter from "matter-js";
+import Entity from "./Entity";
 import { getState } from "./state";
 import { AgentLayout } from "./types";
 import { convertTarget } from "./input";

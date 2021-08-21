@@ -14,9 +14,9 @@ import { readAndCompressImage } from "browser-image-resizer";
 import { sendEntityDelete } from "./client";
 
 const config = {
-  quality: 0.4,
-  maxWidth: 500,
-  maxHeight: 500,
+  quality: 0.8,
+  maxWidth: 800,
+  maxHeight: 800,
   autoRotate: true,
   debug: false,
 };
@@ -34,6 +34,7 @@ let fakeInput = document.getElementById("fake-input");
 document.body.addEventListener("drop", (e) => {
   e.stopPropagation();
   e.preventDefault();
+  console.log(e);
   console.log(e.dataTransfer.getData("URL"));
   uploadImage(e.dataTransfer.files[0]);
 });
@@ -49,24 +50,48 @@ document.body.addEventListener("dragover", (event) => {
 // ondragover="event.stopPropagation(); event.preventDefault(); handleDragOver(event);"
 // ondrop="event.stopPropagation(); event.preventDefault(); handleDrop(event);">
 
+const getHeightAndWidthFromDataUrl = (dataURL: string) =>
+  new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({
+        height: img.height,
+        width: img.width,
+      });
+    };
+    img.src = dataURL;
+  });
+
 function uploadImage(file: File) {
-  readAndCompressImage(file, config).then((resizedImage: File) => {
+  readAndCompressImage(file, config).then(async (resizedImage: File) => {
+    const fileAsDataURL = window.URL.createObjectURL(resizedImage);
+    const dimensions = (await getHeightAndWidthFromDataUrl(
+      fileAsDataURL
+    )) as any;
+    console.log(dimensions);
     // Upload file to some Web API
     const formData = new FormData();
     formData.append("image-upload", resizedImage);
 
     let { me } = getState();
     formData.append("position", JSON.stringify(me.pos));
+    formData.append(
+      "size",
+      JSON.stringify({
+        x: dimensions.width,
+        y: dimensions.height,
+      })
+    );
     formData.append("owner", me.uuid);
 
     fetch("/upload", {
       method: "POST",
       body: formData,
     })
-      .then((response) => response.json())
+      // .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        add;
+        // add;
       })
       .catch((error) => {
         console.error(error);
@@ -177,7 +202,7 @@ class UI extends React.Component {
   render() {
     let { infoOpen } = this.state;
     const urlParams = new URLSearchParams(window.location.search);
-    let ismax = urlParams.get("u") == "max";
+    let editing = urlParams.get("edit") !== null;
     return (
       <div className="items">
         <input
@@ -188,7 +213,7 @@ class UI extends React.Component {
           onChange={(e) => this.imageUpload(e)}
         />
         {/* {file && <img src={URL.createObjectURL(file)} />} */}
-        {ismax && (
+        {editing && (
           <>
             {" "}
             <img

@@ -24,7 +24,7 @@ function startEndpoints(entityUpload: any) {
   };
 
   const upload = multer({
-    dest: "./uploads/"
+    dest: "./uploads/",
     // you might also want to set some limits: https://github.com/expressjs/multer#limits
   });
 
@@ -37,10 +37,11 @@ function startEndpoints(entityUpload: any) {
       //   console.log(req.body);
       let owner_uuid = req.body["owner"];
       let position = JSON.parse(req.body["position"]);
+      if (!req.file) {
+        return handleError(new Error("no file"), res);
+      }
       const tempPath = req.file.path;
-      const uuid = Math.random()
-        .toString()
-        .slice(2, 7);
+      const uuid = Math.random().toString().slice(2, 7);
 
       let ext = ".jpg";
       let file_name_uuid = `${uuid}${ext}`;
@@ -48,12 +49,9 @@ function startEndpoints(entityUpload: any) {
       const targetPath = path.join(__dirname, rel_path);
 
       if (ext === ".png" || ext == ".jpg" || ext == ".jpeg") {
-        fs.rename(tempPath, targetPath, err => {
+        fs.rename(tempPath, targetPath, (err) => {
           if (err) return handleError(err, res);
-          res
-            .status(200)
-            .contentType("text/plain")
-            .end("File uploaded!");
+          res.status(200).contentType("text/plain").end("File uploaded!");
         });
         entityUpload(
           uuid,
@@ -62,7 +60,7 @@ function startEndpoints(entityUpload: any) {
           owner_uuid
         );
       } else {
-        fs.unlink(tempPath, err => {
+        fs.unlink(tempPath, (err) => {
           console.log(ext);
           if (err) return handleError(err, res);
           res
