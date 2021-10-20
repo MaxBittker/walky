@@ -1,6 +1,8 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
 import walk from "./../assets/ear_walk.gif";
+// import walk from "./../assets/walk1.gif";
+// import stand from "./../assets/stand1.gif";
 import stand from "./../assets/ear_stand.gif";
 // import bubble from "./../assets/bubble.png";
 import { sendEntityUpdate } from "./client";

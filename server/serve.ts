@@ -12,6 +12,33 @@ import {
 } from "../src/types";
 import { updateAgent } from "../src/movement";
 import { Vector } from "matter-js";
+import { existsSync, readFileSync, writeFile } from "fs";
+
+const dbLocation = "db.txt";
+let db = JSON.parse(
+  (existsSync(dbLocation) && readFileSync(dbLocation).toString()) || "{}"
+);
+
+let writeLocked = false;
+let lastCheckpoint = "{}";
+let t = 0;
+let iid = 1;
+let agentState: { [uuid: string]: AgentLayout } = {};
+let entityState: { [uuid: string]: EntityLayout } = db;
+
+setInterval(() => {
+  let checkpoint = JSON.stringify(entityState);
+  if (writeLocked || checkpoint === lastCheckpoint) {
+    return;
+  }
+  writeLocked = true;
+  console.log("writing checkpoint");
+  writeFile(dbLocation, checkpoint, (err) => {
+    lastCheckpoint = checkpoint;
+    writeLocked = false;
+  });
+}, 1000 * 60);
+
 const server = http.createServer();
 
 server.listen(9898);
@@ -20,11 +47,6 @@ const wsServer = new websocket.server({
 });
 
 console.log("LISTENING!");
-
-let t = 0;
-let iid = 1;
-let agentState: { [uuid: string]: AgentLayout } = {};
-let entityState: { [uuid: string]: EntityLayout } = {};
 
 let openConnections = new Set<websocket.connection>();
 

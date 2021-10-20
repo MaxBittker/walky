@@ -3,24 +3,22 @@ import * as ReactDOM from "react-dom";
 import * as Matter from "matter-js";
 import { getState } from "./state";
 // import { AgentLayout } from "./types";
-// let Vector = Matter.Vector;
-import add from "./../assets/add.gif";
-import move from "./../assets/move.gif";
+let Vector = Matter.Vector;
+import add from "./../assets/upload.png";
 import X from "./../assets/delete.ico";
 import chat from "./../assets/chat.gif";
-import subtract from "./../assets/subtract.gif";
+import "regenerator-runtime/runtime";
 
 import { readAndCompressImage } from "browser-image-resizer";
 
 const config = {
   quality: 0.8,
-  maxWidth: 800,
-  maxHeight: 800,
+  maxWidth: 1000,
+  maxHeight: 1000,
   autoRotate: true,
   debug: false,
+  mimeType: "image/png",
 };
-
-// const target = document.getElementById('window');
 
 let fakeInput = document.getElementById("fake-input");
 
@@ -35,7 +33,8 @@ document.body.addEventListener("drop", (e) => {
   e.preventDefault();
   console.log(e);
   console.log(e.dataTransfer.getData("URL"));
-  uploadImage(e.dataTransfer.files[0]);
+  let files = Array.from(e.dataTransfer.files);
+  files.forEach(uploadImage);
 });
 document.body.addEventListener("dragenter", (event) => {
   event.stopPropagation();
@@ -61,43 +60,61 @@ const getHeightAndWidthFromDataUrl = (dataURL: string) =>
     img.src = dataURL;
   });
 
-function uploadImage(file: File) {
-  readAndCompressImage(file, config).then(async (resizedImage: File) => {
-    const fileAsDataURL = window.URL.createObjectURL(resizedImage);
-    const dimensions = (await getHeightAndWidthFromDataUrl(
-      fileAsDataURL
-    )) as any;
-    console.log(dimensions);
-    // Upload file to some Web API
-    const formData = new FormData();
-    formData.append("image-upload", resizedImage);
+function uploadImage(file: File, i = 0) {
+  console.log(file);
+  readAndCompressImage(file, { ...config, mimeType: file.type })
+    .then(async (resizedImage: File) => {
+      console.log(resizedImage);
 
-    let { me } = getState();
-    formData.append("position", JSON.stringify(me.pos));
-    formData.append(
-      "size",
-      JSON.stringify({
-        x: dimensions.width,
-        y: dimensions.height,
+      const fileAsDataURL = window.URL.createObjectURL(resizedImage);
+      const dimensions = (await getHeightAndWidthFromDataUrl(
+        fileAsDataURL
+      )) as any;
+      // Upload file to some Web API
+      const formData = new FormData();
+      formData.append("image-upload", resizedImage);
+
+      let { me } = getState();
+      formData.append(
+        "position",
+        JSON.stringify(
+          Vector.add(
+            me.pos,
+            Vector.mult(
+              {
+                x: 30,
+                y: 30,
+              },
+              i
+            )
+          )
+        )
+      );
+      formData.append(
+        "size",
+        JSON.stringify({
+          x: dimensions.width,
+          y: dimensions.height,
+        })
+      );
+      formData.append("owner", me.uuid);
+
+      fetch("/upload", {
+        method: "POST",
+        body: formData,
       })
-    );
-    formData.append("owner", me.uuid);
+        // .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          // add;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
-    fetch("/upload", {
-      method: "POST",
-      body: formData,
+      // return fetch(url, options);
     })
-      // .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        // add;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    // return fetch(url, options);
-  });
+    .catch((e: any) => console.error(e));
   // .then(result => {
   // TODO: Handle the result
   // console.log(result);
@@ -118,17 +135,16 @@ class UI extends React.Component {
     super(props);
     document.body.className = "";
     this.state = {
-      file: null,
       infoOpen: false,
     };
   }
-  imageUpload(e: React.ChangeEvent) {
+  async imageUpload(e: React.ChangeEvent) {
     let files = e.target.files;
     if (files.length == 0) {
       return;
     }
-    uploadImage(files[0]);
-    this.setState({ file: files[0] });
+
+    Array.from(e.target.files).forEach(uploadImage);
   }
   openKB(e: React.MouseEvent) {
     e.preventDefault();
@@ -146,6 +162,7 @@ class UI extends React.Component {
       <div className="items">
         <input
           type="file"
+          multiple
           id="imgupload"
           accept="image/*"
           style={{ display: "none" }}

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState, useCallback, useRef } from "react";
-import move from "./../assets/move.gif";
-import X from "./../assets/delete.ico";
-import subtract from "./../assets/subtract.gif";
+import move from "./../assets/dragArea.png";
+import X from "./../assets/close.png";
+import subtract from "./../assets/duplicate.png";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
 import * as Matter from "matter-js";
@@ -150,7 +150,7 @@ export default function Entity({ url, pos, scale, uuid, i }) {
           <img
             src={subtract}
             className={"tool " + (false ? "active" : "")}
-            id="move2"
+            id="duplicate"
             onMouseDown={(e) => {
               const { entities } = getState();
 
