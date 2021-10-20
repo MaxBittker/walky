@@ -3,7 +3,6 @@ import ReactDOM = require("react-dom");
 import walk from "./../assets/ear_walk.gif";
 import stand from "./../assets/ear_stand.gif";
 // import bubble from "./../assets/bubble.png";
-import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
 import * as Matter from "matter-js";
 import Entity from "./Entity";
@@ -81,20 +80,14 @@ function render() {
       {agents.map(renderAgent)}
       <div
         id="entities"
-        className={classNames({
-          deleting: window.deleteMode,
-          moving: window.moveMode,
-        })}
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
         <div id="info">
           <h2>Welcome!</h2>
           {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
-          <p style={{ float: "right" }}>
-            The space may contain loud or scary noises today.
-          </p>
+          <p style={{ float: "right" }}>The space is under construction </p>
         </div>
-        {audios.map(({ url, pos, name }, i) => {
+        {/* {audios.map(({ url, pos, name }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
           let relPos = pos;
           return (
@@ -110,108 +103,25 @@ function render() {
               {name}
             </h1>
           );
-        })}
+        })} */}
 
-        {entities.slice(0, 10).map(({ url, pos, scale, uuid }, i) => {
+        {entities.map(({ url, pos, scale, uuid }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
-          let relPos = pos;
           return (
-            <img
-              key={i}
-              onClick={(e) => {
-                e.stopPropagation();
-                window.deleteMode && window.deleteImage(uuid);
-              }}
+            <Entity
+              key={uuid}
+              url={url}
+              pos={pos}
+              scale={scale}
               uuid={uuid}
-              className="photo"
-              // src={window.location.origin + url}
-              src={"http://walky.space" + url}
-              style={{
-                left: relPos.x,
-                top: relPos.y,
-                transform: `translate(-50%, -50%) scale(${scale * 4}) `,
-              }}
-            />
+              i={i}
+            ></Entity>
           );
         })}
       </div>
     </React.Fragment>
   );
   ReactDOM.render(element, document.getElementById("window"));
-  dragElement(document.getElementById("window"));
-}
-
-function dragElement(elmnt) {
-  let grabPos: Matter.Vector;
-  let activeUUID: string;
-  elmnt.onmousedown = dragMouseDown;
-
-  function dragMouseDown(e) {
-    if (!e.target.classList.contains("photo")) {
-      return;
-    }
-    e = e || window.event;
-    e.preventDefault();
-
-    const { entities } = getState();
-    let myUUID = e.target.getAttribute("uuid");
-    if (!myUUID) {
-      return;
-    }
-    let i = entities.findIndex(({ uuid }) => {
-      return uuid === myUUID.toString();
-    });
-    let ent = entities[i];
-
-    let convertedMouse = convertTarget({
-      x: e.clientX,
-      y: e.clientY,
-    });
-    grabPos = Vector.sub(ent.pos, convertedMouse);
-    activeUUID = e.target.getAttribute("uuid").toString();
-
-    console.log("startDrag");
-    document.body.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.body.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    if (!grabPos) {
-      return;
-    }
-
-    e = e || window.event;
-    e.preventDefault();
-
-    // set the element's new position:
-    const { entities } = getState();
-
-    let i = entities.findIndex(({ uuid }) => {
-      return uuid === activeUUID;
-    });
-    let ent = entities[i];
-
-    let convertedMouse = convertTarget({
-      x: e.clientX,
-      y: e.clientY,
-    });
-    ent.pos = Vector.add(grabPos, convertedMouse);
-
-    entities[i] = ent;
-    getState().entities = entities;
-
-    // sendEntityUpdate(activeUUID);
-  }
-
-  function closeDragElement() {
-    sendEntityUpdate(activeUUID);
-    // stop moving when mouse button is released:
-    grabPos = null;
-    activeUUID = null;
-    document.body.onmouseup = null;
-    document.body.onmousemove = null;
-  }
 }
 
 export { render };

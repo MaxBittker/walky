@@ -24,6 +24,7 @@ body {
   right: 0;
   top: 0;
   bottom: 0;
+  /* background-color: bisque;  */
 }
 @media screen and (max-width: 600px) {
   #window {
@@ -55,11 +56,11 @@ body {
 
 #entities img {
   /* box-shadow: 2px 2px 10px black; */
-  filter: drop-shadow(4px 4px 7px black);
-  opacity: 0.5;
-  will-change: filter;
+  /* filter: drop-shadow(4px 4px 7px black); */
+  /* opacity: 0.5; */
+  /* will-change: filter; */
   /* box-shadow: inset 0 0 0 0.01px white; */
-  mix-blend-mode: normal;
+  /* mix-blend-mode: normal; */
   image-rendering: pixelated;
 }
 
@@ -70,14 +71,18 @@ body {
 }
 
 img {
-  position: absolute;
+  /* position: absolute; */
   z-index: 1;
-  mix-blend-mode: difference;
+  /* mix-blend-mode: difference; */
   /* mix-blend-mode: exclusion; */
   pointer-events: none;
   user-select: none;
   /* transition: transform 0.05s; */
   /* transform: translate(-50%, -50%); */
+}
+.photo.selected {
+  border: 1px blue dashed;
+  filter: drop-shadow(0px 0px 5px blue);
 }
 .deleting img {
   pointer-events: all;
@@ -138,10 +143,10 @@ img {
   bottom: 0;
 }
 #ui {
-  /* position: absolute;
+  position: absolute;
   left: 0;
   bottom: 0;
-  z-index: 66; */
+  z-index: 66;
   /* user-select: none; */
 }
 
@@ -160,20 +165,25 @@ img {
 #add-image:hover {
   filter: drop-shadow(1px 1px 5px #44f);
 }
+.toolbar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+}
 .tool {
-  position: fixed;
+  /* position: fixed; */
   transform: rotate(5deg);
-  z-index: 66;
+  z-index: 166;
   mix-blend-mode: normal;
   pointer-events: initial;
-
   margin: 15px;
   width: 80px;
   height: 80px;
 }
 #subtract-image {
-  left: 100px;
-  bottom: 0;
+  /* left: 100px; */
+  /* bottom: 0; */
 }
 
 #subtract-image:hover,
@@ -185,8 +195,8 @@ img {
   filter: drop-shadow(1px 1px 5px #f44);
 }
 #move {
-  left: 200px;
-  bottom: 0;
+  /* left: 200px; */
+  /* bottom: 0; */
 }
 #move:hover,
 #move.active {
@@ -209,7 +219,7 @@ img {
 }
 @media screen and (max-width: 800px) {
   #move {
-    display: none;
+    /* display: none; */
   }
 }
 @media screen and (min-width: 800px) {

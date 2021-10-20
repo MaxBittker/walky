@@ -148,7 +148,8 @@ class Source {
   }
 }
 
-let sources = sounds.map(({ pos, url, name }) => new Source(pos, url, name));
+let sources = [];
+// sounds.map(({ pos, url, name }) => new Source(pos, url, name));
 
 let state = getState();
 

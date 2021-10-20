@@ -22,6 +22,8 @@ function startInput() {
     // event.preventDefault();
     start_audio();
 
+    if (window.dragging) return;
+
     let state = getState();
     let eventPos = { x: event.pageX, y: event.pageY };
     state.me.target = convertTarget(eventPos);
@@ -37,7 +39,7 @@ function startInput() {
   });
   window.addEventListener("mousemove", (event) => {
     // event.preventDefault();
-    if (!mouseDown) return;
+    if (!mouseDown || window.dragging) return;
     let state = getState();
     let eventPos = { x: event.pageX, y: event.pageY };
     state.me.target = convertTarget(eventPos);

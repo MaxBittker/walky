@@ -11,7 +11,6 @@ import chat from "./../assets/chat.gif";
 import subtract from "./../assets/subtract.gif";
 
 import { readAndCompressImage } from "browser-image-resizer";
-import { sendEntityDelete } from "./client";
 
 const config = {
   quality: 0.8,
@@ -117,40 +116,11 @@ function imagePrompt(event: React.MouseEvent) {
 class UI extends React.Component {
   constructor(props: any) {
     super(props);
-    window.deleteMode = false;
     document.body.className = "";
     this.state = {
       file: null,
-      deleteMode: false,
-      moveMode: false,
       infoOpen: false,
     };
-
-    window.deleteImage = (uuid: string) => {
-      this.setState({ deleteMode: false });
-      window.deleteMode = false;
-      document.body.className = "";
-      let state = getState();
-      state.me.target = undefined;
-      sendEntityDelete(uuid);
-    };
-    document.body.addEventListener("click", () => {
-      if (window.deleteMode) {
-        window.setTimeout(() => {
-          this.setState({ deleteMode: false });
-          window.deleteMode = false;
-          document.body.className = "";
-        }, 5);
-      }
-
-      if (window.moveMode) {
-        window.setTimeout(() => {
-          this.setState({ moveMode: false });
-          window.moveMode = false;
-          document.body.className = "";
-        }, 5);
-      }
-    });
   }
   imageUpload(e: React.ChangeEvent) {
     let files = e.target.files;
@@ -167,38 +137,7 @@ class UI extends React.Component {
     document.getElementById("fake-input").focus();
     return;
   }
-  enterDeleteMode(e: React.MouseEvent) {
-    if (this.state.deleteMode) {
-      window.deleteMode = false;
-      document.body.className = "";
-      this.setState({ deleteMode: false });
-      return;
-    }
 
-    e.preventDefault();
-    e.stopPropagation();
-    let state = getState();
-    state.me.target = undefined;
-    window.deleteMode = true;
-    document.body.className = "deleting";
-    this.setState({ deleteMode: true });
-  }
-  enterMoveMode(e: React.MouseEvent) {
-    if (this.state.moveMode) {
-      window.moveMode = false;
-      document.body.className = "";
-      this.setState({ moveMode: false });
-      return;
-    }
-
-    e.preventDefault();
-    e.stopPropagation();
-    let state = getState();
-    state.me.target = undefined;
-    window.moveMode = true;
-    // document.body.className = "deleting";
-    this.setState({ moveMode: true });
-  }
   render() {
     let { infoOpen } = this.state;
     const urlParams = new URLSearchParams(window.location.search);
@@ -221,18 +160,6 @@ class UI extends React.Component {
               className="tool"
               id="add-image"
               onClick={imagePrompt}
-            />
-            <img
-              src={move}
-              className={"tool " + (this.state.moveMode ? "active" : "")}
-              id="move"
-              onClick={(e) => this.enterMoveMode(e)}
-            />
-            <img
-              src={subtract}
-              className={"tool " + (this.state.deleteMode ? "active" : "")}
-              id="subtract-image"
-              onClick={(e) => this.enterDeleteMode(e)}
             />
           </>
         )}

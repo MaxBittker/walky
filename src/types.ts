@@ -7,6 +7,7 @@ interface EntityLayout {
   uuid: string;
   url: string;
   pos: Matter.Vector;
+  size: Matter.Vector;
   scale: number;
   iid: number;
 }
@@ -37,7 +38,7 @@ enum PacketTypes {
   agentUpdate = 1,
   entityUpdate = 2,
   ping = 3,
-  pong = 4
+  pong = 4,
 }
 
 interface PingLayout {
@@ -60,5 +61,5 @@ export {
   AgentLayout,
   PacketTypes,
   PacketLayout,
-  PingLayout
+  PingLayout,
 };

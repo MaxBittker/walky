@@ -81,6 +81,7 @@ wsServer.on("request", function (request) {
         // movement;
         iid++;
         entityState[data.uuid].pos = data.pos;
+        entityState[data.uuid].scale = data.scale;
         entityState[data.uuid].iid = iid;
       } else {
         // deletion;
