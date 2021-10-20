@@ -10,6 +10,7 @@ import { getState } from "./state";
 import { AgentLayout } from "./types";
 import { convertTarget } from "./input";
 import { sendEntityDelete } from "./client";
+import { v4 as uuidv4 } from "uuid";
 
 let Vector = Matter.Vector;
 
@@ -26,8 +27,9 @@ export default function Entity({ url, pos, scale, uuid, i }) {
   let unsetSelection = useCallback(() => {}, [setSelected, mode]);
   let mouseUp = useCallback(
     (e) => {
-      e.preventDefault();
       if (mode === "move") {
+        e.preventDefault();
+
         setMode("");
         console.log("not dragging");
         window.setTimeout(() => {
@@ -146,11 +148,35 @@ export default function Entity({ url, pos, scale, uuid, i }) {
             }}
           />
           <img
+            src={subtract}
+            className={"tool " + (false ? "active" : "")}
+            id="move2"
+            onMouseDown={(e) => {
+              const { entities } = getState();
+
+              let i = entities.findIndex(({ uuid: u }) => {
+                return u === uuid;
+              });
+              let oldEnt = entities[i];
+              let ent = { ...oldEnt };
+              ent.pos = Vector.add(ent.pos, { x: 30, y: 30 });
+              ent.uuid = uuidv4().slice(0, 8);
+              entities.push(ent);
+
+              // oldEnt.pos = Vector.sub(oldEnt.pos, { x: 30, y: 30 });
+
+              getState().entities = entities;
+              sendEntityUpdate(ent.uuid);
+              // sendEntityUpdate(uuid);
+              e.preventDefault();
+            }}
+          />
+          <img
             ref={img}
             src={X}
             className={"tool "}
             id="subtract-image"
-            onClick={(e) => {
+            onMouseDown={(e) => {
               console.log("delete!!");
               sendEntityDelete(uuid);
             }}
