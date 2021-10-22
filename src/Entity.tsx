@@ -6,8 +6,7 @@ import subtract from "./../assets/duplicate.png";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
 import * as Matter from "matter-js";
-import { getState } from "./state";
-import { AgentLayout } from "./types";
+import { getState, getEntity, writeEntity } from "./state";
 import { convertTarget } from "./input";
 import { sendEntityDelete } from "./client";
 import { v4 as uuidv4 } from "uuid";
@@ -36,7 +35,9 @@ export default function Entity({ url, pos, scale, uuid, i }) {
           window.dragging = false;
         }, 200);
       } else {
-        setSelected(false);
+        if (!e.target.classList.contains("tool")) {
+          setSelected(false);
+        }
       }
     },
     [setSelected, setMode, mode]
@@ -50,22 +51,15 @@ export default function Entity({ url, pos, scale, uuid, i }) {
     e = e || window.event;
     e.preventDefault();
 
-    // set the element's new position:
-    const { entities } = getState();
-
-    let i = entities.findIndex(({ uuid: u }) => {
-      return u === uuid;
-    });
-    let ent = entities[i];
+    let ent = getEntity(uuid);
 
     let convertedMouse = convertTarget({
       x: e.clientX,
       y: e.clientY,
     });
     ent.pos = Vector.add(grabPos, convertedMouse);
-    entities[i] = ent;
-    getState().entities = entities;
-    sendEntityUpdate(uuid);
+    writeEntity(uuid, ent);
+    // getState().entities = entities;
   }, []);
   React.useEffect(() => {
     if (selected) {
@@ -95,19 +89,15 @@ export default function Entity({ url, pos, scale, uuid, i }) {
         zIndex: 200 + (selected ? 100 : 0),
       }}
       onClick={(e) => {
-        // e.stopPropagation();
+        e.stopPropagation();
         if (editing) {
           setSelected(true);
         }
       }}
       onMouseDown={(e) => {
         const { entities } = getState();
-        let myUUID = uuid;
 
-        let i = entities.findIndex(({ uuid }) => {
-          return uuid === myUUID.toString();
-        });
-        let ent = entities[i];
+        let ent = getEntity(uuid);
 
         let convertedMouse = convertTarget({
           x: e.clientX,
@@ -117,20 +107,11 @@ export default function Entity({ url, pos, scale, uuid, i }) {
       }}
       onWheel={(e) => {
         if (!selected) return;
-        const { entities } = getState();
-
-        let i = entities.findIndex(({ uuid: u }) => {
-          return u === uuid;
-        });
-        let ent = entities[i];
-
-        console.log(ent.scale, e.deltaY);
+        let ent = getEntity(uuid);
 
         ent.scale += e.deltaY * 0.001;
 
-        entities[i] = ent;
-        getState().entities = entities;
-        sendEntityUpdate(uuid);
+        writeEntity(uuid, ent);
       }}
     >
       {selected && (
@@ -139,8 +120,9 @@ export default function Entity({ url, pos, scale, uuid, i }) {
             src={move}
             className={"tool " + (false ? "active" : "")}
             id="move"
+            draggable="false"
             onMouseDown={(e) => {
-              // e.preventDefault();
+              e.preventDefault();
               setMode("move");
               console.log("dragging");
 
@@ -151,23 +133,18 @@ export default function Entity({ url, pos, scale, uuid, i }) {
             src={subtract}
             className={"tool " + (false ? "active" : "")}
             id="duplicate"
-            onMouseDown={(e) => {
+            onClick={(e) => {
               const { entities } = getState();
 
-              let i = entities.findIndex(({ uuid: u }) => {
-                return u === uuid;
-              });
-              let oldEnt = entities[i];
+              let oldEnt = getEntity(uuid);
+
               let ent = { ...oldEnt };
-              ent.pos = Vector.add(ent.pos, { x: 30, y: 30 });
               ent.uuid = uuidv4().slice(0, 8);
               entities.push(ent);
-
-              // oldEnt.pos = Vector.sub(oldEnt.pos, { x: 30, y: 30 });
-
+              oldEnt.pos = Vector.add(oldEnt.pos, { x: 30, y: 30 });
               getState().entities = entities;
               sendEntityUpdate(ent.uuid);
-              // sendEntityUpdate(uuid);
+              sendEntityUpdate(uuid);
               e.preventDefault();
             }}
           />

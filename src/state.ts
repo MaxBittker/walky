@@ -3,6 +3,7 @@ import * as Matter from "matter-js";
 import { nrandom } from "./utils";
 import { v4 as uuidv4 } from "uuid";
 import { StateLayout } from "./types";
+import { sendEntityUpdate } from "./client";
 
 let Vector = Matter.Vector;
 
@@ -17,14 +18,14 @@ let state: StateLayout = {
     facing: true,
     moving: false,
     lastUpdated: 0,
-    color: Math.random() * 360
+    color: Math.random() * 360,
   },
   camera: { x: 0, y: 0 },
   frame: { x: 0, y: 0 },
   center: { x: 0, y: 0 },
   entities: [],
   audios: [],
-  agents: []
+  agents: [],
 };
 
 state.entities = [];
@@ -41,4 +42,24 @@ window.setInterval(resize, 2000);
 function getState() {
   return state;
 }
-export { getState };
+
+function getEntity(uuid: string) {
+  // set the element's new position:
+  const { entities } = getState();
+
+  let i = entities.findIndex(({ uuid: u }) => {
+    return u === uuid;
+  });
+  return entities[i];
+}
+function writeEntity(uuid, v) {
+  // set the element's new position:
+  const { entities } = getState();
+
+  let i = entities.findIndex(({ uuid: u }) => {
+    return u === uuid;
+  });
+  entities[i] = v;
+  sendEntityUpdate(uuid);
+}
+export { getState, getEntity, writeEntity };
