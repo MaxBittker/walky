@@ -157,7 +157,8 @@ class UI extends React.Component {
   render() {
     let { infoOpen } = this.state;
     const urlParams = new URLSearchParams(window.location.search);
-    let editing = urlParams.get("edit") !== null;
+    let editing = true;
+    //  urlParams.get("edit") !== null;
     return (
       <div className="items">
         <input

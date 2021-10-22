@@ -16,7 +16,8 @@ let Vector = Matter.Vector;
 let grabPos: Matter.Vector;
 
 const urlParams = new URLSearchParams(window.location.search);
-let editing = urlParams.get("edit") !== null;
+let editing = true;
+// urlParams.get("edit") !== null;
 
 export default function Entity({ url, pos, scale, uuid, i }) {
   let [mode, setMode] = useState("");
@@ -88,7 +89,7 @@ export default function Entity({ url, pos, scale, uuid, i }) {
         display: "flex",
         zIndex: 200 + (selected ? 100 : 0),
       }}
-      onClick={(e) => {
+      onDoubleClick={(e) => {
         e.stopPropagation();
         if (editing) {
           setSelected(true);
