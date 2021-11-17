@@ -47,11 +47,19 @@
 .x {
   right: 0;
   position: absolute;
+  filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5))
+    drop-shadow(-1px -1px 1px rgba(255, 255, 255, 0.5))
+    drop-shadow(-1px 1px 1px rgba(255, 255, 255, 0.5))
+    drop-shadow(1px -1px 1px rgba(255, 255, 255, 0.5));
 }
 
 .x:hover,
 .x.active {
-  filter: drop-shadow(0px 0px 3px #f44) drop-shadow(0px 1px 0px white);
+  filter: drop-shadow(1px 1px 3px red)
+    drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5))
+    drop-shadow(-1px -1px 1px rgba(255, 255, 255, 0.5))
+    drop-shadow(-1px 1px 1px rgba(255, 255, 255, 0.5))
+    drop-shadow(1px -1px 1px rgba(255, 255, 255, 0.5));
 }
 
 .draggable {

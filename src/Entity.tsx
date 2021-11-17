@@ -324,7 +324,7 @@ export default function Entity({
               }}
             >
               <svg className="tool" id="d" viewBox="0 0 25 25">
-                <path className="tool" d="M 18 6 h 4 v 18 h -16 v -3" />
+                <path className="tool" d="M 18 6 h 4 v 18 h -16 v -4 h 12" />
 
                 <rect className="tool" x="2" y="2" width="16" height="18" />
               </svg>
