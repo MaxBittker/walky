@@ -13,11 +13,20 @@ function convertTarget(t: Matter.Vector) {
   // let zCamera = Vector.div(camera, zoom);
   let zCenter = center;
   let zPos = Vector.div(t, zoom);
-  // console.log(t);
   return Vector.sub(Vector.add(zPos, camera), zCenter);
+}
+function deconvertTarget(t: Matter.Vector) {
+  const { camera, center } = getState();
+  // let zCamera = Vector.div(camera, zoom);
+  let zCenter = center;
+  let zPos = Vector.mult(t, zoom);
+  return Vector.add(Vector.sub(zPos, camera), zCenter);
 }
 let mouseDown = false;
 function startInput() {
+  window.addEventListener("stop", () => {
+    state.me.target = state.me.pos;
+  });
   window.addEventListener("click", (event) => {
     // event.preventDefault();
     start_audio();
@@ -160,4 +169,4 @@ function startInput() {
   }
 }
 
-export { startInput, convertTarget };
+export { startInput, convertTarget, deconvertTarget };

@@ -8,6 +8,7 @@ interface EntityLayout {
   url: string;
   pos: Matter.Vector;
   size: Matter.Vector;
+  rotation: number;
   scale: number;
   iid: number;
 }

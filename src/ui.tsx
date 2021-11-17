@@ -31,7 +31,7 @@ let fakeInput = document.getElementById("fake-input");
 document.body.addEventListener("drop", (e) => {
   e.stopPropagation();
   e.preventDefault();
-  console.log(e);
+  // console.log(e);
   console.log(e.dataTransfer.getData("URL"));
   let files = Array.from(e.dataTransfer.files);
   files.forEach(uploadImage);

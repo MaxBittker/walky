@@ -80,8 +80,11 @@ img {
   /* transition: transform 0.05s; */
   /* transform: translate(-50%, -50%); */
 }
+.photo {
+  pointer-events: initial;
+}
 .photo.selected {
-  border: 1px blue dashed;
+  /* border: 1px blue dashed; */
   filter: drop-shadow(0px 0px 5px black);
 }
 .deleting img {
@@ -157,8 +160,11 @@ img {
   user-select: none;
 }
 #add-image {
-  left: 0;
-  bottom: 0;
+  left: 10px;
+  bottom: 10px;
+  margin: 5px;
+  width: 70px;
+  height: 70px;
   /* filter: drop-shadow(0px 0px 5px #444); */
 }
 
@@ -172,10 +178,11 @@ img {
   top: 0;
   bottom: 0;
   z-index: 10;
+  pointer-events: none;
 }
 .toolbar .tool {
-  max-width: 35%;
-  max-height: 35%;
+  max-width: 25%;
+  max-height: 25%;
 }
 .tool {
   /* position: fixed; */
@@ -183,9 +190,9 @@ img {
   z-index: 166;
   mix-blend-mode: normal;
   pointer-events: initial;
-  margin: 5px;
-  width: 80px;
-  height: 80px;
+  margin: -5px;
+  width: 40px;
+  height: 40px;
 }
 #subtract-image {
   /* left: 100px; */
@@ -282,4 +289,45 @@ img {
   font-size: 60px;
   filter: blur(25px);
   position: "absolute";
+}
+
+.draggable {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  /* filter: drop-shadow(1px 1px 3px blue); */
+  display: block;
+  user-select: none;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  touch-action: manipulation;
+}
+
+.handle-container {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  position: absolute;
+  cursor: nwse-resize;
+  z-index: 10000;
+  display: block;
+  user-select: none;
+  margin: 0;
+  pointer-events: none;
+}
+.resize-handle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  z-index: 1000000;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  display: block;
+  user-select: none;
+  margin: 0;
+  pointer-events: all;
+  right: -18px;
+  bottom: -18px;
+  border-radius: 100%;
+  cursor: grabbing;
 }

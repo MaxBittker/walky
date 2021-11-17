@@ -64,6 +64,7 @@ function entityUpload(
     pos: position,
     size,
     scale: 1.0,
+    rotation: 0.0,
     iid,
   };
   iid++;

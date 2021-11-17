@@ -37,6 +37,7 @@ function startEndpoints(entityUpload: any) {
       //   console.log(req.body);
       let owner_uuid = req.body["owner"];
       let position = JSON.parse(req.body["position"]);
+      let size = JSON.parse(req.body["size"]);
       if (!req.file) {
         return handleError(new Error("no file"), res);
       }
@@ -57,6 +58,7 @@ function startEndpoints(entityUpload: any) {
           uuid,
           path.join("/files", file_name_uuid),
           position,
+          size,
           owner_uuid
         );
       } else {

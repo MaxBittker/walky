@@ -107,13 +107,15 @@ function render() {
           );
         })} */}
 
-        {entities.map(({ url, pos, scale, uuid }, i) => {
+        {entities.map(({ url, pos, size, rotation, scale, uuid }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
           return (
             <Entity
               key={uuid}
               url={url}
               pos={pos}
+              size={size}
+              rotation={rotation}
               scale={scale}
               uuid={uuid}
               i={i}

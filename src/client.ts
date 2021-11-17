@@ -104,7 +104,7 @@ function sendEntityUpdate(i_uuid: string) {
     data: ent,
   };
 
-  console.log("updating: " + i_uuid);
+  // console.log("updating: " + i_uuid);
   ws.send(JSON.stringify(packet));
 }
 
