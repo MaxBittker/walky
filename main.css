@@ -8,11 +8,14 @@ body {
   overscroll-behavior-x: none;
   overscroll-behavior-y: none;
   user-select: none;
+  box-sizing: border-box;
+  touch-action: manipulation;
 }
 body {
 }
 * {
   user-select: none !important;
+  touch-action: manipulation;
 }
 #window {
   overscroll-behavior-y: none;
@@ -80,13 +83,7 @@ img {
   /* transition: transform 0.05s; */
   /* transform: translate(-50%, -50%); */
 }
-.photo {
-  pointer-events: initial;
-}
-.photo.selected {
-  /* border: 1px blue dashed; */
-  filter: drop-shadow(0px 0px 5px black);
-}
+
 .deleting img {
   pointer-events: all;
 }
@@ -162,79 +159,25 @@ img {
 #add-image {
   left: 10px;
   bottom: 10px;
-  margin: 5px;
-  width: 70px;
-  height: 70px;
+
   /* filter: drop-shadow(0px 0px 5px #444); */
 }
 
 #add-image:hover {
   filter: drop-shadow(1px 1px 5px #44f);
 }
-.toolbar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 10;
-  pointer-events: none;
-}
-.toolbar .tool {
-  max-width: 25%;
-  max-height: 25%;
+
+#ui .tool {
+  margin: 5px;
+  width: 70px;
+  height: 70px;
+  z-index: 166;
 }
 .tool {
-  /* position: fixed; */
-  transform: rotate(5deg);
-  z-index: 166;
   mix-blend-mode: normal;
   pointer-events: initial;
-  margin: -5px;
-  width: 40px;
-  height: 40px;
-}
-#subtract-image {
-  /* left: 100px; */
-  /* bottom: 0; */
-  float: right;
 }
 
-#subtract-image:hover,
-#subtract-image.active {
-  filter: drop-shadow(1px 1px 5px #f44);
-}
-#subtract-image:hover,
-#subtract-image.active {
-  filter: drop-shadow(1px 1px 5px #f44);
-}
-#move {
-  /* left: 200px; */
-  /* bottom: 0; */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  height: 50%;
-  width: 50%;
-  max-width: 50%;
-  max-height: 50%;
-  user-select: none;
-  /* opacity: 0.5; */
-}
-#duplicate:hover,
-#duplicate.active {
-  filter: drop-shadow(1px 1px 5px white);
-}
-#move:hover,
-#move.active {
-  filter: drop-shadow(1px 1px 5px white);
-}
-#move:hover,
-#move.active {
-  filter: drop-shadow(1px 1px 5px white);
-}
 #fake-input {
   opacity: 0;
   position: relative;
@@ -289,45 +232,4 @@ img {
   font-size: 60px;
   filter: blur(25px);
   position: "absolute";
-}
-
-.draggable {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  /* filter: drop-shadow(1px 1px 3px blue); */
-  display: block;
-  user-select: none;
-  margin: 0;
-  top: 50%;
-  left: 50%;
-  touch-action: manipulation;
-}
-
-.handle-container {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  position: absolute;
-  cursor: nwse-resize;
-  z-index: 10000;
-  display: block;
-  user-select: none;
-  margin: 0;
-  pointer-events: none;
-}
-.resize-handle {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 1px solid black;
-  box-sizing: border-box;
-  z-index: 1000000;
-  background-color: white;
-  transform: translate(-50%, -50%);
-  display: block;
-  user-select: none;
-  margin: 0;
-  pointer-events: all;
-  right: -18px;
-  bottom: -18px;
-  border-radius: 100%;
-  cursor: grabbing;
 }

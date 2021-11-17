@@ -87,7 +87,7 @@ function render() {
         <div id="info">
           <h2>Welcome!</h2>
           {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
-          <p style={{ float: "right" }}>The space is under construction </p>
+          <p style={{ float: "right" }}>walky.space is under construction </p>
         </div>
         {/* {audios.map(({ url, pos, name }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);

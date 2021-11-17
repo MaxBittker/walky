@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState, useCallback, useRef } from "react";
 import { Simulate } from "react-dom/test-utils";
 import X from "./../assets/close.png";
+import "./entity.css";
 import subtract from "./../assets/duplicate.png";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
@@ -130,19 +131,23 @@ export default function Entity({
   let handle = useRef<HTMLDivElement>(null);
 
   let unsetSelection = useCallback(() => {}, [setSelected, mode]);
+  let mouseDown = useCallback(
+    (e) => {
+      if (!e.target.classList.contains("tool") && e.target !== img.current) {
+        setSelected(false);
+      }
+    },
+    [setSelected, setMode, mode]
+  );
   let mouseUp = useCallback(
     (e) => {
-      if (mode === "move") {
+      if (mode !== "") {
         e.preventDefault();
-
         setMode("");
+
         window.setTimeout(() => {
           window.dragging = false;
         }, 200);
-      } else {
-        if (!e.target.classList.contains("tool")) {
-          setSelected(false);
-        }
       }
     },
     [setSelected, setMode, mode]
@@ -164,7 +169,6 @@ export default function Entity({
     });
     ent.pos = V.add(grabPos, convertedMouse);
     writeEntity(uuid, ent);
-    // getState().entities = entities;
   }, []);
 
   let mouseResize = useCallback(
@@ -211,8 +215,10 @@ export default function Entity({
       window.dragging = true;
       window.dispatchEvent(new Event("stop"));
       window.addEventListener("click", unsetSelection);
+      window.addEventListener("mouseup", mouseUp);
+      window.addEventListener("mousedown", mouseDown);
     }
-    window.addEventListener("mouseup", mouseUp);
+
     if (selected && mode === "move") {
       window.addEventListener("mousemove", mouseMove);
     }
@@ -225,6 +231,7 @@ export default function Entity({
       window.removeEventListener("mousemove", mouseMove);
       window.removeEventListener("mousemove", mouseResize);
       window.removeEventListener("mouseup", mouseUp);
+      window.removeEventListener("mousedown", mouseDown);
     };
   }, [unsetSelection, selected, mode]);
 
@@ -258,6 +265,7 @@ export default function Entity({
               Simulate.mouseDown(hit, {
                 clientX: e.clientX,
                 clientY: e.clientY,
+                target: hit,
               });
             }
             return;
@@ -284,22 +292,22 @@ export default function Entity({
       ></img>
       {selected && (
         <>
-          <span
-            className="toolbar"
+          <div
             style={{
               position: "absolute",
               left: relPos.x,
               top: relPos.y,
               width: size.x * scale,
               height: size.y * scale,
-              transform: `translate(-50%, -50%) rotate(${rotation}deg)  `,
+              transform: `translate(-50%, -50%) rotate(${rotation}deg) `,
               zIndex: 200 + (selected ? 100 : 0),
             }}
+            ref={handleContainer}
+            className="handle-container "
           >
-            <img
-              src={subtract}
-              className={"tool " + (false ? "active" : "")}
-              id="duplicate"
+            <button
+              className="tool duplicate"
+              tabIndex={-1}
               onClick={(e) => {
                 const { entities } = getState();
 
@@ -314,30 +322,33 @@ export default function Entity({
                 sendEntityUpdate(uuid);
                 e.preventDefault();
               }}
-            />
-            <img
-              src={X}
-              className={"tool "}
-              id="subtract-image"
-              onMouseDown={(e) => {
+            >
+              <svg className="tool" id="d" viewBox="0 0 25 25">
+                <path className="tool" d="M 18 6 h 4 v 18 h -16 v -3" />
+
+                <rect className="tool" x="2" y="2" width="16" height="18" />
+              </svg>
+            </button>
+
+            <button
+              className="tool x"
+              tabIndex={-1}
+              onClick={(e) => {
                 console.log("delete!!");
                 sendEntityDelete(uuid);
               }}
-            />
-          </span>
-          <div
-            style={{
-              position: "absolute",
-              left: relPos.x,
-              top: relPos.y,
-              width: size.x * scale,
-              height: size.y * scale,
-              transform: `translate(-50%, -50%) rotate(${rotation}deg) `,
-              zIndex: 200 + (selected ? 100 : 0),
-            }}
-            ref={handleContainer}
-            className="handle-container"
-          >
+            >
+              <svg
+                className="tool"
+                height="18"
+                width="18"
+                id="d"
+                viewBox="0 0 18 18"
+              >
+                <polyline className="tool" points="0,0 , 18,18"></polyline>
+                <polyline className="tool" points="18,0 , 0,18"></polyline>
+              </svg>
+            </button>
             <div
               onMouseDown={(e) => {
                 let ent = getEntity(uuid);
@@ -351,7 +362,7 @@ export default function Entity({
                 setStartScale(scale);
               }}
               ref={handle}
-              className="resize-handle"
+              className="resize-handle tool"
             ></div>
           </div>
         </>

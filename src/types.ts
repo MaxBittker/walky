@@ -1,7 +1,7 @@
 import * as Matter from "matter-js";
 import { string } from "prop-types";
 import { type } from "os";
-import { Source } from "./audio";
+// import { Source } from "./audio";
 
 interface EntityLayout {
   uuid: string;
@@ -31,7 +31,7 @@ interface StateLayout {
   frame: Matter.Vector;
   center: Matter.Vector;
   entities: EntityLayout[];
-  audios: Source[];
+  // audios: Source[];
   agents: AgentLayout[];
 }
 

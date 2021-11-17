@@ -1,0 +1,79 @@
+.photo {
+  pointer-events: initial;
+}
+.photo.selected {
+  /* border: 1px blue dashed; */
+  filter: drop-shadow(0px 0px 5px rgb(143, 143, 143));
+}
+
+.handle-container {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  position: absolute;
+  z-index: 10000;
+  display: block;
+  user-select: none;
+  margin: 0;
+  pointer-events: none;
+}
+
+.handle-container button {
+  pointer-events: all;
+
+  max-width: 50%;
+  max-height: 50%;
+  width: 18px;
+  height: 18px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.handle-container svg {
+  stroke: black;
+  fill: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  height: 100%;
+}
+.duplicate {
+  width: 25px !important;
+  height: 25px !important;
+}
+.duplicate:hover,
+.duplicate.active {
+  filter: drop-shadow(1px 1px 5px green);
+  /* background-color: rgba(32, 52, 236, 0.705); */
+}
+
+.x {
+  right: 0;
+  position: absolute;
+}
+
+.x:hover,
+.x.active {
+  filter: drop-shadow(0px 0px 3px #f44) drop-shadow(0px 1px 0px white);
+}
+
+.draggable {
+  margin: 0;
+  touch-action: manipulation;
+}
+
+.resize-handle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  z-index: 1000000;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  display: block;
+  user-select: none;
+  margin: 0;
+  pointer-events: all;
+  right: -18px;
+  bottom: -18px;
+  border-radius: 100%;
+  cursor: grabbing;
+}

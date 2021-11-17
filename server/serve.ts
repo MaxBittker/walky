@@ -58,12 +58,15 @@ function entityUpload(
   owner: string
 ) {
   console.log(url);
+
+  let maxDimension = Math.max(size.x, size.y);
+  let scale = 300 / maxDimension;
   entityState[uuid] = {
     uuid,
     url,
     pos: position,
     size,
-    scale: 1.0,
+    scale,
     rotation: 0.0,
     iid,
   };

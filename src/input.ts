@@ -1,6 +1,6 @@
 import { getState } from "./state";
 import * as Matter from "matter-js";
-import { start_audio } from "./audio";
+// import { start_audio } from "./audio";
 let Vector = Matter.Vector;
 
 let zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
@@ -29,7 +29,7 @@ function startInput() {
   });
   window.addEventListener("click", (event) => {
     // event.preventDefault();
-    start_audio();
+    // start_audio();
 
     if (window.dragging) return;
 
