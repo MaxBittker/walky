@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Simulate } from "react-dom/test-utils";
 import "./entity.css";
 import classNames from "classnames";
@@ -11,6 +11,7 @@ import { getState, getEntity, writeEntity } from "./state";
 import { convertTarget, deconvertTarget } from "./input";
 import { sendEntityDelete } from "./client";
 import { v4 as uuidv4 } from "uuid";
+import { useDelayedGate } from "./hooks";
 
 let V = Matter.Vector;
 
@@ -123,6 +124,7 @@ export default function Entity({
 }) {
   let [mode, setMode] = useState("");
   let [selected, setSelected] = useState(false);
+  let beenSelected = useDelayedGate(selected, 180/window.zoom);
   let [startScale, setStartScale] = useState<number>(NaN);
   let img = useRef<HTMLImageElement>(null);
   let handleContainer = useRef<HTMLDivElement>(null);
@@ -140,6 +142,9 @@ export default function Entity({
   );
   let mouseUp = useCallback(
     (e) => {
+      if (selected && !beenSelected) {
+        setSelected(false);
+      }
       if (mode !== "") {
         e.preventDefault();
         setMode("");
@@ -149,8 +154,14 @@ export default function Entity({
         }, 200);
       }
     },
-    [setSelected, setMode, mode]
+    [setSelected, beenSelected, selected setMode, mode]
   );
+
+  useEffect(() => {
+    if (beenSelected) {
+        window.dragging = false;
+    }
+  }, [mode, beenSelected]);
 
   let mouseMove = useCallback((e) => {
     if (!grabPos) {
@@ -220,9 +231,11 @@ export default function Entity({
   );
 
   React.useEffect(() => {
-    if (selected) {
+    if (beenSelected) {
       window.dragging = true;
       window.dispatchEvent(new Event("stop"));
+    }
+    if (selected) {
       window.addEventListener("click", unsetSelection);
       window.addEventListener("mouseup", mouseUp);
       window.addEventListener("touchend", mouseUp);
@@ -230,11 +243,11 @@ export default function Entity({
       window.addEventListener("touchstart", mouseDown);
     }
 
-    if (selected && mode === "move") {
+    if (beenSelected && mode === "move") {
       window.addEventListener("mousemove", mouseMove);
       window.addEventListener("touchmove", mouseMove);
     }
-    if (selected && mode === "resize") {
+    if (beenSelected && mode === "resize") {
       window.addEventListener("mousemove", mouseResize);
       window.addEventListener("touchmove", mouseResize);
     }
@@ -252,7 +265,7 @@ export default function Entity({
       window.removeEventListener("mousemove", mouseResize);
       window.removeEventListener("touchmove", mouseResize);
     };
-  }, [unsetSelection, selected, mode, mouseMove]);
+  }, [unsetSelection, selected, beenSelected, mode, mouseMove]);
 
   let relPos = pos;
 
@@ -275,10 +288,9 @@ export default function Entity({
         }
         return;
       }
+
       setSelected(true);
-
       let ent = getEntity(uuid);
-
       let convertedMouse = convertTarget({
         x: e.clientX,
         y: e.clientY,
@@ -312,7 +324,9 @@ export default function Entity({
       <img
         key={uuid}
         ref={img}
-        className={classNames("photo draggable " + mode, { selected })}
+        className={classNames("photo draggable " + mode, {
+          selected: beenSelected,
+        })}
         src={window.location.origin + url}
         crossOrigin="anonymous"
         style={{
@@ -326,7 +340,7 @@ export default function Entity({
         onMouseDown={imageMouseDown}
         onTouchStart={imageMouseDown}
       ></img>
-      {selected && (
+      {beenSelected && (
         <>
           <div
             style={{

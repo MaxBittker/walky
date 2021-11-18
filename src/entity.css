@@ -5,7 +5,7 @@
 .photo.selected {
 }
 
-.photo.move {
+.photo.selected.move {
   /* border: 1px blue dashed; */
   /* filter: drop-shadow(0px 10px 15px rgba(15, 15, 15, 0.281))
     drop-shadow(0px 0px 1px white); */
