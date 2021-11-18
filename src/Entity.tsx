@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useState, useCallback, useRef } from "react";
 import { Simulate } from "react-dom/test-utils";
-import X from "./../assets/close.png";
 import "./entity.css";
-import subtract from "./../assets/duplicate.png";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
 import * as Matter from "matter-js";
@@ -49,7 +47,7 @@ function checkImageCoord(
 
   let pc = deconvertTarget(pos);
   ctx.translate(pc.x, pc.y);
-  ctx.scale(scale, scale);
+  ctx.scale(scale * window.zoom, scale * window.zoom);
   ctx.rotate(rotation / (180 / Math.PI));
 
   ctx.drawImage(
@@ -135,6 +133,7 @@ export default function Entity({
     (e) => {
       if (!e.target.classList.contains("tool") && e.target !== img.current) {
         setSelected(false);
+        setMode("");
       }
     },
     [setSelected, setMode, mode]
@@ -157,7 +156,10 @@ export default function Entity({
     if (!grabPos) {
       return;
     }
-
+    if (e.touches) {
+      e.clientX = e.touches[0].clientX;
+      e.clientY = e.touches[0].clientY;
+    }
     e = e || window.event;
     e.preventDefault();
 
@@ -175,6 +177,10 @@ export default function Entity({
     (e) => {
       if (!grabPos) {
         return;
+      }
+      if (e.touches) {
+        e.clientX = e.touches[0].clientX;
+        e.clientY = e.touches[0].clientY;
       }
 
       e = e || window.event;
@@ -203,7 +209,10 @@ export default function Entity({
 
       let newAngle = handleAngle - a;
 
-      ent.scale = newScale;
+      let maxDim = Math.max(size.x, size.y);
+      let maxScale = 600 / maxDim;
+
+      ent.scale = Math.min(newScale, maxScale);
       ent.rotation = newAngle * (180 / Math.PI);
       writeEntity(uuid, ent);
     },
@@ -216,32 +225,94 @@ export default function Entity({
       window.dispatchEvent(new Event("stop"));
       window.addEventListener("click", unsetSelection);
       window.addEventListener("mouseup", mouseUp);
+      window.addEventListener("touchend", mouseUp);
       window.addEventListener("mousedown", mouseDown);
+      window.addEventListener("touchstart", mouseDown);
     }
 
     if (selected && mode === "move") {
       window.addEventListener("mousemove", mouseMove);
+      window.addEventListener("touchmove", mouseMove);
     }
     if (selected && mode === "resize") {
       window.addEventListener("mousemove", mouseResize);
+      window.addEventListener("touchmove", mouseResize);
     }
 
     return () => {
       window.removeEventListener("click", unsetSelection);
-      window.removeEventListener("mousemove", mouseMove);
-      window.removeEventListener("mousemove", mouseResize);
       window.removeEventListener("mouseup", mouseUp);
+      window.removeEventListener("touchend", mouseUp);
       window.removeEventListener("mousedown", mouseDown);
+      window.removeEventListener("touchstart", mouseDown);
+
+      window.removeEventListener("mousemove", mouseMove);
+      window.removeEventListener("touchmove", mouseMove);
+
+      window.removeEventListener("mousemove", mouseResize);
+      window.removeEventListener("touchmove", mouseResize);
     };
-  }, [unsetSelection, selected, mode]);
+  }, [unsetSelection, selected, mode, mouseMove]);
 
   let relPos = pos;
+
+  let imageMouseDown = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (e.touches) {
+        e.clientX = e.touches[0].clientX;
+        e.clientY = e.touches[0].clientY;
+      }
+      let hit = checkImageCoord(img.current, pos, scale, rotation, e);
+
+      if (hit !== img.current) {
+        if (hit) {
+          Simulate.mouseDown(hit, {
+            clientX: e.clientX,
+            clientY: e.clientY,
+            target: hit,
+          });
+        }
+        return;
+      }
+      setSelected(true);
+
+      let ent = getEntity(uuid);
+
+      let convertedMouse = convertTarget({
+        x: e.clientX,
+        y: e.clientY,
+      });
+      grabPos = V.sub(ent.pos, convertedMouse);
+      setMode("move");
+    },
+    [pos, scale, rotation, img.current, setMode]
+  );
+
+  let resizeHandleMouseDown = useCallback(
+    (e) => {
+      let ent = getEntity(uuid);
+      if (e.touches) {
+        e.clientX = e.touches[0].clientX;
+        e.clientY = e.touches[0].clientY;
+      }
+
+      let convertedMouse = convertTarget({
+        x: e.clientX,
+        y: e.clientY,
+      });
+      grabPos = V.sub(ent.pos, convertedMouse);
+      setMode("resize");
+      setStartScale(scale);
+    },
+    [pos, setMode, setStartScale]
+  );
   return (
     <React.Fragment key={uuid}>
       <img
         key={uuid}
         ref={img}
-        className={classNames("photo draggable", { selected })}
+        className={classNames("photo draggable " + mode, { selected })}
         src={window.location.origin + url}
         crossOrigin="anonymous"
         style={{
@@ -252,43 +323,8 @@ export default function Entity({
           display: "flex",
           zIndex: 200 + (selected ? 100 : 0),
         }}
-        onMouseDown={(e) => {
-          e.preventDefault();
-          if (!editing) {
-            return;
-          }
-
-          let hit = checkImageCoord(img.current, pos, scale, rotation, e);
-
-          if (hit !== img.current) {
-            if (hit) {
-              Simulate.mouseDown(hit, {
-                clientX: e.clientX,
-                clientY: e.clientY,
-                target: hit,
-              });
-            }
-            return;
-          }
-          setSelected(true);
-
-          let ent = getEntity(uuid);
-
-          let convertedMouse = convertTarget({
-            x: e.clientX,
-            y: e.clientY,
-          });
-          grabPos = V.sub(ent.pos, convertedMouse);
-          setMode("move");
-        }}
-        onWheel={(e) => {
-          if (!selected) return;
-          let ent = getEntity(uuid);
-
-          ent.scale += e.deltaY * 0.001;
-
-          writeEntity(uuid, ent);
-        }}
+        onMouseDown={imageMouseDown}
+        onTouchStart={imageMouseDown}
       ></img>
       {selected && (
         <>
@@ -299,11 +335,13 @@ export default function Entity({
               top: relPos.y,
               width: size.x * scale,
               height: size.y * scale,
-              transform: `translate(-50%, -50%) rotate(${rotation}deg) `,
+              transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${
+                mode === "move" ? 1.005 : 1.0
+              })`,
               zIndex: 200 + (selected ? 100 : 0),
             }}
             ref={handleContainer}
-            className="handle-container "
+            className={"handle-container " + mode}
           >
             <button
               className="tool duplicate"
@@ -350,17 +388,8 @@ export default function Entity({
               </svg>
             </button>
             <div
-              onMouseDown={(e) => {
-                let ent = getEntity(uuid);
-
-                let convertedMouse = convertTarget({
-                  x: e.clientX,
-                  y: e.clientY,
-                });
-                grabPos = V.sub(ent.pos, convertedMouse);
-                setMode("resize");
-                setStartScale(scale);
-              }}
+              onMouseDown={resizeHandleMouseDown}
+              onTouchStart={resizeHandleMouseDown}
               ref={handle}
               className="resize-handle tool"
             ></div>

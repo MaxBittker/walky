@@ -3,24 +3,24 @@ import * as Matter from "matter-js";
 // import { start_audio } from "./audio";
 let Vector = Matter.Vector;
 
-let zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
+window.zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
 window.addEventListener("resize", () => {
-  zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
+  window.zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
 });
 
 function convertTarget(t: Matter.Vector) {
   const { camera, center } = getState();
   // let zCamera = Vector.div(camera, zoom);
   let zCenter = center;
-  let zPos = Vector.div(t, zoom);
+  let zPos = Vector.div(t, window.zoom);
   return Vector.sub(Vector.add(zPos, camera), zCenter);
 }
 function deconvertTarget(t: Matter.Vector) {
   const { camera, center } = getState();
   // let zCamera = Vector.div(camera, zoom);
   let zCenter = center;
-  let zPos = Vector.mult(t, zoom);
-  return Vector.add(Vector.sub(zPos, camera), zCenter);
+  // let zPos = Vector.mult(t, zoom);
+  return Vector.mult(Vector.add(Vector.sub(t, camera), zCenter), window.zoom);
 }
 let mouseDown = false;
 function startInput() {
@@ -55,6 +55,8 @@ function startInput() {
   });
 
   window.addEventListener("touchmove", (event) => {
+    if (window.dragging) return;
+
     event.preventDefault();
 
     let state = getState();
