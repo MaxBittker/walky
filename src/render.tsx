@@ -88,6 +88,7 @@ function render() {
           <h2>Welcome!</h2>
           {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
           <p>This space is under construction. </p>
+          <p>Tap + hold to select. </p>
           <p style={{ float: "right" }}>Be nice - Max </p>
         </div>
         {/* {audios.map(({ url, pos, name }, i) => {
