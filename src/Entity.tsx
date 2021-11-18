@@ -159,7 +159,9 @@ export default function Entity({
 
   useEffect(() => {
     if (beenSelected) {
-        window.dragging = false;
+        window.dragging = true;
+    }else{
+      window.dragging = false;
     }
   }, [mode, beenSelected]);
 
