@@ -85,11 +85,12 @@ function render() {
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
         <div id="info">
-          <h2>Welcome!</h2>
+          <h2 style={{ marginBottom: ".5em" }}>Welcome! </h2>
           {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
-          <p>This space is under construction. </p>
-          <p>Tap + hold to select. </p>
-          <p style={{ float: "right" }}>Be nice - Max </p>
+          <p>Walky.space is under construction - </p>
+          <p>You can help by sharing or sorting photos.</p>
+          <p>Tap + hold to select. &nbsp; Be kind, please ☺</p>
+          <p style={{ float: "right" }}>- Max </p>
         </div>
         {/* {audios.map(({ url, pos, name }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);

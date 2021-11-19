@@ -220,11 +220,11 @@ img {
   z-index: 99999;
   padding: 30px;
   font-size: 22px;
-  max-width: 400px;
-  line-height: 60px;
+  max-width: 450px;
+  line-height: 45px;
   /* margin: auto; */
   font-weight: 100;
-  background-color: #ffffffee;
+  background-color: #fffffffe;
   border: 1px solid rgb(0, 0, 0);
   border-radius: 0px;
   transform: translate(-50%, -50%);
