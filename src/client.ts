@@ -1,5 +1,12 @@
+import { debug } from "console";
 import { getState } from "./state";
-import { PacketTypes, PacketLayout, AgentLayout, PingLayout } from "./types";
+import {
+  PacketTypes,
+  PacketLayout,
+  AgentLayout,
+  PingLayout,
+  EntityLayout,
+} from "./types";
 import { nrandom } from "./utils";
 // import { v4 as uuidv4 } from "uuid";
 // import chair from "./../assets/Classroom+Chair.jpg";
@@ -71,7 +78,17 @@ function processUpdate(packet: PacketLayout) {
     processAgents(data as { [uuid: string]: AgentLayout });
     // console.log(state.agents[0].lastUpdated - Date.now());
   } else if (type == PacketTypes.entityUpdate) {
-    state.entities = Object.values(data).sort((a, b) => a.iid - b.iid);
+    let entData = data as EntityLayout;
+    let i = state.entities.findIndex((v) => v.uuid === entData.uuid);
+    if (!entData.pos) {
+      // delete
+      state.entities = state.entities.filter((v) => v.uuid != entData.uuid);
+    } else if (i >= 0) {
+      state.entities[i] = entData;
+    } else {
+      state.entities.push(entData);
+    }
+    state.entities = state.entities.sort((a, b) => a.iid - b.iid);
   } else if (type == PacketTypes.pong) {
     clockSync(data as PingLayout);
   }

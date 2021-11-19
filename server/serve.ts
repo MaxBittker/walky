@@ -71,7 +71,7 @@ function entityUpload(
     iid,
   };
   iid++;
-  sendEntityUpdate();
+  sendEntityUpdate(uuid);
 }
 startEndpoints(entityUpload);
 
@@ -79,7 +79,7 @@ wsServer.on("request", function (request) {
   const connection = request.accept(undefined, request.origin);
   let uuid: string;
   openConnections.add(connection);
-  sendEntityUpdate(connection);
+  sendEntityUpdateAll(connection);
   connection.on("message", function (message: any) {
     if (!message.utf8Data) {
       return;
@@ -112,7 +112,7 @@ wsServer.on("request", function (request) {
         // deletion;
         delete entityState[data.uuid];
       }
-      sendEntityUpdate();
+      sendEntityUpdate(data.uuid);
     }
   });
   connection.on("close", function (reasonCode, description) {
@@ -122,12 +122,17 @@ wsServer.on("request", function (request) {
   });
 });
 
-function sendEntityUpdate(connection?: websocket.connection) {
+function sendEntityUpdateAll(connection?: websocket.connection) {
+  Object.keys(entityState).forEach((uuid) =>
+    sendEntityUpdate(uuid, connection)
+  );
+}
+
+function sendEntityUpdate(uuid: string, connection?: websocket.connection) {
   let packet = JSON.stringify({
     type: PacketTypes.entityUpdate,
-    data: entityState,
+    data: entityState[uuid] || { uuid },
   });
-  console.log("sending entities");
 
   let connections = openConnections;
   if (connection) {

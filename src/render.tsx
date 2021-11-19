@@ -115,8 +115,10 @@ function render() {
             <Entity
               key={uuid}
               url={url}
-              pos={pos}
-              size={size}
+              x={pos.x}
+              y={pos.y}
+              w={size.x}
+              h={size.y}
               rotation={rotation}
               scale={scale}
               uuid={uuid}
