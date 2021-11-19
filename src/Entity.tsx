@@ -107,17 +107,16 @@ function distance(a, b) {
 
 export default function Entity({
   url,
-  x,y,w,h,
+  pos,
+  size,
   scale,
   rotation,
   uuid,
   i,
 }: {
   url: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
+  pos: Vector;
+  size: Vector;
   scale: number;
   rotation: number;
   uuid: string;
@@ -125,8 +124,8 @@ export default function Entity({
 }) {
   let [mode, setMode] = useState("");
   let [selected, setSelected] = useState(false);
-  let beenSelected = useDelayedGate(selected, 100/window.zoom);
-  let [startScale, setStartScale] = useState<number>(1.0);
+  let beenSelected = useDelayedGate(selected, 100);
+  let [startScale, setStartScale] = useState<number|null>(null);
   let img = useRef<HTMLImageElement>(null);
   let handleContainer = useRef<HTMLDivElement>(null);
   let handle = useRef<HTMLDivElement>(null);
@@ -208,22 +207,22 @@ export default function Entity({
       });
 
       let p1 = convertedMouse;
-      let center = {x,y};
+      let center = pos;
       let p2 = V.add(center, V.sub(center, p1));
 
       let newDistance = distance(p1, p2);
 
       let newScale =
-        startScale * (newDistance / (magnitude({x:w,y:h}) * startScale));
+        startScale * (newDistance / (magnitude(size) * startScale));
 
       let pDifference = V.sub(p1, p2);
       let handleAngle = angle(pDifference);
 
-      let a = Math.atan2(h, w); //+ Math.PI;
+      let a = Math.atan2(size.y, size.x); //+ Math.PI;
 
       let newAngle = handleAngle - a;
 
-      let maxDim = Math.max(w, h);
+      let maxDim = Math.max(size.x, size.y);
       let maxScale = 600 / maxDim;
 
       ent.scale = Math.min(newScale, maxScale);
@@ -270,7 +269,7 @@ export default function Entity({
     };
   }, [unsetSelection, selected, beenSelected, mode, mouseMove]);
 
-  // let relPos = pos;
+  let relPos = pos;
 
   let imageMouseDown = useCallback(
     (e) => {
@@ -279,7 +278,7 @@ export default function Entity({
         e.clientX = e.touches[0].clientX;
         e.clientY = e.touches[0].clientY;
       }
-      let hit = checkImageCoord(img.current, {x,y}, scale, rotation, e);
+      let hit = checkImageCoord(img.current, pos, scale, rotation, e);
 
       if (hit !== img.current) {
         if (hit) {
@@ -301,7 +300,7 @@ export default function Entity({
       grabPos = V.sub(ent.pos, convertedMouse);
       setMode("move");
     },
-    [x,y, scale, rotation, img.current, setMode]
+    [pos, scale, rotation, img.current, setMode]
   );
 
   let resizeHandleMouseDown = useCallback(
@@ -320,7 +319,7 @@ export default function Entity({
       setMode("resize");
       setStartScale(scale);
     },
-    [ setMode, setStartScale]
+    [pos, setMode, setStartScale]
   );
   return (
     <React.Fragment key={uuid}>
@@ -334,11 +333,11 @@ export default function Entity({
         crossOrigin="anonymous"
         style={{
           position: "absolute",
-          left: x,
-          top: y,
+          left: relPos.x,
+          top: relPos.y,
           transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale}) `,
           display: "flex",
-          zIndex: 200 + (beenSelected ? 100 : 0),
+          zIndex: 500 + (beenSelected ? 500 : 0),
         }}
         onMouseDown={imageMouseDown}
         onTouchStart={imageMouseDown}
@@ -348,14 +347,14 @@ export default function Entity({
           <div
             style={{
               position: "absolute",
-              left: x,
-              top: y,
-              width: w * scale,
-              height:h * scale,
+              left: relPos.x,
+              top: relPos.y,
+              width: size.x * scale,
+              height: size.y * scale,
               transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${
                 mode === "move" ? 1.005 : 1.0
               })`,
-              zIndex: 200 + (beenSelected ? 100 : 0),
+              zIndex: 500 + (beenSelected ? 500 : 0),
             }}
             ref={handleContainer}
             className={"handle-container " + mode}
