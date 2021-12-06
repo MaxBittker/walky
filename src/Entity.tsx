@@ -124,7 +124,7 @@ export default function Entity({
 }) {
   let [mode, setMode] = useState("");
   let [selected, setSelected] = useState(false);
-  let beenSelected = useDelayedGate(selected, 100 / window.zoom );
+  let beenSelected = useDelayedGate(selected, 200 / window.zoom );
   let [startScale, setStartScale] = useState<number|null>(null);
   let img = useRef<HTMLImageElement>(null);
   let handleContainer = useRef<HTMLDivElement>(null);

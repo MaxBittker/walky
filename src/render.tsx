@@ -87,14 +87,14 @@ function render() {
         <div id="info">
           <h2 style={{ marginBottom: ".5em" }}>Welcome! </h2>
           {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
-          <p>Walky.space is under construction - </p>
-          <p>
+          <p>Walky.space is under construction. </p>
+         {/* <p>
             Todays's theme is{" "}
             <i>
-              <b>bookshelf</b>
+              <b>Categories</b>
             </i>
-          </p>
-          <p>You're invited to share, sort, and delete.</p>
+          </p> */}
+          <p>You're invited to share, organize, and prune.</p>
 
           <p>Tap + hold to select. &nbsp; Be kind, please ☺</p>
           <p style={{ float: "right" }}>- Max </p>

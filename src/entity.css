@@ -53,6 +53,7 @@
 .duplicate {
   width: 25px !important;
   height: 25px !important;
+  display: none;
 }
 .duplicate:hover,
 .duplicate.active {
