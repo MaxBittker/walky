@@ -51,6 +51,12 @@
   height: 100%;
 }
 .duplicate {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  transform: translate(-50% ,-50%);
+
   width: 25px !important;
   height: 25px !important;
   display: none;
@@ -63,6 +69,8 @@
 
 .x {
   right: 0;
+  top: 0;
+  transform: translate(50% ,-50%);
   position: absolute;
   filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5))
     drop-shadow(-1px -1px 1px rgba(255, 255, 255, 0.5))
@@ -107,4 +115,19 @@
   bottom: -18px;
   border-radius: 100%;
   cursor: grabbing;
+}
+
+textarea{
+  font-size: 2rem;
+  padding: .5rem;
+  border: none;
+  white-space: pre;
+  overflow: hidden ;
+  background: transparent;;
+
+}
+textarea::-webkit-resizer {
+  display: none;
+
+  
 }

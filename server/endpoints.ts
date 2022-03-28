@@ -58,7 +58,8 @@ function startEndpoints(PORT: number) {
             .end(
               JSON.stringify({
                 uuid,
-                url: path.join("/files", file_name_uuid),
+                value: path.join("/files", file_name_uuid),
+                type: "img",
                 position,
                 size,
                 owner_uuid

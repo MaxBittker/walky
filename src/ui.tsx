@@ -5,12 +5,14 @@ import { getState } from "./state";
 // import { AgentLayout } from "./types";
 let Vector = Matter.Vector;
 import add from "./../assets/upload.png";
+import Aa from "./../assets/text.png";
 import X from "./../assets/delete.ico";
 import chat from "./../assets/chat.gif";
 import "regenerator-runtime/runtime";
 
 import * as browserImageResizer from "browser-image-resizer";
 import { sendEntityUpdate } from "./client";
+import { EntityType } from "./types";
 
 const config = {
   quality: 0.8,
@@ -151,6 +153,30 @@ function imagePrompt(event: React.MouseEvent) {
   state.me.target = state.me.pos;
 }
 
+function textAdd(event: React.MouseEvent) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  let state = getState();
+  state.me.target = state.me.pos;
+
+  let newEnt = {
+    value: "New Text",
+    type: EntityType.Text,
+    uuid: Math.random().toString().slice(2, 7),
+    pos: state.me.pos,
+    size: { x: 142 + 16, y: 41 + 16 },
+    scale: 1.0,
+    rotation: 0.0,
+    iid:
+      state.entities.map((e) => e.iid).reduce((a, b) => Math.max(a, b), 1) + 1
+  };
+
+  state.entities.push(newEnt);
+  state.entities = state.entities.sort((a, b) => a.iid - b.iid);
+  sendEntityUpdate(newEnt.uuid);
+}
+
 class UI extends React.Component {
   constructor(props: any) {
     super(props);
@@ -181,7 +207,7 @@ class UI extends React.Component {
     let editing = true;
     //  urlParams.get("edit") !== null;
     return (
-      <div className="items">
+      <div id="items">
         <input
           type="file"
           multiple
@@ -200,6 +226,7 @@ class UI extends React.Component {
               id="add-image"
               onClick={imagePrompt}
             />
+            <img src={Aa} className="tool" id="add-text" onClick={textAdd} />
           </>
         )}
 
@@ -214,6 +241,7 @@ class UI extends React.Component {
             fakeInput.focus();
           }}
         />
+
         {infoOpen && (
           <div id="info">
             <img

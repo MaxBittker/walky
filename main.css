@@ -16,7 +16,9 @@ body {
   height: -webkit-fill-available;
   height: fill-available;
 }
-body {
+textarea {
+  font-family: "Libre Franklin", sans-serif;
+
 }
 * {
   -webkit-user-select: none; /* Safari */
@@ -74,7 +76,7 @@ body {
   /* will-change: filter; */
   /* box-shadow: inset 0 0 0 0.01px white; */
   /* mix-blend-mode: normal; */
-  image-rendering: pixelated;
+  /* image-rendering: pixelated; */
 }
 
 * {
@@ -162,6 +164,7 @@ img {
 
 #items {
   user-select: none;
+  display: flex;
 }
 #items img {
   user-select: none;
@@ -169,11 +172,10 @@ img {
 #add-image {
   left: 10px;
   bottom: 10px;
-
   /* filter: drop-shadow(0px 0px 5px #444); */
 }
 
-#add-image:hover {
+#add-image:hover,  #add-text:hover{
   filter: drop-shadow(1px 1px 5px #44f);
 }
 
@@ -184,10 +186,10 @@ img {
   z-index: 166;
 }
 .tool {
+  display: inline-block;
   mix-blend-mode: normal;
   pointer-events: initial;
 }
-
 #fake-input {
   opacity: 0;
   position: relative;
@@ -231,13 +233,13 @@ img {
 }
 #spawner{
   position: absolute;
-  z-index: 999999;
+  /* z-index: 999999; */
   transform: translate(-50%, -50%);
   width: 120px;
   height: 120px;
   border-radius: 100%;
-  /* border: 2px dashed black ; */
-
+  opacity: 0.5;
+  /* border: 2px dashed rgba(100, 100, 100, 0.561) ; */
 }
 
 #close {

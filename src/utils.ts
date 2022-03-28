@@ -14,4 +14,8 @@ function randomVec(r = 1) {
 function distance(a: Matter.Vector, b: Matter.Vector) {
   return Vector.magnitude(Vector.sub(a, b));
 }
-export { nrandom, randomVec, distance };
+function clamp(num: number, min: number, max: number) {
+  return Math.min(Math.max(num, min), max);
+}
+
+export { nrandom, randomVec, distance, clamp };

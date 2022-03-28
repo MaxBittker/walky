@@ -3,8 +3,8 @@ import walk from "./../assets/ear_walk.gif";
 // import walk from "./../assets/walk1.gif";
 // import stand from "./../assets/stand1.gif";
 import stand from "./../assets/ear_stand.gif";
+import spiral from "./../assets/spiral.svg";
 // import bubble from "./../assets/bubble.png";
-import { sendEntityUpdate } from "./client";
 import * as Matter from "matter-js";
 import Entity from "./Entity";
 import { getState } from "./state";
@@ -96,37 +96,35 @@ function Render({ tick }): JSX.Element {
         id="entities"
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
-        <div id="spawner"></div>
-        <div id="info">
+        <img id="spawner" src={spiral} />
+        {/* <div id="info">
           <h2 style={{ marginBottom: ".5em" }}>Welcome! </h2>
           <p>Walky.space is under construction. </p>
-          {/* <p>
-            Todays's theme is{" "}
-            <i>
-              <b>Categories</b>
-            </i>
-          </p> */}
+     
           <p>You're invited to share, organize, and prune.</p>
 
           <p>Tap + hold to select. &nbsp; Be kind, please ☺</p>
           <p style={{ float: "right" }}>- Max </p>
-        </div>
+        </div> */}
 
-        {entities.map(({ url, pos, size, rotation, scale, uuid }, i) => {
-          // let relPos = Vector.add(Vector.sub(pos, camera), center);
-          return (
-            <Entity
-              key={uuid}
-              url={url}
-              pos={pos}
-              size={size}
-              rotation={rotation}
-              scale={scale}
-              uuid={uuid}
-              i={i}
-            ></Entity>
-          );
-        })}
+        {entities.map(
+          ({ value, type, pos, size, rotation, scale, uuid }, i) => {
+            // let relPos = Vector.add(Vector.sub(pos, camera), center);
+            return (
+              <Entity
+                key={uuid}
+                value={value}
+                type={type}
+                pos={pos}
+                size={size}
+                rotation={rotation}
+                scale={scale}
+                uuid={uuid}
+                i={i}
+              ></Entity>
+            );
+          }
+        )}
       </div>
     </React.Fragment>
   );

@@ -65,7 +65,7 @@ function startInput() {
     for (let i = 0; i < touches.length; i++) {
       state.me.target = convertTarget({
         x: touches[i].pageX,
-        y: touches[i].pageY,
+        y: touches[i].pageY
       });
     }
   });
@@ -79,7 +79,7 @@ function startInput() {
     for (let i = 0; i < touches.length; i++) {
       state.me.target = convertTarget({
         x: touches[i].pageX,
-        y: touches[i].pageY,
+        y: touches[i].pageY
       });
     }
   });
@@ -90,7 +90,10 @@ function startInput() {
   let down = false;
   let keypoll: number;
   window.addEventListener("keydown", (event) => {
-    let { key, keyCode } = event;
+    let { key, keyCode, target } = event;
+    if (event?.target?.tagName === "TEXTAREA") {
+      return;
+    }
     let { me } = getState();
     if (key == "Control") {
       console.log("focusing");

@@ -1,8 +1,14 @@
 import * as Matter from "matter-js";
 
+enum EntityType {
+  Image = "img",
+  Text = "text"
+}
+
 interface EntityLayout {
   uuid: string;
-  url: string;
+  value: string;
+  type: EntityType;
   pos: Matter.Vector;
   size: Matter.Vector;
   rotation: number;
@@ -30,4 +36,4 @@ interface StateLayout {
   agents: AgentLayout[];
 }
 
-export { StateLayout, EntityLayout, AgentLayout };
+export { StateLayout, EntityLayout, AgentLayout,EntityType };
