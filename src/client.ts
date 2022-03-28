@@ -49,9 +49,13 @@ function processAgents(agents: AgentLayout[]) {
     };
   });
 }
-
+let lastJSON = "";
 function sendUpdate() {
-  awareness.setLocalStateField("agent", getState().me);
+  let newJSON = JSON.stringify(getState().me);
+  if (lastJSON !== newJSON) {
+    awareness.setLocalStateField("agent", getState().me);
+    lastJSON = newJSON;
+  }
 }
 
 function sendEntityUpdate(i_uuid: string) {
