@@ -229,6 +229,16 @@ img {
   border-radius: 0px;
   transform: translate(-50%, -50%);
 }
+#spawner{
+  position: absolute;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+  /* border: 2px dashed black ; */
+
+}
 
 #close {
   position: absolute;

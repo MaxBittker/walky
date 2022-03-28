@@ -70,7 +70,7 @@ function renderAgent(agent: AgentLayout, i: number) {
   );
 }
 function Render({ tick }): JSX.Element {
-  const { camera, entities, me, agents, center } = getState();
+  const { camera, entities, agents, center } = getState();
   const [count, setCount] = React.useState(0);
 
   useAnimationFrame((deltaTime: number) => {
@@ -96,6 +96,7 @@ function Render({ tick }): JSX.Element {
         id="entities"
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
+        <div id="spawner"></div>
         <div id="info">
           <h2 style={{ marginBottom: ".5em" }}>Welcome! </h2>
           <p>Walky.space is under construction. </p>

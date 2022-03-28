@@ -3,6 +3,7 @@ import * as Matter from "matter-js";
 import { v4 as uuidv4 } from "uuid";
 import { EntityLayout, StateLayout } from "./types";
 import { sendEntityUpdate } from "./client";
+import { nrandom, randomVec } from "./utils";
 
 let Vector = Matter.Vector;
 
@@ -11,8 +12,8 @@ let uuid = uuidv4().slice(0, 8);
 let state: StateLayout = {
   me: {
     uuid,
-    pos: { x: 0, y: 0 },
-    target: { x: 0, y: 0 },
+    pos: randomVec(100),
+    target: randomVec(100),
     facing: true,
     moving: false,
     color: Math.random() * 360
