@@ -1,9 +1,9 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as http from "http";
-import * as express from "express";
-import * as multer from "multer";
-function startEndpoints(entityUpload: any) {
+import express from "express";
+import multer from "multer";
+function startEndpoints() {
   const app = express();
   const httpServer = http.createServer(app);
 
@@ -11,6 +11,9 @@ function startEndpoints(entityUpload: any) {
 
   app.use(express.static("../docs"));
   app.use("/files", express.static("./uploads"));
+  app.get("*", function (request, response) {
+    response.sendFile(path.resolve(__dirname, "../docs/index.html"));
+  });
 
   httpServer.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
@@ -24,7 +27,7 @@ function startEndpoints(entityUpload: any) {
   };
 
   const upload = multer({
-    dest: "./uploads/",
+    dest: "./uploads/"
     // you might also want to set some limits: https://github.com/expressjs/multer#limits
   });
 
@@ -34,7 +37,6 @@ function startEndpoints(entityUpload: any) {
       "image-upload" /* name attribute of <file> element in your form */
     ),
     (req, res) => {
-      //   console.log(req.body);
       let owner_uuid = req.body["owner"];
       let position = JSON.parse(req.body["position"]);
       let size = JSON.parse(req.body["size"]);
@@ -52,15 +54,19 @@ function startEndpoints(entityUpload: any) {
       if (ext === ".png" || ext == ".jpg" || ext == ".jpeg") {
         fs.rename(tempPath, targetPath, (err) => {
           if (err) return handleError(err, res);
-          res.status(200).contentType("text/plain").end("File uploaded!");
+          res
+            .status(200)
+            .contentType("text/json")
+            .end(
+              JSON.stringify({
+                uuid,
+                url: path.join("/files", file_name_uuid),
+                position,
+                size,
+                owner_uuid
+              })
+            );
         });
-        entityUpload(
-          uuid,
-          path.join("/files", file_name_uuid),
-          position,
-          size,
-          owner_uuid
-        );
       } else {
         fs.unlink(tempPath, (err) => {
           console.log(ext);

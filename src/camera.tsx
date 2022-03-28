@@ -1,6 +1,6 @@
 import * as Matter from "matter-js";
 import { getState } from "./state";
-import { speed } from "./movement";
+import { topSpeed } from "./movement";
 let Vector = Matter.Vector;
 
 // the 0 is weird.
@@ -19,7 +19,7 @@ function updateCamera(elapsedTicks: number) {
   pos = Vector.sub(pos, Vector.mult(center, zoom));
 
   let distanceFromPos = Vector.magnitude(Vector.sub(pos, camera));
-  let camera_speed = speed;
+  let camera_speed = topSpeed;
   if (distanceFromPos < Vector.magnitude(frame) / 20) {
     camera_speed = 0;
   }

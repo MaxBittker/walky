@@ -1,8 +1,7 @@
 import * as Matter from "matter-js";
 
-import { nrandom } from "./utils";
 import { v4 as uuidv4 } from "uuid";
-import { StateLayout } from "./types";
+import { EntityLayout, StateLayout } from "./types";
 import { sendEntityUpdate } from "./client";
 
 let Vector = Matter.Vector;
@@ -10,22 +9,20 @@ let Vector = Matter.Vector;
 let uuid = uuidv4().slice(0, 8);
 
 let state: StateLayout = {
-  tick: 0,
   me: {
     uuid,
     pos: { x: 0, y: 0 },
-    target: undefined,
+    target: { x: 0, y: 0 },
     facing: true,
     moving: false,
-    lastUpdated: 0,
-    color: Math.random() * 360,
+    color: Math.random() * 360
   },
   camera: { x: 0, y: 0 },
   frame: { x: 0, y: 0 },
   center: { x: 0, y: 0 },
   entities: [],
   // audios: [],
-  agents: [],
+  agents: []
 };
 
 state.entities = [];
@@ -52,7 +49,7 @@ function getEntity(uuid: string) {
   });
   return entities[i];
 }
-function writeEntity(uuid, v) {
+function writeEntity(uuid: string, v: EntityLayout) {
   // set the element's new position:
   const { entities } = getState();
 

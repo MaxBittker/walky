@@ -9,7 +9,8 @@ import X from "./../assets/delete.ico";
 import chat from "./../assets/chat.gif";
 import "regenerator-runtime/runtime";
 
-import { readAndCompressImage } from "browser-image-resizer";
+import * as browserImageResizer from "browser-image-resizer";
+import { sendEntityUpdate } from "./client";
 
 const config = {
   quality: 0.8,
@@ -17,7 +18,7 @@ const config = {
   maxHeight: 1000,
   autoRotate: true,
   debug: false,
-  mimeType: "image/png",
+  mimeType: "image/png"
 };
 
 let fakeInput = document.getElementById("fake-input");
@@ -54,7 +55,7 @@ const getHeightAndWidthFromDataUrl = (dataURL: string) =>
     img.onload = () => {
       resolve({
         height: img.height,
-        width: img.width,
+        width: img.width
       });
     };
     img.src = dataURL;
@@ -62,7 +63,8 @@ const getHeightAndWidthFromDataUrl = (dataURL: string) =>
 
 function uploadImage(file: File, i = 0) {
   console.log(file);
-  readAndCompressImage(file, { ...config, mimeType: file.type })
+  browserImageResizer
+    .readAndCompressImage(file, { ...config, mimeType: file.type })
     .then(async (resizedImage: File) => {
       console.log(resizedImage);
 
@@ -74,7 +76,7 @@ function uploadImage(file: File, i = 0) {
       const formData = new FormData();
       formData.append("image-upload", resizedImage);
 
-      let { me } = getState();
+      let { me, entities } = getState();
       formData.append(
         "position",
         JSON.stringify(
@@ -83,7 +85,7 @@ function uploadImage(file: File, i = 0) {
             Vector.mult(
               {
                 x: 30,
-                y: 30,
+                y: 30
               },
               i
             )
@@ -94,19 +96,38 @@ function uploadImage(file: File, i = 0) {
         "size",
         JSON.stringify({
           x: dimensions.width,
-          y: dimensions.height,
+          y: dimensions.height
         })
       );
       formData.append("owner", me.uuid);
 
       fetch("/upload", {
         method: "POST",
-        body: formData,
+        body: formData
       })
         // .then((response) => response.json())
+        .then((bod) => {
+          return bod.json();
+        })
         .then((data) => {
           console.log(data);
-          // add;
+
+          let maxDimension = Math.max(dimensions.width, dimensions.height);
+          let scale = 300 / maxDimension;
+          let newEnt = {
+            ...data,
+            uuid: Math.random().toString().slice(2, 7),
+            pos: data.position,
+            scale,
+            rotation: 0.0,
+            iid:
+              entities.map((e) => e.iid).reduce((a, b) => Math.max(a, b), 1) + 1
+          };
+          let state = getState();
+
+          state.entities.push(newEnt);
+          state.entities = state.entities.sort((a, b) => a.iid - b.iid);
+          sendEntityUpdate(newEnt.uuid);
         })
         .catch((error) => {
           console.error(error);
@@ -127,7 +148,7 @@ function imagePrompt(event: React.MouseEvent) {
   let el = document.getElementById("imgupload");
   el.click();
   let state = getState();
-  state.me.target = undefined;
+  state.me.target = state.me.pos;
 }
 
 class UI extends React.Component {
@@ -135,7 +156,7 @@ class UI extends React.Component {
     super(props);
     document.body.className = "";
     this.state = {
-      infoOpen: false,
+      infoOpen: false
     };
   }
   async imageUpload(e: React.ChangeEvent) {
@@ -189,7 +210,7 @@ class UI extends React.Component {
           onClick={(e) => {
             e.stopPropagation();
             let state = getState();
-            state.me.target = undefined;
+            state.me.target = state.me.pos;
             fakeInput.focus();
           }}
         />

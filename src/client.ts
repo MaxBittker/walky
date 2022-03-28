@@ -1,116 +1,60 @@
-import { debug } from "console";
+import * as Y from "yjs";
+import { WebrtcProvider } from "y-webrtc";
 import { getState } from "./state";
-import {
-  PacketTypes,
-  PacketLayout,
-  AgentLayout,
-  PingLayout,
-  EntityLayout,
-} from "./types";
+import { AgentLayout, EntityLayout } from "./types";
 import { nrandom } from "./utils";
 // import { v4 as uuidv4 } from "uuid";
-// import chair from "./../assets/Classroom+Chair.jpg";
-// let ws = new WebSocket("ws://159.203.112.6:9898/");
-// let ws = new WebSocket("ws://localhost:9898/");
-let ws = new WebSocket(`ws://${window.location.hostname}:9898/`);
-// let ws = new WebSocket(`ws://${"walky.space"}:9898/`);
 
-ws.onerror = () => {
-  ws = new WebSocket("ws://localhost:9898/");
-};
-
-ws.onopen = function () {
-  console.log("WebSocket Client Connected");
-
-  requestClockSync();
-};
-
-ws.onmessage = function (e) {
-  let packet = JSON.parse(e.data);
-  processUpdate(packet);
-};
-
-function requestClockSync() {
-  if (ws.readyState != ws.OPEN) {
-    return;
-  }
-  let pingPacket: PacketLayout = {
-    type: PacketTypes.ping,
-    data: {
-      pingtime: Date.now(),
-      tick: getState().tick,
-    },
-  };
-  ws.send(JSON.stringify(pingPacket));
-}
-
-function clockSync(pingData: PingLayout) {
-  let pingMs = Date.now() - pingData.pingtime;
+const ydoc = new Y.Doc();
+const yMapEnts = ydoc.getMap("entities");
+// observers are called after each transaction
+yMapEnts.observe((event) => {
+  let data = Object.values(ydoc.toJSON().entities);
   let state = getState();
-  state.tick = pingData.tick + pingMs / (16 * 2);
-  state.me.lastUpdated = state.tick;
-}
 
-function processAgents(agentMap: { [uuid: string]: AgentLayout }) {
+  state.entities = data as EntityLayout[];
+  state.entities = state.entities.sort((a, b) => a.iid - b.iid);
+});
+
+const yProvider = new WebrtcProvider(
+  `walky-space-${window.location.pathname}`,
+  ydoc
+);
+const awareness = yProvider.awareness;
+const myYId = awareness.clientID;
+
+// You can observe when a user updates their awareness information
+awareness.on("change", (_changes) => {
+  // todo be more selective
+  const newStates = awareness.getStates();
+  let agents = Array.from(newStates.values())
+    .map((e) => e.agent)
+    .filter((e) => e);
+
+  processAgents(agents);
+});
+
+function processAgents(agents: AgentLayout[]) {
   let state = getState();
-  let new_agents = agentMap;
 
-  // remove agents who aren't in the map
-  state.agents = state.agents.filter((a) => new_agents[a.uuid]);
-
-  // for each agent, get the new target from the server
+  let agentsMap: { [uuid: string]: AgentLayout } = {};
   state.agents.forEach((a) => {
-    a.target = new_agents[a.uuid].target;
-    a.word = new_agents[a.uuid].word;
-    delete new_agents[a.uuid];
+    agentsMap[a.uuid] = a;
   });
-  // if an agent wasn't seen before, add it;
-  //  (maybe set its clock to match local)
-  state.agents = [...state.agents, ...Object.values(new_agents)];
-}
 
-function processUpdate(packet: PacketLayout) {
-  let { type, data } = packet;
-  // console.log(packet);
-
-  let state = getState();
-  if (type == PacketTypes.agentUpdate) {
-    processAgents(data as { [uuid: string]: AgentLayout });
-    // console.log(state.agents[0].lastUpdated - Date.now());
-  } else if (type == PacketTypes.entityUpdate) {
-    let entData = data as EntityLayout;
-    let i = state.entities.findIndex((v) => v.uuid === entData.uuid);
-    if (!entData.pos) {
-      // delete
-      state.entities = state.entities.filter((v) => v.uuid != entData.uuid);
-    } else if (i >= 0) {
-      state.entities[i] = entData;
-    } else {
-      state.entities.push(entData);
-    }
-    state.entities = state.entities.sort((a, b) => a.iid - b.iid);
-  } else if (type == PacketTypes.pong) {
-    clockSync(data as PingLayout);
-  }
+  state.agents = agents.map((a) => {
+    return {
+      ...a,
+      pos: agentsMap[a.uuid]?.pos || a.pos
+    };
+  });
 }
 
 function sendUpdate() {
-  if (ws.readyState != ws.OPEN) {
-    return;
-  }
-
-  let packet = {
-    type: PacketTypes.agentUpdate,
-    data: getState().me,
-  };
-  ws.send(JSON.stringify(packet));
+  awareness.setLocalStateField("agent", getState().me);
 }
 
 function sendEntityUpdate(i_uuid: string) {
-  if (ws.readyState != ws.OPEN) {
-    return;
-  }
-
   const { entities } = getState();
 
   let ent = entities.find(({ uuid }) => uuid === i_uuid);
@@ -118,26 +62,13 @@ function sendEntityUpdate(i_uuid: string) {
     console.log("bad entity update: " + i_uuid);
     return;
   }
-  let packet = {
-    type: PacketTypes.entityUpdate,
-    data: ent,
-  };
 
-  // console.log("updating: " + i_uuid);
-  ws.send(JSON.stringify(packet));
+  yMapEnts.set(i_uuid, ent);
 }
 
 function sendEntityDelete(uuid: string) {
-  if (ws.readyState != ws.OPEN) {
-    return;
-  }
-
-  let packet = {
-    type: PacketTypes.entityUpdate,
-    data: { uuid },
-  };
   console.log("deleting: " + uuid);
-  ws.send(JSON.stringify(packet));
+  yMapEnts.delete(uuid);
 }
 
-export { sendUpdate, requestClockSync, sendEntityDelete, sendEntityUpdate };
+export { sendUpdate, sendEntityDelete, sendEntityUpdate };

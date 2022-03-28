@@ -1,5 +1,4 @@
 import * as React from "react";
-import ReactDOM = require("react-dom");
 import walk from "./../assets/ear_walk.gif";
 // import walk from "./../assets/walk1.gif";
 // import stand from "./../assets/stand1.gif";
@@ -11,6 +10,8 @@ import Entity from "./Entity";
 import { getState } from "./state";
 import { AgentLayout } from "./types";
 import { convertTarget } from "./input";
+import { useAnimationFrame } from "./useAnimationFrame";
+
 let Vector = Matter.Vector;
 
 // let zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
@@ -47,7 +48,7 @@ function renderAgent(agent: AgentLayout, i: number) {
         key={"w" + agent.uuid}
         style={{
           left: relPos.x,
-          top: relPos.y,
+          top: relPos.y
           // filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
           // transform: `translate(-50%, -75%)`
         }}
@@ -62,16 +63,26 @@ function renderAgent(agent: AgentLayout, i: number) {
           left: relPos.x,
           top: relPos.y,
           filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
-          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`,
+          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`
         }}
       ></img>
     </React.Fragment>
   );
 }
-function render() {
-  const { camera, entities, me, agents, center, audios } = getState();
+function Render({ tick }): JSX.Element {
+  const { camera, entities, me, agents, center } = getState();
+  const [count, setCount] = React.useState(0);
+
+  useAnimationFrame((deltaTime: number) => {
+    // Pass on a function to the setter of the state
+    // to make sure we always have the latest state
+    tick();
+    setCount((prevCount) => (prevCount + deltaTime * 0.01) % 100);
+  });
+
   const cameraPos = Vector.sub(center, camera);
-  const element = (
+  // Example to map all cursors in jsx
+  return (
     <React.Fragment>
       {/* <div
         id="background"
@@ -80,15 +91,15 @@ function render() {
         }}
       ></div> */}
       {agents.map(renderAgent)}
+
       <div
         id="entities"
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
         <div id="info">
           <h2 style={{ marginBottom: ".5em" }}>Welcome! </h2>
-          {/* <h2>note: walky.space contains loud or scary sounds today</h2> */}
           <p>Walky.space is under construction. </p>
-         {/* <p>
+          {/* <p>
             Todays's theme is{" "}
             <i>
               <b>Categories</b>
@@ -99,23 +110,6 @@ function render() {
           <p>Tap + hold to select. &nbsp; Be kind, please ☺</p>
           <p style={{ float: "right" }}>- Max </p>
         </div>
-        {/* {audios.map(({ url, pos, name }, i) => {
-          // let relPos = Vector.add(Vector.sub(pos, camera), center);
-          let relPos = pos;
-          return (
-            <h1
-              key={i}
-              className="photo audio"
-              style={{
-                left: relPos.x,
-                top: relPos.y,
-                transform: `translate(-50%, -50%)`,
-              }}
-            >
-              {name}
-            </h1>
-          );
-        })} */}
 
         {entities.map(({ url, pos, size, rotation, scale, uuid }, i) => {
           // let relPos = Vector.add(Vector.sub(pos, camera), center);
@@ -125,10 +119,6 @@ function render() {
               url={url}
               pos={pos}
               size={size}
-              // x={pos.x}
-              // y={pos.y}
-              // w={size.x}
-              // h={size.y}
               rotation={rotation}
               scale={scale}
               uuid={uuid}
@@ -139,7 +129,6 @@ function render() {
       </div>
     </React.Fragment>
   );
-  ReactDOM.render(element, document.getElementById("window"));
 }
 
-export { render };
+export { Render };
