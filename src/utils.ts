@@ -1,4 +1,5 @@
 import * as Matter from "matter-js";
+let Vector = Matter.Vector;
 
 function nrandom(s = 1) {
   return (Math.random() - 0.5) * s;
@@ -10,5 +11,7 @@ function randomVec(r = 1) {
     opp = Math.sin(ang) * hyp;
   return { x: adj, y: opp };
 }
-
-export { nrandom, randomVec };
+function distance(a: Matter.Vector, b: Matter.Vector) {
+  return Vector.magnitude(Vector.sub(a, b));
+}
+export { nrandom, randomVec, distance };

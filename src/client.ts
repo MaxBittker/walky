@@ -3,7 +3,8 @@ import { WebsocketProvider } from "y-websocket";
 
 import { getState } from "./state";
 import { AgentLayout, EntityLayout } from "./types";
-import { nrandom } from "./utils";
+
+import { nrandom, distance } from "./utils";
 // import { v4 as uuidv4 } from "uuid";
 
 const ydoc = new Y.Doc();
@@ -43,9 +44,13 @@ function processAgents(agents: AgentLayout[]) {
   });
 
   state.agents = agents.map((a) => {
+    let pos = agentsMap[a.uuid]?.pos || a.pos;
+    if (distance(a.target, a.pos) < 1) {
+      pos = a.pos;
+    }
     return {
       ...a,
-      pos: agentsMap[a.uuid]?.pos || a.pos
+      pos
     };
   });
 }
