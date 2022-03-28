@@ -1,16 +1,8 @@
 // Node.js WebSocket server script
-import * as http from "http";
 import { startEndpoints } from "./endpoints";
+import { startWsServer } from "./yjs/ws-server";
 
-const server = http.createServer();
+let basePort: number = parseInt(process.env?.PORT || "4000", 10);
 
-server.listen(9898);
-// const wsServer = new websocket.server({
-//   httpServer: server
-// });
-
-console.log("LISTENING!");
-
-// let openConnections = new Set<websocket.connection>();
-
-startEndpoints();
+startEndpoints(basePort);
+startWsServer(9898);

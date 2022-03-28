@@ -1,5 +1,6 @@
 import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc";
+import { WebsocketProvider } from "y-websocket";
+
 import { getState } from "./state";
 import { AgentLayout, EntityLayout } from "./types";
 import { nrandom } from "./utils";
@@ -16,10 +17,9 @@ yMapEnts.observe((event) => {
   state.entities = state.entities.sort((a, b) => a.iid - b.iid);
 });
 
-const yProvider = new WebrtcProvider(
-  `walky-space-${window.location.pathname}`,
-  ydoc
-);
+const roomname = `walky-space-${window.location.pathname}`;
+const yProvider = new WebsocketProvider("ws://localhost:9898", roomname, ydoc);
+
 const awareness = yProvider.awareness;
 const myYId = awareness.clientID;
 

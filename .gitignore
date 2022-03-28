@@ -1,5 +1,6 @@
 server/uploads/
 server/db.txt
+server/dbDir/
 # Logs
 logs
 *.log

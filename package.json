@@ -18,7 +18,7 @@
     "react-dom": "^16.13.1",
     "seedrandom": "^3.0.5",
     "xml2js": "^0.4.23",
-    "y-webrtc": "^10.2.2",
+    "y-websocket": "^1.4.0",
     "yjs": "^13.5.31"
   },
   "devDependencies": {

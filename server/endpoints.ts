@@ -3,11 +3,9 @@ import * as fs from "fs";
 import * as http from "http";
 import express from "express";
 import multer from "multer";
-function startEndpoints() {
+function startEndpoints(PORT: number) {
   const app = express();
   const httpServer = http.createServer(app);
-
-  const PORT = process.env.PORT || 4000;
 
   app.use(express.static("../docs"));
   app.use("/files", express.static("./uploads"));
