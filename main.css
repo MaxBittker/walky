@@ -206,6 +206,9 @@ img {
   #move {
     /* display: none; */
   }
+  #add-text {
+    display: none;
+  }
 }
 @media screen and (min-width: 800px) {
   #chat-image {

@@ -19,7 +19,11 @@ yMapEnts.observe((event) => {
 });
 
 const roomname = `walky-space-${window.location.pathname}`;
-const yProvider = new WebsocketProvider("ws://localhost:9898", roomname, ydoc);
+const yProvider = new WebsocketProvider(
+  `ws://${window.location.hostname}:9898`,
+  roomname,
+  ydoc
+);
 
 const awareness = yProvider.awareness;
 const myYId = awareness.clientID;
