@@ -369,7 +369,7 @@ export default function Entity({
           if(img.current){
             let prev = img.current.style.height;
             img.current.style.height= "1px";
-            ent.size.y = Math.min(img.current.scrollHeight+16, 5000);
+            ent.size.y = Math.min(img.current.scrollHeight, 5000);
             img.current.style.height= prev;
 
              prev = img.current.style.width;

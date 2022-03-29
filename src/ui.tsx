@@ -165,7 +165,7 @@ function textAdd(event: React.MouseEvent) {
     type: EntityType.Text,
     uuid: Math.random().toString().slice(2, 7),
     pos: state.me.pos,
-    size: { x: 142 + 16, y: 41 + 16 },
+    size: { x: 164, y: 55 },
     scale: 1.0,
     rotation: 0.0,
     iid:

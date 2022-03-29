@@ -13,9 +13,10 @@ function updateAgent(agent: AgentLayout, elapsed: number) {
   if (distance < epsilon) {
     speed = 0;
   }
-  velocity = Vector.mult(heading, speed);
+  let dT = Math.min(speed * elapsed, distance);
+  velocity = Vector.mult(heading, dT);
 
-  agent.pos = Vector.add(pos, Vector.mult(velocity, elapsed));
+  agent.pos = Vector.add(pos, velocity);
   // this might not be consistent
   if (velocity.x < -0.1) {
     agent.facing = true;
