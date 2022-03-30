@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import { EntityLayout, StateLayout } from "./types";
 import { sendEntityUpdate } from "./client";
 import { nrandom, randomVec } from "./utils";
+import { atom } from "jotai";
+
+const lockedAtom = atom(true);
 
 let Vector = Matter.Vector;
 
@@ -12,8 +15,8 @@ let uuid = uuidv4().slice(0, 8);
 let state: StateLayout = {
   me: {
     uuid,
-    pos: randomVec(100),
-    target: randomVec(100),
+    pos: randomVec(50),
+    target: randomVec(50),
     facing: true,
     moving: false,
     color: Math.random() * 360
@@ -60,4 +63,4 @@ function writeEntity(uuid: string, v: EntityLayout) {
   entities[i] = v;
   sendEntityUpdate(uuid);
 }
-export { getState, getEntity, writeEntity };
+export { getState, getEntity, writeEntity, lockedAtom };

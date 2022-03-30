@@ -99,7 +99,7 @@ function startInput() {
       console.log("focusing");
       document.getElementById("fake-input").focus();
     }
-    if (event.getModifierState("Control")) {
+    if (event.getModifierState("Control") || event.getModifierState("Meta")) {
       return;
     }
     if (!me.word) {

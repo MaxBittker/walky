@@ -1,16 +1,16 @@
-.photo {
+.draggable {
   pointer-events: initial;
   transition: filter 300ms ease-in-out;
 }
-.photo.selected {
+.draggable.selected {
 }
 
-.photo.selected.move {
+.draggable.selected.move {
   /* border: 1px blue dashed; */
   /* filter: drop-shadow(0px 10px 15px rgba(15, 15, 15, 0.281))
     drop-shadow(0px 0px 1px white); */
 
-  filter: drop-shadow(8px 16px 0px rgba(15, 15, 15, 0.281));
+  /* filter: drop-shadow(8px 16px 0px rgba(15, 15, 15, 0.281)); */
   transition: filter 100ms;
 }
 
@@ -126,8 +126,15 @@ textarea{
   background: transparent;;
 
 }
+textarea:focus{
+  /* outline: 0; */
+  /* border: .1px solid rgb(00, 0, 255,.4) */
+ }
 textarea::-webkit-resizer {
   display: none;
 
   
+}
+.locked{
+  pointer-events: none;;
 }

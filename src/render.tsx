@@ -3,7 +3,7 @@ import walk from "./../assets/ear_walk.gif";
 // import walk from "./../assets/walk1.gif";
 // import stand from "./../assets/stand1.gif";
 import stand from "./../assets/ear_stand.gif";
-import spiral from "./../assets/spiral.svg";
+import spiral from "./../assets/spiral.png";
 // import bubble from "./../assets/bubble.png";
 import * as Matter from "matter-js";
 import Entity from "./Entity";
@@ -96,7 +96,7 @@ function Render({ tick }): JSX.Element {
         id="entities"
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
-        <img id="spawner" src={spiral} />
+        <img id="spawner" className="" src={spiral} />
         {/* <div id="info">
           <h2 style={{ marginBottom: ".5em" }}>Welcome! </h2>
           <p>Walky.space is under construction. </p>

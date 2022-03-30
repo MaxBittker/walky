@@ -1,0 +1,112 @@
+#debug {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+#ui {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 66;
+  /* user-select: none; */
+}
+
+#items {
+  user-select: none;
+  display: flex;
+  align-items: flex-end;
+
+}
+#items img {
+  user-select: none;
+}
+#add-image {
+  left: 10px;
+  bottom: 10px;
+  /* filter: drop-shadow(0px 0px 5px #444); */
+}
+
+#items .tool:hover{
+  transform: rotate(4deg);
+}
+.tool{
+  background-size: contain;
+}
+#items #locked, #items #unlocked{
+  /* margin-left:10px; */
+  margin-bottom: 10px;
+}
+#locked{
+  background-image:  url(../assets/locked.png);
+}
+#locked:hover{
+  background-image:  url(../assets/unlocked.png);
+  transform: rotate(0deg) !important;
+
+
+}
+#unlocked{
+  background-image:  url(../assets/unlocked.png);
+  transform: rotate(-2deg) !important;
+
+}
+#unlocked:hover{
+  /* background-image:  url(../assets/locked.png); */
+  transform: rotate(-4deg) !important;
+
+}
+#ui .tool {
+  margin: 5px;
+  width: 70px;
+  height: 70px;
+  z-index: 166;
+}
+.tool {
+  display: inline-block;
+  mix-blend-mode: normal;
+  pointer-events: initial;
+}
+#fake-input {
+  opacity: 0;
+  position: relative;
+  left: -1000px;
+  font-size: 30px;
+}
+
+#chat-image {
+  left: 200;
+  bottom: 0;
+  /* filter: drop-shadow(0px 0px 5px #444); */
+}
+@media screen and (max-width: 800px) {
+  #move {
+    /* display: none; */
+  }
+  #add-text {
+    /* display: none; */
+  }
+}
+@media screen and (min-width: 800px) {
+  #chat-image {
+    display: none;
+  }
+}
+#info {
+  /* box-shadow: 0px 0px 0px 1px white, 0.2px 0.3px 1px -3px rgba(0, 0, 0, 0.136),
+    0.6px 0.8px 2.6px -3px rgba(0, 0, 0, 0.195),
+    1.5px 1.8px 6.3px -3px rgba(0, 0, 0, 0.254),
+    5px 6px 21px -3px rgba(0, 0, 0, 0.39); */
+  box-shadow: 4px 8px 0px rgba(15, 15, 15, 0.226);
+  position: absolute;
+  z-index: 99999;
+  padding: 30px;
+  font-size: 22px;
+  max-width: 450px;
+  line-height: 45px;
+  /* margin: auto; */
+  font-weight: 100;
+  background-color: #fffffffe;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 0px;
+  transform: translate(-50%, -50%);
+}

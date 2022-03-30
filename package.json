@@ -11,6 +11,7 @@
     "assets": "^3.0.1",
     "browser-image-resizer": "github:ericnograles/browser-image-resizer",
     "classnames": "^2.2.6",
+    "jotai": "^1.6.1",
     "matter-js": "^0.14.2",
     "morphdom": "^2.6.1",
     "parcel": "^1.12.4",

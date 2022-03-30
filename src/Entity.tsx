@@ -7,21 +7,19 @@ import { sendEntityUpdate } from "./client";
 import * as Matter from "matter-js";
 import { Vector } from "matter-js";
 
-import { getState, getEntity, writeEntity } from "./state";
+import { getState, getEntity, writeEntity, lockedAtom } from "./state";
 import { convertTarget, deconvertTarget } from "./input";
 import { sendEntityDelete } from "./client";
 import { v4 as uuidv4 } from "uuid";
 import { useDelayedGate } from "./hooks";
 import { EntityType } from "./types";
 import { clamp } from "./utils";
+import { useAtom } from "jotai";
 
 let V = Matter.Vector;
 
 let grabPos: Matter.Vector;
 
-const urlParams = new URLSearchParams(window.location.search);
-let editing = true;
-// urlParams.get("edit") !== null;
 let canvas = document.createElement("canvas");
 let ctx = canvas.getContext("2d");
 // document.body.appendChild(ctx.canvas); // used for debugging
@@ -83,7 +81,7 @@ function checkImageCoord(
       let styles = window.getComputedStyle(nextTarget);
       let pos = {
         x: parseFloat(styles.left),
-        y: parseFloat(styles.top),
+        y: parseFloat(styles.top)
       };
 
       nextEl = checkImageCoord(nextTarget, pos, scale, rotation, event);
@@ -108,39 +106,46 @@ function distance(a, b) {
 }
 
 interface IControlledTextArea {
-  value: string
-  onChange: React.ChangeEventHandler<HTMLTextAreaElement> | undefined
-  [x: string]: any
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
+  [x: string]: any;
 }
 
-const ControlledTextArea = ({ value, onChange, refa, ...rest }: IControlledTextArea) => {
-  const [cursor, setCursor] = useState(0)
+const ControlledTextArea = ({
+  value,
+  onChange,
+  refa,
+  ...rest
+}: IControlledTextArea) => {
+  const [cursor, setCursor] = useState(0);
   // const ref = useRef(null)
 
   useEffect(() => {
-      const input: any = refa.current
-      if (input) {
-          input.setSelectionRange(cursor, cursor)
-      }
-  }, [refa, cursor, value])
+    const input: any = refa.current;
+    if (input) {
+      input.setSelectionRange(cursor, cursor);
+    }
+  }, [refa, cursor, value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setCursor(e.target.selectionStart)
-      onChange && onChange(e)
-  }
+    setCursor(e.target.selectionStart);
+    onChange && onChange(e);
+  };
 
-  return <textarea  ref={refa} value={value} onChange={handleChange} {...rest} />
-}
+  return (
+    <textarea ref={refa} value={value} onChange={handleChange} {...rest} />
+  );
+};
 
 export default function Entity({
   value,
-  type, 
+  type,
   pos,
   size,
   scale,
   rotation,
   uuid,
-  i,
+  i
 }: {
   value: string;
   type: EntityType;
@@ -151,10 +156,16 @@ export default function Entity({
   uuid: string;
   i: number;
 }) {
+  let [locked] = useAtom(lockedAtom);
+
   let [mode, setMode] = useState("");
   let [selected, setSelected] = useState(false);
-  let beenSelected = useDelayedGate(selected, 200 / window.zoom );
-  let [startScale, setStartScale] = useState<number|null>(null);
+  let beenSelected = useDelayedGate(selected, 200 / window.zoom);
+  if (locked) {
+    selected = false;
+    beenSelected = false;
+  }
+  let [startScale, setStartScale] = useState<number | null>(null);
   let img = useRef<HTMLImageElement>(null);
   let handleContainer = useRef<HTMLDivElement>(null);
   let handle = useRef<HTMLDivElement>(null);
@@ -183,14 +194,14 @@ export default function Entity({
         }, 200);
       }
     },
-    [setSelected, beenSelected, selected setMode, mode]
+    [setSelected, beenSelected, selected, setMode, mode]
   );
 
   useEffect(() => {
     if (beenSelected) {
-        window.dragging = true;
-        img.current?.focus();
-    }else{
+      window.dragging = true;
+      img.current?.focus();
+    } else {
       window.dragging = false;
     }
   }, [mode, beenSelected]);
@@ -210,7 +221,7 @@ export default function Entity({
 
     let convertedMouse = convertTarget({
       x: e.clientX,
-      y: e.clientY,
+      y: e.clientY
     });
     ent.pos = V.add(grabPos, convertedMouse);
     writeEntity(uuid, ent);
@@ -233,7 +244,7 @@ export default function Entity({
 
       let convertedMouse = convertTarget({
         x: e.clientX,
-        y: e.clientY,
+        y: e.clientY
       });
 
       let p1 = convertedMouse;
@@ -254,7 +265,7 @@ export default function Entity({
 
       let maxDim = Math.max(size.x, size.y);
       let maxScale = 600 / maxDim;
-      let minScale = type === EntityType.Text ? .5: .1;
+      let minScale = type === EntityType.Text ? 0.5 : 0.1;
       ent.scale = clamp(newScale, minScale, maxScale);
       ent.rotation = newAngle * (180 / Math.PI);
       writeEntity(uuid, ent);
@@ -267,21 +278,23 @@ export default function Entity({
       window.dragging = true;
       window.dispatchEvent(new Event("stop"));
     }
-    if (selected) {
-      window.addEventListener("click", unsetSelection);
-      window.addEventListener("mouseup", mouseUp);
-      window.addEventListener("touchend", mouseUp);
-      window.addEventListener("mousedown", mouseDown);
-      window.addEventListener("touchstart", mouseDown);
-    }
+    if (!locked) {
+      if (selected) {
+        window.addEventListener("click", unsetSelection);
+        window.addEventListener("mouseup", mouseUp);
+        window.addEventListener("touchend", mouseUp);
+        window.addEventListener("mousedown", mouseDown);
+        window.addEventListener("touchstart", mouseDown);
+      }
 
-    if (beenSelected && mode === "move") {
-      window.addEventListener("mousemove", mouseMove);
-      window.addEventListener("touchmove", mouseMove);
-    }
-    if (beenSelected && mode === "resize") {
-      window.addEventListener("mousemove", mouseResize);
-      window.addEventListener("touchmove", mouseResize);
+      if (beenSelected && mode === "move") {
+        window.addEventListener("mousemove", mouseMove);
+        window.addEventListener("touchmove", mouseMove);
+      }
+      if (beenSelected && mode === "resize") {
+        window.addEventListener("mousemove", mouseResize);
+        window.addEventListener("touchmove", mouseResize);
+      }
     }
 
     return () => {
@@ -297,13 +310,15 @@ export default function Entity({
       window.removeEventListener("mousemove", mouseResize);
       window.removeEventListener("touchmove", mouseResize);
     };
-  }, [unsetSelection, selected, beenSelected, mode, mouseMove]);
+  }, [unsetSelection, selected, beenSelected, mode, mouseMove, locked]);
 
   let relPos = pos;
 
   let imageMouseDown = useCallback(
     (e) => {
-      e.preventDefault();
+      if (e.target.tagName !== "TEXTAREA" || !beenSelected) {
+        e.preventDefault();
+      }
       if (e.touches) {
         e.clientX = e.touches[0].clientX;
         e.clientY = e.touches[0].clientY;
@@ -315,7 +330,7 @@ export default function Entity({
           Simulate.mouseDown(hit, {
             clientX: e.clientX,
             clientY: e.clientY,
-            target: hit,
+            target: hit
           });
         }
         return;
@@ -325,12 +340,12 @@ export default function Entity({
       let ent = getEntity(uuid);
       let convertedMouse = convertTarget({
         x: e.clientX,
-        y: e.clientY,
+        y: e.clientY
       });
       grabPos = V.sub(ent.pos, convertedMouse);
       setMode("move");
     },
-    [pos, scale, rotation, img.current, setMode]
+    [pos, scale, rotation, img.current, setMode, beenSelected]
   );
 
   let resizeHandleMouseDown = useCallback(
@@ -343,7 +358,7 @@ export default function Entity({
 
       let convertedMouse = convertTarget({
         x: e.clientX,
-        y: e.clientY,
+        y: e.clientY
       });
       grabPos = V.sub(ent.pos, convertedMouse);
       setMode("resize");
@@ -351,73 +366,84 @@ export default function Entity({
     },
     [pos, setMode, setStartScale]
   );
+  let selectedN = selected && mode === "move" ? 1 : 0;
+  let shadowFactor = type === EntityType.Text ? 0.5 : 1;
+  let shadowSize = (shadowFactor * selectedN) / scale;
+  let shadowFilter = `drop-shadow(${10 * shadowSize}px ${
+    16 * shadowSize
+  }px 0px rgba(15, 15, 15, 0.281))`;
   return (
     <React.Fragment key={uuid}>
-     {type===EntityType.Text && <ControlledTextArea
-     spellCheck={false}
-    //  contentEditable={beenSelected}
-    //  onDoubleClick={e=>{
-    //    console.log("dbl")
-    //    img.current?.focus();
-    //  }}
-    //  suppressContentEditableWarning={true}
-        key={uuid}
-        refa={img}
-        onChange={(e)=>{
-          let ent = getEntity(uuid);
-          ent.value = e.target.value;
-          if(img.current){
-            let prev = img.current.style.height;
-            img.current.style.height= "1px";
-            ent.size.y = Math.min(img.current.scrollHeight, 5000);
-            img.current.style.height= prev;
+      {type === EntityType.Text && (
+        <ControlledTextArea
+          spellCheck={false}
+          //  contentEditable={beenSelected}
+          //  onDoubleClick={e=>{
+          //    console.log("dbl")
+          //    img.current?.focus();
+          //  }}
+          //  suppressContentEditableWarning={true}
+          key={uuid}
+          refa={img}
+          onChange={(e) => {
+            let ent = getEntity(uuid);
+            ent.value = e.target.value;
+            if (img.current) {
+              let prev = img.current.style.height;
+              img.current.style.height = "1px";
+              ent.size.y = Math.min(img.current.scrollHeight, 5000);
+              img.current.style.height = prev;
 
-             prev = img.current.style.width;
-            img.current.style.width= "1px";
-            ent.size.x = Math.min(img.current.scrollWidth+16,1000);
-            img.current.style.width= prev;
-
-          }
-          writeEntity(uuid, ent);
-
-        }}
-        className={classNames("text draggable " + mode, {
-          selected: beenSelected,
-        })}
-        
-        style={{
-          position: "absolute",
-          left: relPos.x,
-          top: relPos.y,
-          height: size.y,
-          width: size.x,
-          transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale}) `,
-          display: "flex",
-          zIndex: 500 + (beenSelected ? 500 : 0),
-        }}
-        onMouseDown={imageMouseDown}
-        onTouchStart={imageMouseDown}
-        value={value}
-      />}
-           {type===EntityType.Image && <img
-        key={uuid}
-        ref={img}
-        className={classNames("photo draggable " + mode, {
-          selected: beenSelected,
-        })}
-        src={window.location.origin + value}
-        crossOrigin="anonymous"
-        style={{
-          position: "absolute",
-          left: relPos.x,
-          top: relPos.y,
-          transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale}) `,
-          display: "flex",
-          zIndex: 500 + (beenSelected ? 500 : 0),
-        }}
-        onMouseDown={imageMouseDown}
-        onTouchStart={imageMouseDown}
-      ></img>}
+              prev = img.current.style.width;
+              img.current.style.width = "1px";
+              ent.size.x = Math.min(img.current.scrollWidth + 16, 1000);
+              img.current.style.width = prev;
+            }
+            writeEntity(uuid, ent);
+          }}
+          className={classNames("text draggable " + mode, {
+            locked,
+            selected: beenSelected
+          })}
+          style={{
+            position: "absolute",
+            left: relPos.x,
+            top: relPos.y,
+            height: size.y,
+            width: size.x,
+            transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale}) `,
+            display: "flex",
+            zIndex: 500 + (beenSelected ? 500 : 0),
+            filter: shadowFilter
+          }}
+          onMouseDown={imageMouseDown}
+          onTouchStart={imageMouseDown}
+          value={value}
+        />
+      )}
+      {type === EntityType.Image && (
+        <img
+          key={uuid}
+          ref={img}
+          className={classNames("photo draggable " + mode, {
+            locked,
+            selected: beenSelected
+          })}
+          src={window.location.origin + value}
+          crossOrigin="anonymous"
+          style={{
+            position: "absolute",
+            left: relPos.x,
+            top: relPos.y,
+            transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale}) `,
+            display: "flex",
+            zIndex: 500 + (beenSelected ? 500 : 0),
+            filter: shadowFilter
+          }}
+          onMouseDown={imageMouseDown}
+          onTouchStart={imageMouseDown}
+        ></img>
+      )}
       {beenSelected && (
         <>
           <div
@@ -430,10 +456,12 @@ export default function Entity({
               transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${
                 mode === "move" ? 1.005 : 1.0
               })`,
-              zIndex: 500 + (beenSelected ? 500 : 0),
+              zIndex: 500 + (beenSelected ? 500 : 0)
             }}
             ref={handleContainer}
-            className={"handle-container " + mode}
+            className={classNames("handle-container " + mode, {
+              locked
+            })}
           >
             <button
               className="tool duplicate"
@@ -451,6 +479,7 @@ export default function Entity({
                 sendEntityUpdate(ent.uuid);
                 sendEntityUpdate(uuid);
                 e.preventDefault();
+                e.stopPropagation();
               }}
             >
               <svg className="tool" id="d" viewBox="0 0 25 25">
@@ -465,6 +494,8 @@ export default function Entity({
               tabIndex={-1}
               onClick={(e) => {
                 console.log("delete!!");
+                e.stopPropagation();
+
                 sendEntityDelete(uuid);
               }}
             >
@@ -492,7 +523,7 @@ export default function Entity({
   );
 }
 
-function getTransform(el) {
+function getTransform(el: Element) {
   try {
     let st = window.getComputedStyle(el, null);
     let tr =
@@ -509,13 +540,13 @@ function getTransform(el) {
     return [0, 0, 0, 0];
   }
 }
-function getCurrentScale(el) {
+function getCurrentScale(el: Element) {
   let values = getTransform(el);
 
   return Math.sqrt(values[0] * values[0] + values[1] * values[1]);
 }
 
-function getCurrentRotation(el) {
+function getCurrentRotation(el: Element) {
   let values = getTransform(el);
 
   return Math.atan2(values[1], values[0]);
