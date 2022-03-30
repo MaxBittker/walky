@@ -369,9 +369,12 @@ export default function Entity({
   let selectedN = selected && mode === "move" ? 1 : 0;
   let shadowFactor = type === EntityType.Text ? 0.5 : 1;
   let shadowSize = (shadowFactor * selectedN) / scale;
-  let shadowFilter = `drop-shadow(${10 * shadowSize}px ${
-    16 * shadowSize
-  }px 0px rgba(15, 15, 15, 0.281))`;
+  let shadowFilter = "";
+  if (selectedN > 0) {
+    shadowFilter = `drop-shadow(${10 * shadowSize}px ${
+      16 * shadowSize
+    }px 0px rgba(15, 15, 15, 0.281))`;
+  }
   return (
     <React.Fragment key={uuid}>
       {type === EntityType.Text && (
