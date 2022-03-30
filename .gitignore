@@ -1,6 +1,7 @@
 server/uploads/
 server/db.txt
 server/dbDir/
+server/config/keys.json
 # Logs
 logs
 *.log

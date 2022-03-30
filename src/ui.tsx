@@ -71,7 +71,6 @@ function uploadImage(file: File, i = 0) {
   readAndCompressImage(file, { ...config, mimeType: file.type })
     .then(async (resizedImage: File) => {
       console.log(resizedImage);
-
       const fileAsDataURL = window.URL.createObjectURL(resizedImage);
       const dimensions = (await getHeightAndWidthFromDataUrl(
         fileAsDataURL
@@ -104,6 +103,7 @@ function uploadImage(file: File, i = 0) {
         })
       );
       formData.append("owner", me.uuid);
+      formData.append("name", file.name);
 
       fetch("/upload", {
         method: "POST",

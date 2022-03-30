@@ -432,7 +432,9 @@ export default function Entity({
             locked,
             selected: beenSelected
           })}
-          src={window.location.origin + value}
+          src={
+            value.startsWith("http") ? value : window.location.origin + value
+          }
           crossOrigin="anonymous"
           style={{
             position: "absolute",
