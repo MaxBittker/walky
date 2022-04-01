@@ -1,6 +1,6 @@
 const WebSocket = require("ws");
 const http = require("http");
-const setupWSConnection = require("./utils.js").setupWSConnection;
+const setupWSConnection = require("./utils.ts").setupWSConnection;
 
 const host = process.env.HOST || "localhost";
 
