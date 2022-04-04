@@ -3,6 +3,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useAtom } from "jotai";
 import "./tools.css";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import * as Matter from "matter-js";
 import { getEntity, getState, lockedAtom } from "./state";
@@ -16,6 +17,8 @@ import "regenerator-runtime/runtime";
 import { sendEntityDelete, sendEntityUpdate } from "./client";
 import { EntityType } from "./types";
 import { uploadImage } from "./imageUpload";
+// import Login from "./auth/Login";
+// import Authenticate from "./auth/Authenticate";
 let lastCreated: string;
 
 let fakeInput = document.getElementById("fake-input");
@@ -77,8 +80,28 @@ function UI({}) {
   let [locked, setLocked] = useAtom(lockedAtom);
   const urlParams = new URLSearchParams(window.location.search);
   //  urlParams.get("edit") !== null;
+  // const [authenticated, setAuthenticated] = React.useState(false);
+  // const [loginOpen, setLoginOpen] = React.useState(false);
+
   return (
     <>
+      {/* {!authenticated && (
+        <>
+          {loginOpen ? (
+            <Login></Login>
+          ) : (
+            <button
+              onClick={() => {
+                setLoginOpen(true);
+              }}
+            >
+              login
+            </button>
+          )}
+        </>
+      )}
+      <Authenticate setAuthenticated={setAuthenticated} /> */}
+
       <div id="items">
         {locked ? (
           <div
@@ -161,7 +184,12 @@ function UI({}) {
 function startUI() {
   console.log("starting");
 
-  ReactDOM.render(<UI />, document.getElementById("ui"));
+  ReactDOM.render(
+    <Router>
+      <UI />
+    </Router>,
+    document.getElementById("ui")
+  );
 }
 
 export { startUI };

@@ -1,5 +1,6 @@
 server/uploads/
 server/db.txt
+server/db.sqlite
 server/dbDir/
 server/config/keys.json
 # Logs

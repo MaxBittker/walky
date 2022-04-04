@@ -29,7 +29,7 @@ const awareness = yProvider.awareness;
 const myYId = awareness.clientID;
 
 // You can observe when a user updates their awareness information
-awareness.on("change", (_changes) => {
+awareness.on("change", (_changes: any) => {
   // todo be more selective
   const newStates = awareness.getStates();
   let agents = Array.from(newStates.values())

@@ -4,6 +4,7 @@
   "description": "walk and collage",
   "main": "index.js",
   "dependencies": {
+    "@stytch/stytch-react": "^3.0.7",
     "@types/matter-js": "^0.14.4",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
@@ -15,8 +16,10 @@
     "matter-js": "^0.14.2",
     "morphdom": "^2.6.1",
     "parcel": "^1.12.4",
+    "query-string": "^7.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^6.3.0",
     "seedrandom": "^3.0.5",
     "xml2js": "^0.4.23",
     "y-websocket": "^1.4.0",

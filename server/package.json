@@ -20,12 +20,16 @@
     "image-size": "^1.0.1",
     "matter-js": "^0.14.2",
     "multer": "^1.4.2",
+    "sqlite3": "^5.0.2",
+    "stytch": "^3.13.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.0.2",
     "websocket": "^1.0.31",
     "y-websocket": "^1.4.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/sqlite3": "^3.1.8",
     "@types/ws": "^8.5.3"
   }
 }
