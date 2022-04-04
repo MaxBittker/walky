@@ -18,7 +18,8 @@ let state: StateLayout = {
     pos: randomVec(50),
     target: randomVec(50),
     facing: true,
-    moving: false,
+    animation: "stand",
+    timeIdle: 0,
     color: Math.random() * 360
   },
   camera: { x: 0, y: 0 },

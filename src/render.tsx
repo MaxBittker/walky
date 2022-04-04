@@ -3,6 +3,7 @@ import walk from "./../assets/ear_walk.gif";
 // import walk from "./../assets/walk1.gif";
 // import stand from "./../assets/stand1.gif";
 import stand from "./../assets/ear_stand.gif";
+import sit from "./../assets/ear_sit.gif";
 import spiral from "./../assets/spiral.png";
 // import bubble from "./../assets/bubble.png";
 import * as Matter from "matter-js";
@@ -19,14 +20,19 @@ let Vector = Matter.Vector;
 //   zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
 // });
 
+let animations = {
+  stand: stand,
+  move: walk,
+  sit: sit
+};
 function renderAgent(agent: AgentLayout, i: number) {
   let { camera, center, me } = getState();
   if (agent.uuid == me.uuid) {
     agent = me;
   }
-  let { pos, moving, facing, color, word } = agent;
+  let { pos, animation, facing, color, word } = agent;
 
-  let newsrc = moving ? walk : stand;
+  let newsrc = animations[animation] || walk;
   let relPos = Vector.add(Vector.sub(pos, camera), center);
 
   return (

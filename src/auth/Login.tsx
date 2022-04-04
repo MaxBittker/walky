@@ -4,7 +4,7 @@ import "./auth.css";
 const STYTCH_PUBLIC_TOKEN =
   "public-token-test-08d11b2e-6a1d-4abf-bf20-b837114c66e2";
 //  process.env.REACT_APP_STYTCH_PUBLIC_TOKEN;
-
+// public-token-live-bcc85982-5413-45fc-9da5-38be4431cb90
 const Login = () => {
   const stytchProps = {
     loginOrSignupView: {

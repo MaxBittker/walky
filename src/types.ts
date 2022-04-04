@@ -21,7 +21,8 @@ interface AgentLayout {
   pos: Matter.Vector;
   target: Matter.Vector;
   facing: Boolean;
-  moving: Boolean;
+  animation: "move" | "stand" | "sit";
+  timeIdle: number;
   color?: number;
   word?: string;
 }
@@ -36,4 +37,4 @@ interface StateLayout {
   agents: AgentLayout[];
 }
 
-export { StateLayout, EntityLayout, AgentLayout,EntityType };
+export { StateLayout, EntityLayout, AgentLayout, EntityType };
