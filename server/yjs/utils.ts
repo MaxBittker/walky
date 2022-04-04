@@ -1,3 +1,4 @@
+import WebSocket from "ws";
 const Y = require("yjs");
 const syncProtocol = require("y-protocols/dist/sync.cjs");
 const awarenessProtocol = require("y-protocols/dist/awareness.cjs");
@@ -49,7 +50,7 @@ if (typeof persistenceDir === "string") {
         ldb.storeUpdate(docName, update);
       });
     },
-    writeState: async (docName, ydoc) => {},
+    writeState: async (docName, ydoc) => {}
   };
 }
 
@@ -126,7 +127,7 @@ class WSSharedDoc extends Y.Doc {
       {
         added,
         updated,
-        removed,
+        removed
       }: {
         added: Array<number>;
         updated: Array<number>;
@@ -165,7 +166,7 @@ class WSSharedDoc extends Y.Doc {
       this.on(
         "update",
         debounce(callbackHandler, CALLBACK_DEBOUNCE_WAIT, {
-          maxWait: CALLBACK_DEBOUNCE_MAXWAIT,
+          maxWait: CALLBACK_DEBOUNCE_MAXWAIT
         })
       );
     }
@@ -193,15 +194,25 @@ const getYDoc = (docname: string, gc: boolean = true): WSSharedDoc =>
 exports.getYDoc = getYDoc;
 
 /**
- * @param {any} conn
+ * @param {WebSocket} conn
  * @param {WSSharedDoc} doc
  * @param {Uint8Array} message
  */
-const messageListener = (conn: any, doc: WSSharedDoc, message: Uint8Array) => {
+const messageListener = (
+  conn: WebSocket,
+  doc: WSSharedDoc,
+  message: Uint8Array
+) => {
   try {
     const encoder = encoding.createEncoder();
     const decoder = decoding.createDecoder(message);
     const messageType = decoding.readVarUint(decoder);
+
+    // let [a0, a1] = message;
+    // if (a0 == 0 && (a1 == 1 || a1 == 2)) {
+    //   return;
+    // }
+
     switch (messageType) {
       case messageSync:
         encoding.writeVarUint(encoder, messageSync);
@@ -279,13 +290,8 @@ const send = (doc: WSSharedDoc, conn: any, m: Uint8Array) => {
 
 const pingTimeout = 30000;
 
-/**
- * @param {any} conn
- * @param {any} req
- * @param {any} opts
- */
-exports.setupWSConnection = (
-  conn: any,
+const setupWSConnection = (
+  conn: WebSocket,
   req: any,
   { docName = req.url.slice(1).split("?")[0], gc = true }: any = {}
 ) => {
@@ -348,3 +354,4 @@ exports.setupWSConnection = (
     }
   }
 };
+export { setupWSConnection };

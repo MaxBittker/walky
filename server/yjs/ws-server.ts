@@ -1,6 +1,6 @@
-const WebSocket = require("ws");
-const http = require("http");
-const setupWSConnection = require("./utils.ts").setupWSConnection;
+import WebSocket from "ws";
+import http from "http";
+import { setupWSConnection } from "./utils";
 
 const host = process.env.HOST || "localhost";
 

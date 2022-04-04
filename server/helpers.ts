@@ -1,6 +1,8 @@
-const util = require("util");
-const gc = require("./config/");
+import util from "util";
+import gc from "./config/";
 const bucket = gc.bucket("walky-uploads"); // should be your bucket name
+import axios, { AxiosRequestConfig } from "axios";
+import sizeOf from "image-size";
 
 /**
  *
@@ -34,4 +36,33 @@ export const uploadImage = (
         reject(`Unable to upload image, something went wrong`);
       })
       .end(buffer);
+  });
+
+export const uploadImageURl = (url: string) =>
+  new Promise(async (resolve, reject): Promise<any> => {
+    const config = { responseType: "arraybuffer" };
+
+    const resp = await axios.get(url, config as AxiosRequestConfig);
+    resp.data;
+    const name = encodeURI(url.substring(url.lastIndexOf("/") + 1));
+
+    const blob = bucket.file(name);
+    const blobStream = blob.createWriteStream({
+      resumable: false
+    });
+    const dimensions = await sizeOf(resp.data);
+    const size = { x: dimensions.width, y: dimensions.height };
+
+    blobStream
+      .on("finish", () => {
+        const publicUrl = util.format(
+          `https://storage.googleapis.com/${bucket.name}/${name}`
+        );
+        resolve({ publicUrl, size });
+      })
+      .on("error", (e: any) => {
+        console.log(e);
+        reject(`Unable to upload image, something went wrong`);
+      })
+      .end(resp.data);
   });

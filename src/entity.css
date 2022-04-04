@@ -138,3 +138,7 @@ textarea::-webkit-resizer {
 .locked{
   pointer-events: none;;
 }
+
+textarea, h1{
+  text-shadow: -1px -1px 0 rgb(245,245,245), 1px -1px 0 rgb(245,245,245), -1px 1px 0 rgb(245,245,245), 1px 1px 0 rgb(245,245,245);
+}
