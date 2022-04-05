@@ -23,11 +23,6 @@ let lastCreated: string;
 
 let fakeInput = document.getElementById("fake-input");
 
-// fakeInput?.addEventListener("paste", (e) => {
-//   e.preventDefault();
-//   uploadImage(e!.clipboardData!.files[0]);
-// });
-
 // Note: A single file comes from event.target.files on <input>
 function imagePrompt(event: React.MouseEvent) {
   event.preventDefault();

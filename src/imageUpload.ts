@@ -18,6 +18,22 @@ const config = {
   mimeType: "image/png"
 };
 
+document.onpaste = function (event) {
+  const items = event?.clipboardData?.items ?? [];
+  for (let index in items) {
+    const item = items[index];
+    if (item.kind === "file") {
+      const blob = item.getAsFile();
+      if (!blob) return;
+      const reader = new FileReader();
+      reader.onload = function () {
+        uploadImage(blob);
+      }; // data url!
+      reader.readAsDataURL(blob);
+    }
+  }
+};
+
 document.body.addEventListener("drop", async (e) => {
   e.stopPropagation();
   e.preventDefault();
