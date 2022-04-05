@@ -163,7 +163,6 @@ img {
 }
 #spawner.shadow{
   z-index: 10;
-  filter: blur(1px);
 }
 
 .rotate{
