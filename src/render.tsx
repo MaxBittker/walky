@@ -4,7 +4,9 @@ import walk from "./../assets/ear_walk.gif";
 // import stand from "./../assets/stand1.gif";
 import stand from "./../assets/ear_stand.gif";
 import sit from "./../assets/ear_sit.gif";
-import spiral from "./../assets/spiral.png";
+import spiral from "./../assets/arch.png";
+import shadow from "./../assets/arch-shadow.png";
+// import flower from "./../assets/flower.png";
 // import bubble from "./../assets/bubble.png";
 import * as Matter from "matter-js";
 import Entity from "./Entity";
@@ -20,6 +22,11 @@ let Vector = Matter.Vector;
 //   zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
 // });
 
+// let animations = {
+//   stand: flower,
+//   move: flower,
+//   sit: flower
+// };
 let animations = {
   stand: stand,
   move: walk,
@@ -69,7 +76,8 @@ function renderAgent(agent: AgentLayout, i: number) {
           left: relPos.x,
           top: relPos.y,
           filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
-          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`
+          transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`,
+          zIndex: Math.floor(10000 + pos.y)
         }}
       ></img>
     </React.Fragment>
@@ -97,12 +105,27 @@ function Render({ tick }): JSX.Element {
         }}
       ></div> */}
       {agents.map(renderAgent)}
+      <img
+        id="spawner"
+        className=""
+        src={spiral}
+        style={{
+          transform: `translate(-50%,-50% ) translate(${cameraPos.x}px,${cameraPos.y}px ) `
+        }}
+      />
+      <img
+        id="spawner"
+        className="shadow"
+        src={shadow}
+        style={{
+          transform: `translate(-50%,-50% ) translate(${cameraPos.x}px,${cameraPos.y}px ) `
+        }}
+      />
 
       <div
         id="entities"
         style={{ transform: `translate(${cameraPos.x}px,${cameraPos.y}px ) ` }}
       >
-        <img id="spawner" className="" src={spiral} />
         {/* <div id="info">
           <h2 style={{ marginBottom: ".5em" }}>Welcome! </h2>
           <p>Walky.space is under construction. </p>
