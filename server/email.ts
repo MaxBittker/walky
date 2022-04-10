@@ -1,7 +1,9 @@
 import path from "path";
+import fs from "fs";
 
-const serviceKey = path.join(__dirname, "./keys.json");
-
+const serviceKey = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "./config/keys.json")).toString()
+);
 const mailjet = require("node-mailjet").connect(
   serviceKey as any["mailjet_key"],
   serviceKey as any["mailjet_secret"]
