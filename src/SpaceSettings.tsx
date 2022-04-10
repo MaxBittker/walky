@@ -2,18 +2,22 @@ import * as React from "react";
 import { useState } from "react";
 import { useAtom, atom } from "jotai";
 import classNames from "classnames";
+
 import "./settings.css";
 import { getEditCode, setEditCode } from "./client";
+import {
+  accessStatusAtom,
+  claimedStatusAtom,
+  spaceSettingsOpen,
+} from "./state";
 
 function generateCode() {
   return Math.random().toString(36).slice(2, 7);
 }
-export const claimedStatusAtom = atom<true | false | null>(null);
-export const accessStatusAtom = atom<"public" | "editor" | "none" | null>(null);
 
 const starterCode = generateCode();
 export default function SpaceSettings() {
-  let [open, setOpen] = useState(false);
+  let [open, setOpen] = useAtom(spaceSettingsOpen);
   let [success, setSuccess] = useState(false);
   let [claimed, setClaimedStatus] = useAtom(claimedStatusAtom);
   let [accessStatus, setAccessStatus] = useAtom(accessStatusAtom);
@@ -125,15 +129,6 @@ export default function SpaceSettings() {
         onClick={() => submit()}
       ></input>
 
-      <div
-        className="PullTab"
-        onClick={(e) => {
-          setOpen(!open);
-          e.stopPropagation();
-        }}
-      >
-        🛈
-      </div>
       {success && <h1> Space Claimed! edit code: {code}</h1>}
     </div>
   );

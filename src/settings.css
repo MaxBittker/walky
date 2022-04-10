@@ -1,6 +1,6 @@
 .PullTabContent {
   position: fixed;
-  z-index: 1000000;
+  z-index: 10000000;
   top: 0;
   left: 50%;
   width: 500px;
@@ -12,7 +12,6 @@
   transform: translate(-50%, -100%) scale(0.96);
   transition: transform 250ms cubic-bezier(0.56, -0.36, 0.5, 1.32);
 
-  filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
   border: 2px ridge black;
   box-sizing: border-box;
 }
@@ -26,17 +25,17 @@
   transform: translate(-50%, calc(-100% - 60px)) scale(1) !important;
 }
 .PullTab {
-  box-sizing: border-box;
-  position: absolute;
-  margin: auto;
-  bottom: -50px;
-  left: 50%;
-  transform: translate(-50%, 0);
+  /* box-sizing: border-box; */
+  /* position: absolute; */
+  /* margin: auto; */
+  /* bottom: -50px; */
+  /* left: 50%; */
+  /* transform: translate(-50%, 0); */
 
-  width: 40px;
-  height: 40px;
-  border-top: none;
-  font-size: 30px;
+  /* width: 40px; */
+  /* height: 40px; */
+  /* border-top: none; */
+  /* font-size: 30px; */
 }
 
 label {

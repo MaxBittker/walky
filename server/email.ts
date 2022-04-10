@@ -34,7 +34,7 @@ function sendEmail({
         HTMLPart: `
         <h3>You're now the gardener of walky.space/${path}!</h3> 
         <h1>Edit code: ${code} </h1>
-        <h3>You can also follow this link to unlock the space: <a href='http://walky.space/${path}?edit=${code}' rel="notrack">walky.space/${path}?edit=${code}</a> </h3>
+        <h3>You can also follow this link to unlock the space: <a href='http://walky.space/${path}?code=${code}' rel="notrack">walky.space/${path}?code=${code}</a> </h3>
         
         
         <p>

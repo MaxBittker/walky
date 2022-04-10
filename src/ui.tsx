@@ -4,9 +4,17 @@ import { useState } from "react";
 import { useAtom } from "jotai";
 import "./tools.css";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import gear from "./../assets/gear.png";
 
 import * as Matter from "matter-js";
-import { getEntity, getState, lockedAtom } from "./state";
+import {
+  accessStatusAtom,
+  claimedStatusAtom,
+  getEntity,
+  getState,
+  lockedAtom,
+  spaceSettingsOpen,
+} from "./state";
 // import { AgentLayout } from "./types";
 let Vector = Matter.Vector;
 import add from "./../assets/upload.png";
@@ -22,10 +30,7 @@ import {
 } from "./client";
 import { EntityType } from "./types";
 import { uploadImage } from "./imageUpload";
-import SpaceSettings, {
-  // claimedStatusAtom,
-  accessStatusAtom,
-} from "./SpaceSettings";
+import SpaceSettings from "./SpaceSettings";
 // import Login from "./auth/Login";
 // import Authenticate from "./auth/Authenticate";
 let lastCreated: string;
@@ -82,11 +87,13 @@ async function imageUpload(e: React.ChangeEvent<HTMLInputElement>) {
 function UI({}) {
   // let [infoOpen] = useState(false);
   let [locked, setLocked] = useAtom(lockedAtom);
-  // let [claimed, setClaimedStatus] = useAtom(claimedStatusAtom);
+  let [claimed, setClaimedStatus] = useAtom(claimedStatusAtom);
   let [accessStatus, setAccessStatus] = useAtom(accessStatusAtom);
+  let [copiedState, setCopiedState] = useState(false);
+  let [open, setOpen] = useAtom(spaceSettingsOpen);
 
   const urlParams = new URLSearchParams(window.location.search);
-  let editCode = urlParams.get("edit");
+  let editCode = urlParams.get("code");
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -96,31 +103,15 @@ function UI({}) {
     navigate(window.location.pathname);
   }, []);
   editCode = editCode || getEditCode();
-
+  console.log(editCode);
   if (accessStatus === "public") {
     editCode = "true";
   }
   return (
     <>
       <SpaceSettings />
+
       <div id="items">
-        {!locked && !editCode && (
-          <input
-            id="pw-input"
-            placeholder="edit code?"
-            onKeyDown={(e) => {
-              e.stopPropagation();
-            }}
-            onSubmit={() => {
-              //todo
-              // if (editCode) {
-              //   setEditCode(editCode);
-              // }
-              // navigate(window.location.pathname);
-            }}
-            onClick={(e) => e.stopPropagation()}
-          ></input>
-        )}
         {locked ? (
           <div
             className="tool"
@@ -140,7 +131,9 @@ function UI({}) {
             }}
           />
         )}
-
+        {!locked && !editCode && (
+          <h3 className="tool">This space is locked, you need an edit link!</h3>
+        )}
         <input
           type="file"
           multiple
@@ -149,8 +142,14 @@ function UI({}) {
           style={{ display: "none" }}
           onChange={(e) => imageUpload(e)}
         />
-        {!locked && editCode && (
-          <>
+        {
+          <div
+            style={{
+              display: !locked && editCode ? "" : "none",
+              left: "80px",
+            }}
+            id="items"
+          >
             {" "}
             <img
               src={add}
@@ -159,8 +158,54 @@ function UI({}) {
               onClick={imagePrompt}
             />
             <img src={Aa} className="tool" id="add-text" onClick={textAdd} />
-          </>
-        )}
+            {claimed == false && (
+              <img
+                src={gear}
+                className="PullTab tool"
+                onClick={(e) => {
+                  setOpen(!open);
+                  e.stopPropagation();
+                }}
+              ></img>
+            )}
+            {claimed == true && accessStatus === "editor" && (
+              <h3
+                className="tool"
+                onClick={() => {
+                  let editLink =
+                    window.location.host +
+                    window.location.pathname +
+                    "?code=" +
+                    getEditCode();
+                  var data = [
+                    new ClipboardItem({
+                      "text/plain": new Blob([editLink], {
+                        type: "text/plain",
+                      }),
+                    }),
+                  ];
+                  navigator.clipboard
+                    .write(data)
+                    .then(
+                      function () {
+                        setCopiedState(true);
+                      },
+                      function () {
+                        setCopiedState(false);
+                      }
+                    )
+                    .finally(() => {
+                      window.setTimeout(() => {
+                        setCopiedState(false);
+                      }, 3000);
+                    });
+                }}
+              >
+                {copiedState ? "Edit Link Copied! ✓" : "Copy Edit Link"}
+              </h3>
+            )}
+          </div>
+        }
 
         <img
           src={chat}

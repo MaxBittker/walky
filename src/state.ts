@@ -6,7 +6,10 @@ import { sendEntityUpdate } from "./client";
 import { nrandom, randomVec } from "./utils";
 import { atom } from "jotai";
 
-const lockedAtom = atom<Boolean>(true);
+export const lockedAtom = atom<Boolean>(true);
+export const claimedStatusAtom = atom<true | false | null>(null);
+export const spaceSettingsOpen = atom<boolean>(false);
+export const accessStatusAtom = atom<"public" | "editor" | "none" | null>(null);
 
 let Vector = Matter.Vector;
 
@@ -64,4 +67,4 @@ function writeEntity(uuid: string, v: EntityLayout) {
   entities[i] = v;
   sendEntityUpdate(uuid);
 }
-export { getState, getEntity, writeEntity, lockedAtom };
+export { getState, getEntity, writeEntity };
