@@ -6,7 +6,7 @@ import { sendEntityUpdate } from "./client";
 import { nrandom, randomVec } from "./utils";
 import { atom } from "jotai";
 
-const lockedAtom = atom(true);
+const lockedAtom = atom<Boolean>(true);
 
 let Vector = Matter.Vector;
 
@@ -20,14 +20,14 @@ let state: StateLayout = {
     facing: true,
     animation: "stand",
     timeIdle: 0,
-    color: Math.random() * 360
+    color: Math.random() * 360,
   },
   camera: { x: 0, y: 0 },
   frame: { x: 0, y: 0 },
   center: { x: 0, y: 0 },
   entities: [],
   // audios: [],
-  agents: []
+  agents: [],
 };
 
 state.entities = [];

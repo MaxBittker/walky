@@ -7,6 +7,13 @@ import { AgentLayout, EntityLayout } from "./types";
 import { nrandom, distance } from "./utils";
 // import { v4 as uuidv4 } from "uuid";
 
+export function setEditCode(editCode: string) {
+  localStorage.setItem("code:" + window.location.pathname, editCode);
+}
+export function getEditCode() {
+  return localStorage.getItem("code:" + window.location.pathname);
+}
+
 const ydoc = new Y.Doc();
 const yMapEnts = ydoc.getMap("entities");
 // observers are called after each transaction
@@ -19,10 +26,12 @@ yMapEnts.observe((event) => {
 });
 
 const roomname = `walky-space-${window.location.pathname}`;
+
 const yProvider = new WebsocketProvider(
   `ws://${window.location.hostname}:9898`,
   roomname,
-  ydoc
+  ydoc,
+  { params: { authToken: getEditCode() || "" } }
 );
 
 const awareness = yProvider.awareness;
@@ -54,7 +63,7 @@ function processAgents(agents: AgentLayout[]) {
     }
     return {
       ...a,
-      pos
+      pos,
     };
   });
 }

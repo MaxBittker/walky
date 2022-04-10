@@ -4,14 +4,17 @@
   bottom: 0;
 }
 #ui {
-  position: fixed;
+  position: relative;
   left: 0;
   bottom: 0;
-  z-index: 66;
+  /* z-index: 66; */
   /* user-select: none; */
 }
 
 #items {
+  position: fixed;
+  left: 0;
+  bottom: 0;
   user-select: none;
   display: flex;
   align-items: flex-end;
@@ -109,4 +112,14 @@
   border: 1px solid rgb(0, 0, 0);
   border-radius: 0px;
   transform: translate(-50%, -50%);
+}
+#pw-input{
+  position: absolute;
+  z-index: 200;
+  left:70px;
+  bottom:20px;
+  font-size: 1.2rem;
+  width:8rem;
+  border: 2px solid rgb(110, 108, 108);
+
 }

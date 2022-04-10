@@ -1,4 +1,6 @@
 import WebSocket from "ws";
+import { IncomingMessage } from "http";
+const querystring = require("querystring");
 const Y = require("yjs");
 const syncProtocol = require("y-protocols/dist/sync.cjs");
 const awarenessProtocol = require("y-protocols/dist/awareness.cjs");
@@ -9,6 +11,8 @@ const mutex = require("lib0/dist/mutex.cjs");
 const map = require("lib0/dist/map.cjs");
 
 const debounce = require("lodash.debounce");
+
+import db from "../database";
 
 const callbackHandler = require("./callback.js").callbackHandler;
 const isCallbackSet = require("./callback.js").isCallbackSet;
@@ -50,7 +54,7 @@ if (typeof persistenceDir === "string") {
         ldb.storeUpdate(docName, update);
       });
     },
-    writeState: async (docName, ydoc) => {}
+    writeState: async (docName, ydoc) => {},
   };
 }
 
@@ -127,7 +131,7 @@ class WSSharedDoc extends Y.Doc {
       {
         added,
         updated,
-        removed
+        removed,
       }: {
         added: Array<number>;
         updated: Array<number>;
@@ -166,7 +170,7 @@ class WSSharedDoc extends Y.Doc {
       this.on(
         "update",
         debounce(callbackHandler, CALLBACK_DEBOUNCE_WAIT, {
-          maxWait: CALLBACK_DEBOUNCE_MAXWAIT
+          maxWait: CALLBACK_DEBOUNCE_MAXWAIT,
         })
       );
     }
@@ -208,10 +212,11 @@ const messageListener = (
     const decoder = decoding.createDecoder(message);
     const messageType = decoding.readVarUint(decoder);
 
-    // let [a0, a1] = message;
-    // if (a0 == 0 && (a1 == 1 || a1 == 2)) {
-    //   return;
-    // }
+    let [a0, a1] = message;
+    let readonly = !(conn as any)["UNLOCKED"];
+    if (readonly && a0 == 0 && (a1 == 1 || a1 == 2)) {
+      return;
+    }
 
     switch (messageType) {
       case messageSync:
@@ -290,11 +295,47 @@ const send = (doc: WSSharedDoc, conn: any, m: Uint8Array) => {
 
 const pingTimeout = 30000;
 
-const setupWSConnection = (
+async function checkCode(path: string, code: string): Promise<boolean> {
+  const query = "SELECT  code FROM space WHERE path = ?";
+  const params = [path];
+
+  return new Promise((resolve, reject) => {
+    db.get(query, params, (err: any, row: Object) => {
+      if (err) {
+        console.error(err);
+        resolve(false);
+        return;
+      }
+
+      if (!row) {
+        resolve(true);
+      } else {
+        let ok = (row as any)["code"] === code;
+        resolve(ok);
+      }
+    });
+  });
+}
+const setupWSConnection = async (
   conn: WebSocket,
-  req: any,
-  { docName = req.url.slice(1).split("?")[0], gc = true }: any = {}
+  req: IncomingMessage,
+  { docName = req?.url?.slice(1).split("?")[0], gc = true }: any = {}
 ) => {
+  let qi = req.url?.lastIndexOf("?");
+  let authToken = null;
+  let writeAccess = false;
+  if (qi) {
+    let qs = req.url?.slice(qi + 1);
+    authToken = querystring.parse(qs)["authToken"];
+    writeAccess = await checkCode(
+      req.url?.slice("walky-space-".length + 2, qi) || "",
+      authToken
+    );
+    if (writeAccess) {
+      (conn as any)["UNLOCKED"] = true;
+    }
+  }
+
   conn.binaryType = "arraybuffer";
   // get doc, initialize if it does not exist yet
   const doc = getYDoc(docName, gc);

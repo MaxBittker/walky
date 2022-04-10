@@ -3,7 +3,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useAtom } from "jotai";
 import "./tools.css";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 
 import * as Matter from "matter-js";
 import { getEntity, getState, lockedAtom } from "./state";
@@ -14,9 +14,15 @@ import Aa from "./../assets/text.png";
 import chat from "./../assets/chat.gif";
 import "regenerator-runtime/runtime";
 
-import { sendEntityDelete, sendEntityUpdate } from "./client";
+import {
+  getEditCode,
+  sendEntityDelete,
+  sendEntityUpdate,
+  setEditCode,
+} from "./client";
 import { EntityType } from "./types";
 import { uploadImage } from "./imageUpload";
+import SpaceSettings from "./SpaceSettings";
 // import Login from "./auth/Login";
 // import Authenticate from "./auth/Authenticate";
 let lastCreated: string;
@@ -52,7 +58,7 @@ function textAdd(event: React.MouseEvent) {
     scale: 1.0,
     rotation: 0.0,
     iid:
-      state.entities.map((e) => e.iid).reduce((a, b) => Math.max(a, b), 1) + 1
+      state.entities.map((e) => e.iid).reduce((a, b) => Math.max(a, b), 1) + 1,
   };
 
   state.entities.push(newEnt);
@@ -74,30 +80,31 @@ function UI({}) {
   let [infoOpen] = useState(false);
   let [locked, setLocked] = useAtom(lockedAtom);
   const urlParams = new URLSearchParams(window.location.search);
-  //  urlParams.get("edit") !== null;
-  // const [authenticated, setAuthenticated] = React.useState(false);
-  // const [loginOpen, setLoginOpen] = React.useState(false);
+  let editCode = urlParams.get("edit");
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (editCode) {
+      setEditCode(editCode);
+    }
+    navigate(window.location.pathname);
+  }, []);
+  editCode = editCode || getEditCode();
 
   return (
     <>
-      {/* {!authenticated && (
-        <>
-          {loginOpen ? (
-            <Login></Login>
-          ) : (
-            <button
-              onClick={() => {
-                setLoginOpen(true);
-              }}
-            >
-              login
-            </button>
-          )}
-        </>
-      )}
-      <Authenticate setAuthenticated={setAuthenticated} /> */}
-
+      <SpaceSettings />
       <div id="items">
+        {!locked && !editCode && (
+          <input
+            id="pw-input"
+            placeholder="edit password"
+            onKeyDown={(e) => {
+              e.stopPropagation();
+            }}
+            onClick={(e) => e.stopPropagation()}
+          ></input>
+        )}
         {locked ? (
           <div
             className="tool"
@@ -126,7 +133,7 @@ function UI({}) {
           style={{ display: "none" }}
           onChange={(e) => imageUpload(e)}
         />
-        {!locked && (
+        {!locked && editCode && (
           <>
             {" "}
             <img

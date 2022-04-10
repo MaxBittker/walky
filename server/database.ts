@@ -12,12 +12,13 @@ let db = new sqlite.Database(DBSOURCE, (err) => {
   } else {
     console.log("Connected to the SQLite database.");
     db.run(
-      `CREATE TABLE IF NOT EXISTS user (
+      `CREATE TABLE IF NOT EXISTS space (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name text,
-            email text UNIQUE,
-            stytch_id text,
-            CONSTRAINT email_unique UNIQUE (email)
+            path text UNIQUE,
+            email text,
+            code text,
+            opt INTEGER,
+            CONSTRAINT path_unique UNIQUE (path)
             )`,
       (err) => {
         console.log(err);
