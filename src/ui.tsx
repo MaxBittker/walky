@@ -177,15 +177,9 @@ function UI({}) {
                     window.location.pathname +
                     "?code=" +
                     getEditCode();
-                  var data = [
-                    new window.ClipboardItem({
-                      "text/plain": new Blob([editLink], {
-                        type: "text/plain",
-                      }),
-                    }),
-                  ];
+
                   navigator.clipboard
-                    .write(data)
+                    .writeText(editLink)
                     .then(
                       function () {
                         setCopiedState(true);
