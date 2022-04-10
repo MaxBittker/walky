@@ -20,7 +20,7 @@ function sendEmail({
     Messages: [
       {
         From: {
-          Email: "max@walky.space",
+          Email: "noreply@walky.space",
           Name: "walky.space",
         },
         To: [
@@ -29,17 +29,19 @@ function sendEmail({
             Name: email,
           },
         ],
-        Subject: `You just claimed walky.space/${path}`,
+        Subject: `You claimed walky.space/${path}`,
         TextPart: `Here's your edit code: ${code} `,
         HTMLPart: `
-        <h3>You're now the steward of <a href='http://walky.space/${path}'>walky.space/${path}</a>!</h3> 
+        <h3>You're now the gardener of walky.space/${path}!</h3> 
         <h1>Edit code: ${code} </h1>
-        <h3>You can also follow this link to unlock the space: <a href='http://walky.space/${path}?edit=${code}'>walky.space/${path}?edit=${code}</a> </h3>
+        <h3>You can also follow this link to unlock the space: <a href='http://walky.space/${path}?edit=${code}' rel="notrack">walky.space/${path}?edit=${code}</a> </h3>
         
+        
+        <p>
+        If you have any questions or comments, you can send them to maxbittker@gmail.com!
+        </p>
         <pre>
-                
- 
-</pre>`,
+        </pre>`,
       },
     ],
   });
