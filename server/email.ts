@@ -4,9 +4,10 @@ import fs from "fs";
 const serviceKey = JSON.parse(
   fs.readFileSync(path.join(__dirname, "./config/keys.json")).toString()
 );
+
 const mailjet = require("node-mailjet").connect(
-  serviceKey as any["mailjet_key"],
-  serviceKey as any["mailjet_secret"]
+  (serviceKey as any)["mailjet_key"],
+  (serviceKey as any)["mailjet_secret"]
 );
 
 function sendEmail({
