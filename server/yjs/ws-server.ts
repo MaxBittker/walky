@@ -2,12 +2,29 @@ import WebSocket from "ws";
 import http from "http";
 import { setupWSConnection } from "./utils";
 
+
 const host = process.env.HOST || "localhost";
+
+
+
+// Certificate
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/walky.space/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/walky.space/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/walky.space/chain.pem', 'utf8');
+
+const credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+};
+
+
 
 function startWsServer(port: number) {
   const wss = new WebSocket.Server({ noServer: true });
 
-  const server = http.createServer(
+  const server = https.createServer(
+  credentials,
     (
       request: any,
       response: {
