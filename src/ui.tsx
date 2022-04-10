@@ -22,7 +22,7 @@ import {
 } from "./client";
 import { EntityType } from "./types";
 import { uploadImage } from "./imageUpload";
-import SpaceSettings from "./SpaceSettings";
+import SpaceSettings, { spaceStatusAtom } from "./SpaceSettings";
 // import Login from "./auth/Login";
 // import Authenticate from "./auth/Authenticate";
 let lastCreated: string;
@@ -77,8 +77,10 @@ async function imageUpload(e: React.ChangeEvent<HTMLInputElement>) {
 }
 
 function UI({}) {
-  let [infoOpen] = useState(false);
+  // let [infoOpen] = useState(false);
   let [locked, setLocked] = useAtom(lockedAtom);
+  let [spaceStatus] = useAtom(spaceStatusAtom);
+
   const urlParams = new URLSearchParams(window.location.search);
   let editCode = urlParams.get("edit");
   const navigate = useNavigate();
@@ -91,6 +93,9 @@ function UI({}) {
   }, []);
   editCode = editCode || getEditCode();
 
+  if (spaceStatus === "public") {
+    editCode = "true";
+  }
   return (
     <>
       <SpaceSettings />
@@ -98,9 +103,16 @@ function UI({}) {
         {!locked && !editCode && (
           <input
             id="pw-input"
-            placeholder="edit password"
+            placeholder="edit code?"
             onKeyDown={(e) => {
               e.stopPropagation();
+            }}
+            onSubmit={() => {
+              //todo
+              // if (editCode) {
+              //   setEditCode(editCode);
+              // }
+              // navigate(window.location.pathname);
             }}
             onClick={(e) => e.stopPropagation()}
           ></input>

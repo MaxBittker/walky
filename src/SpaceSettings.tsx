@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-// import { useAtom } from "jotai";
+import { useAtom, atom } from "jotai";
 import classNames from "classnames";
 import "./settings.css";
 import { setEditCode } from "./client";
@@ -8,11 +8,14 @@ import { setEditCode } from "./client";
 function generateCode() {
   return Math.random().toString(36).slice(2, 7);
 }
+export const spaceStatusAtom = atom<"public" | "claimed" | "unclaimed" | null>(
+  null
+);
 const starterCode = generateCode();
 export default function SpaceSettings() {
   let [open, setOpen] = useState(false);
   let [success, setSuccess] = useState(false);
-  let [spaceStatus, setPlaceStatus] = useState<boolean | null>(null);
+  let [spaceStatus, setPlaceStatus] = useAtom(spaceStatusAtom);
 
   let [code, setCode] = useState(starterCode);
   let [email, setEmail] = useState<string>("");
@@ -26,7 +29,11 @@ export default function SpaceSettings() {
         const response = await fetch(url);
         const json = await response.json();
         console.log(json);
-        setPlaceStatus(!json?.claimed);
+        if (json?.public) {
+          setPlaceStatus("public");
+        } else {
+          setPlaceStatus(json?.claimed ? "claimed" : "unclaimed");
+        }
       } catch (error) {
         console.log("error", error);
       }
@@ -35,7 +42,8 @@ export default function SpaceSettings() {
     fetchData();
   }, []);
 
-  const hidden = spaceStatus === null || spaceStatus === false;
+  const hidden = spaceStatus !== "unclaimed";
+
   async function submit() {
     const url = `/claim${window.location.pathname}`;
 
