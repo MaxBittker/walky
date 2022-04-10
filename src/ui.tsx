@@ -178,7 +178,7 @@ function UI({}) {
                     "?code=" +
                     getEditCode();
                   var data = [
-                    new ClipboardItem({
+                    new window.ClipboardItem({
                       "text/plain": new Blob([editLink], {
                         type: "text/plain",
                       }),
