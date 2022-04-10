@@ -310,7 +310,8 @@ async function checkCode(path: string, code: string): Promise<boolean> {
       if (!row) {
         resolve(true);
       } else {
-        let ok = (row as any)["code"] === code;
+        let returnedCode = (row as any)["code"];
+        let ok = returnedCode === code || returnedCode === "";
         resolve(ok);
       }
     });

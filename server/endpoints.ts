@@ -22,7 +22,7 @@ function startEndpoints(PORT: number) {
 
   app.get("/claimed/:path?", async function (req, res) {
     let path = req.params.path;
-    const code = req.body["code"];
+    const code = req.header("code");
 
     // Query the space by path
     const query = "SELECT id, email, path, code FROM space WHERE path = ?";
@@ -32,15 +32,19 @@ function startEndpoints(PORT: number) {
       if (err) return res.status(400).send(err);
 
       if (!row) {
-        return res.status(201).send({ claimed: false });
+        return res.status(201).send({ claimed: false, access: "public" });
       } else {
-        //todo "claimed by you"
         if ((row as any)["code"] === "") {
-          res.status(200).send({ claimed: true, public: true });
+          res.status(200).send({ claimed: true, access: "public" });
           return;
         }
+        if ((row as any)["code"] === code) {
+          res.status(200).send({ claimed: true, access: "editor" });
+          return;
+        }
+
         // space was already saved in database.
-        res.status(200).send({ claimed: true });
+        res.status(200).send({ claimed: true, access: "none" });
       }
     });
   });

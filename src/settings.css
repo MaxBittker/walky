@@ -27,9 +27,12 @@
 }
 .PullTab {
   box-sizing: border-box;
-  position: relative;
+  position: absolute;
   margin: auto;
-  bottom: -60px;
+  bottom: -50px;
+  left: 50%;
+  transform: translate(-50%, 0);
+
   width: 40px;
   height: 40px;
   border-top: none;
@@ -65,7 +68,7 @@ input[type="submit"] {
   border: 3px solid black;
   margin: auto;
   margin-top: 1rem;
-  margin-bottom: calc(1.5rem - 60px);
+  margin-bottom: calc(1.5rem);
   width: fit-content;
   padding: 0.3rem 1rem;
   font-weight: bold;

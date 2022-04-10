@@ -3,19 +3,20 @@ import { useState } from "react";
 import { useAtom, atom } from "jotai";
 import classNames from "classnames";
 import "./settings.css";
-import { setEditCode } from "./client";
+import { getEditCode, setEditCode } from "./client";
 
 function generateCode() {
   return Math.random().toString(36).slice(2, 7);
 }
-export const spaceStatusAtom = atom<"public" | "claimed" | "unclaimed" | null>(
-  null
-);
+export const claimedStatusAtom = atom<true | false | null>(null);
+export const accessStatusAtom = atom<"public" | "editor" | "none" | null>(null);
+
 const starterCode = generateCode();
 export default function SpaceSettings() {
   let [open, setOpen] = useState(false);
   let [success, setSuccess] = useState(false);
-  let [spaceStatus, setPlaceStatus] = useAtom(spaceStatusAtom);
+  let [claimed, setClaimedStatus] = useAtom(claimedStatusAtom);
+  let [accessStatus, setAccessStatus] = useAtom(accessStatusAtom);
 
   let [code, setCode] = useState(starterCode);
   let [email, setEmail] = useState<string>("");
@@ -26,14 +27,19 @@ export default function SpaceSettings() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            code: getEditCode() ?? "",
+          },
+        });
         const json = await response.json();
         console.log(json);
-        if (json?.public) {
-          setPlaceStatus("public");
-        } else {
-          setPlaceStatus(json?.claimed ? "claimed" : "unclaimed");
+        if (json?.access) {
+          setAccessStatus(json?.access);
         }
+        setClaimedStatus(json?.claimed);
       } catch (error) {
         console.log("error", error);
       }
@@ -42,7 +48,7 @@ export default function SpaceSettings() {
     fetchData();
   }, []);
 
-  const hidden = spaceStatus !== "unclaimed";
+  const hidden = claimed === true || claimed === null;
 
   async function submit() {
     const url = `/claim${window.location.pathname}`;

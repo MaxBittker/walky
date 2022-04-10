@@ -22,7 +22,10 @@ import {
 } from "./client";
 import { EntityType } from "./types";
 import { uploadImage } from "./imageUpload";
-import SpaceSettings, { spaceStatusAtom } from "./SpaceSettings";
+import SpaceSettings, {
+  // claimedStatusAtom,
+  accessStatusAtom,
+} from "./SpaceSettings";
 // import Login from "./auth/Login";
 // import Authenticate from "./auth/Authenticate";
 let lastCreated: string;
@@ -79,7 +82,8 @@ async function imageUpload(e: React.ChangeEvent<HTMLInputElement>) {
 function UI({}) {
   // let [infoOpen] = useState(false);
   let [locked, setLocked] = useAtom(lockedAtom);
-  let [spaceStatus] = useAtom(spaceStatusAtom);
+  // let [claimed, setClaimedStatus] = useAtom(claimedStatusAtom);
+  let [accessStatus, setAccessStatus] = useAtom(accessStatusAtom);
 
   const urlParams = new URLSearchParams(window.location.search);
   let editCode = urlParams.get("edit");
@@ -93,7 +97,7 @@ function UI({}) {
   }, []);
   editCode = editCode || getEditCode();
 
-  if (spaceStatus === "public") {
+  if (accessStatus === "public") {
     editCode = "true";
   }
   return (
