@@ -28,7 +28,7 @@ yMapEnts.observe((event) => {
 const roomname = `walky-space-${window.location.pathname}`;
 
 const yProvider = new WebsocketProvider(
-  `ws://${window.location.hostname}:9898`,
+  `wss://${window.location.hostname}`,
   roomname,
   ydoc,
   { params: { authToken: getEditCode() || "" } }
