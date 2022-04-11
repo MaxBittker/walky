@@ -43,7 +43,7 @@ function startEndpoints(PORT: number): https.Server {
   app.use("/files", express.static("./uploads"));
 
   app.get("/claimed/:path?", async function (req, res) {
-    let path = req.params.path;
+    let path = req.params.path ?? "";
     const code = req.header("code");
 
     // Query the space by path
@@ -72,7 +72,7 @@ function startEndpoints(PORT: number): https.Server {
   });
 
   app.post("/claim/:path?", async function (req, res) {
-    let path = req.params.path ?? "/";
+    let path = req.params.path ?? "";
     const email = req.body["email"];
     const code = req.body["code"];
     const opt = req.body["opt"];
