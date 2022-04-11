@@ -27,11 +27,14 @@ yMapEnts.observe((event) => {
 
 const roomname = `walky-space-${window.location.pathname}`;
 
+const urlParams = new URLSearchParams(window.location.search);
+const editCode = urlParams.get("code");
+
 const yProvider = new WebsocketProvider(
   `wss://${window.location.hostname}`,
   roomname,
   ydoc,
-  { params: { authToken: getEditCode() || "" } }
+  { params: { authToken: getEditCode() || editCode || "" } }
 );
 
 const awareness = yProvider.awareness;
