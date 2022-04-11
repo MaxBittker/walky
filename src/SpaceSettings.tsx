@@ -10,6 +10,7 @@ import {
   claimedStatusAtom,
   spaceSettingsOpen,
 } from "./state";
+import { useNavigate } from "react-router";
 
 function generateCode() {
   return Math.random().toString(36).slice(2, 7);
@@ -53,6 +54,7 @@ export default function SpaceSettings() {
   }, []);
 
   const hidden = claimed === true || claimed === null;
+  const navigate = useNavigate();
 
   async function submit() {
     const url = `/claim${window.location.pathname}`;
@@ -76,6 +78,9 @@ export default function SpaceSettings() {
       console.log(json);
       setSuccess(!json?.claimed);
       setEditCode(code);
+      // window.setTimeout(() => {
+      //   // navigate(window.location.pathname);
+      // }, 3000);
     } catch (error) {
       console.log("error", error);
     }
@@ -129,7 +134,9 @@ export default function SpaceSettings() {
         onClick={() => submit()}
       ></input>
 
-      {success && <h1> Space Claimed! edit code: {code}</h1>}
+      {success && (
+        <h3> Space Claimed! Write down this code: {code} .Refresh to edit!</h3>
+      )}
     </div>
   );
 }
