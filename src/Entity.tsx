@@ -81,7 +81,7 @@ function checkImageCoord(
       let styles = window.getComputedStyle(nextTarget);
       let pos = {
         x: parseFloat(styles.left),
-        y: parseFloat(styles.top)
+        y: parseFloat(styles.top),
       };
 
       nextEl = checkImageCoord(nextTarget, pos, scale, rotation, event);
@@ -145,7 +145,7 @@ export default function Entity({
   scale,
   rotation,
   uuid,
-  i
+  i,
 }: {
   value: string;
   type: EntityType;
@@ -221,7 +221,7 @@ export default function Entity({
 
     let convertedMouse = convertTarget({
       x: e.clientX,
-      y: e.clientY
+      y: e.clientY,
     });
     ent.pos = V.add(grabPos, convertedMouse);
     writeEntity(uuid, ent);
@@ -244,7 +244,7 @@ export default function Entity({
 
       let convertedMouse = convertTarget({
         x: e.clientX,
-        y: e.clientY
+        y: e.clientY,
       });
 
       let p1 = convertedMouse;
@@ -264,7 +264,7 @@ export default function Entity({
       let newAngle = handleAngle - a;
 
       let maxDim = Math.max(size.x, size.y);
-      let maxScale = 600 / maxDim;
+      let maxScale = 1000 / maxDim;
       let minScale = type === EntityType.Text ? 0.5 : 0.1;
       ent.scale = clamp(newScale, minScale, maxScale);
       ent.rotation = newAngle * (180 / Math.PI);
@@ -330,7 +330,7 @@ export default function Entity({
           Simulate.mouseDown(hit, {
             clientX: e.clientX,
             clientY: e.clientY,
-            target: hit
+            target: hit,
           });
         }
         return;
@@ -340,7 +340,7 @@ export default function Entity({
       let ent = getEntity(uuid);
       let convertedMouse = convertTarget({
         x: e.clientX,
-        y: e.clientY
+        y: e.clientY,
       });
       grabPos = V.sub(ent.pos, convertedMouse);
       setMode("move");
@@ -358,7 +358,7 @@ export default function Entity({
 
       let convertedMouse = convertTarget({
         x: e.clientX,
-        y: e.clientY
+        y: e.clientY,
       });
       grabPos = V.sub(ent.pos, convertedMouse);
       setMode("resize");
@@ -406,7 +406,7 @@ export default function Entity({
           }}
           className={classNames("text draggable " + mode, {
             locked,
-            selected: beenSelected
+            selected: beenSelected,
           })}
           style={{
             position: "absolute",
@@ -417,7 +417,7 @@ export default function Entity({
             transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale}) `,
             display: "flex",
             zIndex: 500 + (beenSelected ? 500 : 0),
-            filter: shadowFilter
+            filter: shadowFilter,
           }}
           onMouseDown={imageMouseDown}
           onTouchStart={imageMouseDown}
@@ -430,7 +430,7 @@ export default function Entity({
           ref={img}
           className={classNames("photo draggable " + mode, {
             locked,
-            selected: beenSelected
+            selected: beenSelected,
           })}
           src={
             value.startsWith("http") ? value : window.location.origin + value
@@ -443,7 +443,7 @@ export default function Entity({
             transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale}) `,
             display: "flex",
             zIndex: 500 + (beenSelected ? 500 : 0),
-            filter: shadowFilter
+            filter: shadowFilter,
           }}
           onMouseDown={imageMouseDown}
           onTouchStart={imageMouseDown}
@@ -461,11 +461,11 @@ export default function Entity({
               transform: `translate(-50%, -50%) rotate(${rotation}deg) scale(${
                 mode === "move" ? 1.005 : 1.0
               })`,
-              zIndex: 500 + (beenSelected ? 500 : 0)
+              zIndex: 500 + (beenSelected ? 500 : 0),
             }}
             ref={handleContainer}
             className={classNames("handle-container " + mode, {
-              locked
+              locked,
             })}
           >
             <button
