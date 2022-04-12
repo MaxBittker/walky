@@ -6,7 +6,7 @@ import "./tools.css";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import gear from "./../assets/gear.png";
 
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 import {
   accessStatusAtom,
   claimedStatusAtom,
@@ -16,7 +16,7 @@ import {
   spaceSettingsOpen,
 } from "./state";
 // import { AgentLayout } from "./types";
-let Vector = Matter.Vector;
+
 import add from "./../assets/upload.png";
 import Aa from "./../assets/text.png";
 import chat from "./../assets/chat.gif";

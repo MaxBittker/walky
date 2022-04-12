@@ -1,7 +1,7 @@
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
+
 import { getState } from "./state";
 import { topSpeed } from "./movement";
-let Vector = Matter.Vector;
 
 // the 0 is weird.
 let zoom = window.innerWidth <= 600 ? 0.6 : 0.0;
@@ -16,20 +16,20 @@ function updateCamera(elapsedTicks: number) {
   let { pos } = me;
 
   // unfortunately this line makes no sense to me:
-  pos = Vector.sub(pos, Vector.mult(center, zoom));
+  pos = Vector.subtract(pos, Vector.multiplyScalar(center, zoom));
 
-  let distanceFromPos = Vector.magnitude(Vector.sub(pos, camera));
+  let distanceFromPos = Vector.length(Vector.subtract(pos, camera));
   let camera_speed = topSpeed;
-  if (distanceFromPos < Vector.magnitude(frame) / 20) {
+  if (distanceFromPos < Vector.length(frame) / 20) {
     camera_speed = 0;
   }
-  camera_speed *= distanceFromPos / (Vector.magnitude(frame) / 6);
-  let directionTowardsPos = Vector.normalise(Vector.sub(pos, camera));
+  camera_speed *= distanceFromPos / (Vector.length(frame) / 6);
+  let directionTowardsPos = Vector.normal(Vector.subtract(pos, camera));
   camera_speed *= elapsedTicks;
   camera_speed = Math.min(camera_speed, distanceFromPos);
   state.camera = Vector.add(
     camera,
-    Vector.mult(directionTowardsPos, camera_speed)
+    Vector.multiplyScalar(directionTowardsPos, camera_speed)
   );
   // state.camera = { x: 0, y: 0 };
 }

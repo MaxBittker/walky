@@ -1,6 +1,5 @@
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 import { AgentLayout } from "./types";
-let Vector = Matter.Vector;
 
 let topSpeed = 3;
 let epsilon = 1;
@@ -8,14 +7,14 @@ function updateAgent(agent: AgentLayout, elapsed: number) {
   agent.timeIdle += elapsed;
   const { target, pos } = agent;
   let velocity = { x: 0, y: 0 };
-  let heading = Vector.normalise(Vector.sub(target, pos));
-  let distance = Vector.magnitude(Vector.sub(pos, target));
+  let heading = Vector.normal(Vector.subtract(target, pos));
+  let distance = Vector.length(Vector.subtract(pos, target));
   let speed = Math.min(topSpeed, distance);
   if (distance < epsilon) {
     speed = 0;
   }
   let dT = Math.min(speed * elapsed, distance);
-  velocity = Vector.mult(heading, dT);
+  velocity = Vector.multiplyScalar(heading, dT);
 
   agent.pos = Vector.add(pos, velocity);
   // this might not be consistent

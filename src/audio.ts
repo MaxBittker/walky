@@ -1,5 +1,5 @@
-import * as Matter from "matter-js";
-let Vector = Matter.Vector;
+import * as Vector from "@graph-ts/vector2";
+
 import { getState } from "./state";
 import seedrandom from "seedrandom";
 import ambient_sounds from "../scraper/ambient_sounds.json";
@@ -127,8 +127,8 @@ class Source {
     }
   }
   attenuate(ear_pos: Matter.Vector) {
-    let delta = Vector.sub(ear_pos, this.pos);
-    let distance = Math.pow(Vector.magnitude(delta), 1.5) / 3500;
+    let delta = Vector.subtract(ear_pos, this.pos);
+    let distance = Math.pow(Vector.length(delta), 1.5) / 3500;
     let safe_distance = Math.max(distance, 1);
     distance = Math.max(distance, 0.01);
     let gain = 0.7 / safe_distance;

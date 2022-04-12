@@ -8,14 +8,12 @@ import spiral from "./../assets/arch.png";
 import shadow from "./../assets/arch-shadow.png";
 // import flower from "./../assets/flower.png";
 // import bubble from "./../assets/bubble.png";
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 import Entity from "./Entity";
 import { getState } from "./state";
 import { AgentLayout } from "./types";
 import { convertTarget } from "./input";
 import { useAnimationFrame } from "./useAnimationFrame";
-
-let Vector = Matter.Vector;
 
 // let zoom = window.innerWidth <= 600 ? 1.0 : 1.0;
 // window.addEventListener("resize", () => {
@@ -30,7 +28,7 @@ let Vector = Matter.Vector;
 let animations = {
   stand: stand,
   move: walk,
-  sit: sit
+  sit: sit,
 };
 function renderAgent(agent: AgentLayout, i: number) {
   let { camera, center, me } = getState();
@@ -40,7 +38,7 @@ function renderAgent(agent: AgentLayout, i: number) {
   let { pos, animation, facing, color, word } = agent;
 
   let newsrc = animations[animation] || walk;
-  let relPos = Vector.add(Vector.sub(pos, camera), center);
+  let relPos = Vector.add(Vector.subtract(pos, camera), center);
 
   return (
     <React.Fragment key={i}>
@@ -61,7 +59,7 @@ function renderAgent(agent: AgentLayout, i: number) {
         key={"w" + agent.uuid}
         style={{
           left: relPos.x,
-          top: relPos.y
+          top: relPos.y,
           // filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
           // transform: `translate(-50%, -75%)`
         }}
@@ -77,7 +75,7 @@ function renderAgent(agent: AgentLayout, i: number) {
           top: relPos.y,
           filter: `sepia(1) saturate(2.5) hue-rotate(${color}deg)`,
           transform: `translate(-50%, -75%) scaleX(${facing ? -1 : 1})`,
-          zIndex: Math.floor(10000 + pos.y)
+          zIndex: Math.floor(10000 + pos.y),
         }}
       ></img>
     </React.Fragment>
@@ -94,7 +92,7 @@ function Render({ tick }): JSX.Element {
     setCount((prevCount) => (prevCount + deltaTime * 0.01) % 100);
   });
 
-  const cameraPos = Vector.sub(center, camera);
+  const cameraPos = Vector.subtract(center, camera);
   // Example to map all cursors in jsx
   return (
     <React.Fragment>
@@ -110,7 +108,7 @@ function Render({ tick }): JSX.Element {
         className=""
         src={spiral}
         style={{
-          transform: `translate(-50%,-50% ) translate(${cameraPos.x}px,${cameraPos.y}px ) `
+          transform: `translate(-50%,-50% ) translate(${cameraPos.x}px,${cameraPos.y}px ) `,
         }}
       />
       <img
@@ -118,7 +116,7 @@ function Render({ tick }): JSX.Element {
         className="shadow"
         src={shadow}
         style={{
-          transform: `translate(-50%,-50% ) translate(${cameraPos.x}px,${cameraPos.y}px ) `
+          transform: `translate(-50%,-50% ) translate(${cameraPos.x}px,${cameraPos.y}px ) `,
         }}
       />
 
@@ -138,7 +136,7 @@ function Render({ tick }): JSX.Element {
 
         {entities.map(
           ({ value, type, pos, size, rotation, scale, uuid }, i) => {
-            // let relPos = Vector.add(Vector.sub(pos, camera), center);
+            // let relPos = Vector.add(Vector.subtract(pos, camera), center);
             return (
               <Entity
                 key={uuid}

@@ -1,4 +1,4 @@
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 
 import { v4 as uuidv4 } from "uuid";
 import { EntityLayout, StateLayout } from "./types";
@@ -10,8 +10,6 @@ export const lockedAtom = atom<Boolean>(true);
 export const claimedStatusAtom = atom<true | false | null>(null);
 export const spaceSettingsOpen = atom<boolean>(false);
 export const accessStatusAtom = atom<"public" | "editor" | "none" | null>(null);
-
-let Vector = Matter.Vector;
 
 let uuid = uuidv4().slice(0, 8);
 
@@ -37,7 +35,7 @@ state.entities = [];
 
 function resize() {
   state.frame = { x: window.innerWidth, y: window.innerHeight };
-  state.center = Vector.div(state.frame, 2);
+  state.center = Vector.divideScalar(state.frame, 2);
   // console.log("resized!");
 }
 resize();

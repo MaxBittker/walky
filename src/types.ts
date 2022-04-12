@@ -1,8 +1,8 @@
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 
 enum EntityType {
   Image = "img",
-  Text = "text"
+  Text = "text",
 }
 
 interface EntityLayout {

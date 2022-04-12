@@ -1,7 +1,6 @@
 import { getState } from "./state";
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 // import { start_audio } from "./audio";
-let Vector = Matter.Vector;
 
 window.zoom = window.innerWidth <= 600 ? 0.6 : 1.0;
 window.addEventListener("resize", () => {
@@ -10,17 +9,20 @@ window.addEventListener("resize", () => {
 
 function convertTarget(t: Matter.Vector) {
   const { camera, center } = getState();
-  // let zCamera = Vector.div(camera, zoom);
+  // let zCamera = Vector.divideScalar(camera, zoom);
   let zCenter = center;
-  let zPos = Vector.div(t, window.zoom);
-  return Vector.sub(Vector.add(zPos, camera), zCenter);
+  let zPos = Vector.divideScalar(t, window.zoom);
+  return Vector.subtract(Vector.add(zPos, camera), zCenter);
 }
 function deconvertTarget(t: Matter.Vector) {
   const { camera, center } = getState();
-  // let zCamera = Vector.div(camera, zoom);
+  // let zCamera = Vector.divideScalar(camera, zoom);
   let zCenter = center;
-  // let zPos = Vector.mult(t, zoom);
-  return Vector.mult(Vector.add(Vector.sub(t, camera), zCenter), window.zoom);
+  // let zPos = Vector.multiplyScalar(t, zoom);
+  return Vector.multiplyScalar(
+    Vector.add(Vector.subtract(t, camera), zCenter),
+    window.zoom
+  );
 }
 let mouseDown = false;
 function startInput() {
@@ -65,7 +67,7 @@ function startInput() {
     for (let i = 0; i < touches.length; i++) {
       state.me.target = convertTarget({
         x: touches[i].pageX,
-        y: touches[i].pageY
+        y: touches[i].pageY,
       });
     }
   });
@@ -79,7 +81,7 @@ function startInput() {
     for (let i = 0; i < touches.length; i++) {
       state.me.target = convertTarget({
         x: touches[i].pageX,
-        y: touches[i].pageY
+        y: touches[i].pageY,
       });
     }
   });
@@ -169,7 +171,10 @@ function startInput() {
     }
 
     let state = getState();
-    let keyTarget = Vector.add(state.me.pos, Vector.mult(velocity, 25));
+    let keyTarget = Vector.add(
+      state.me.pos,
+      Vector.multiplyScalar(velocity, 25)
+    );
     state.me.target = keyTarget;
   }
 }

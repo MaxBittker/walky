@@ -4,8 +4,7 @@ import { Simulate } from "react-dom/test-utils";
 import "./entity.css";
 import classNames from "classnames";
 import { sendEntityUpdate } from "./client";
-import * as Matter from "matter-js";
-import { Vector } from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 
 import { getState, getEntity, writeEntity, lockedAtom } from "./state";
 import { convertTarget, deconvertTarget } from "./input";
@@ -16,8 +15,6 @@ import { EntityType } from "./types";
 import { clamp } from "./utils";
 import { useAtom } from "jotai";
 
-let V = Matter.Vector;
-
 let grabPos: Matter.Vector;
 
 let canvas = document.createElement("canvas");
@@ -25,7 +22,7 @@ let ctx = canvas.getContext("2d");
 // document.body.appendChild(ctx.canvas); // used for debugging
 function checkImageCoord(
   img_element: HTMLElement,
-  pos: Vector,
+  pos: Vector.Vector2,
   scale: number,
   rotation: number,
   event: MouseEvent
@@ -94,15 +91,12 @@ function checkImageCoord(
   }
 }
 
-function magnitude(a) {
-  return Math.sqrt(Math.pow(a.x, 2) + Math.pow(a.y, 2));
-}
-function angle(b) {
+function angle(b: Vector.Vector2) {
   return Math.atan2(b.y, b.x); //radians
 }
 
-function distance(a, b) {
-  return magnitude(V.sub(a, b));
+function distance(a: Vector.Vector2, b: Vector.Vector2) {
+  return Vector.length(Vector.subtract(a, b));
 }
 
 interface IControlledTextArea {
@@ -149,8 +143,8 @@ export default function Entity({
 }: {
   value: string;
   type: EntityType;
-  pos: Vector;
-  size: Vector;
+  pos: Vector.Vector2;
+  size: Vector.Vector2;
   scale: number;
   rotation: number;
   uuid: string;
@@ -223,7 +217,7 @@ export default function Entity({
       x: e.clientX,
       y: e.clientY,
     });
-    ent.pos = V.add(grabPos, convertedMouse);
+    ent.pos = Vector.add(grabPos, convertedMouse);
     writeEntity(uuid, ent);
   }, []);
 
@@ -249,14 +243,15 @@ export default function Entity({
 
       let p1 = convertedMouse;
       let center = pos;
-      let p2 = V.add(center, V.sub(center, p1));
+      let p2 = Vector.add(center, Vector.subtract(center, p1));
 
       let newDistance = distance(p1, p2);
 
+      startScale = startScale ?? 1;
       let newScale =
-        startScale * (newDistance / (magnitude(size) * startScale));
+        startScale * (newDistance / (Vector.length(size) * startScale));
 
-      let pDifference = V.sub(p1, p2);
+      let pDifference = Vector.subtract(p1, p2);
       let handleAngle = angle(pDifference);
 
       let a = Math.atan2(size.y, size.x); //+ Math.PI;
@@ -342,7 +337,7 @@ export default function Entity({
         x: e.clientX,
         y: e.clientY,
       });
-      grabPos = V.sub(ent.pos, convertedMouse);
+      grabPos = Vector.subtract(ent.pos, convertedMouse);
       setMode("move");
     },
     [pos, scale, rotation, img.current, setMode, beenSelected]
@@ -360,7 +355,7 @@ export default function Entity({
         x: e.clientX,
         y: e.clientY,
       });
-      grabPos = V.sub(ent.pos, convertedMouse);
+      grabPos = Vector.subtract(ent.pos, convertedMouse);
       setMode("resize");
       setStartScale(scale);
     },
@@ -479,7 +474,7 @@ export default function Entity({
                 let ent = { ...oldEnt };
                 ent.uuid = uuidv4().slice(0, 8);
                 entities.push(ent);
-                oldEnt.pos = V.add(oldEnt.pos, { x: 30, y: 30 });
+                oldEnt.pos = Vector.add(oldEnt.pos, { x: 30, y: 30 });
                 getState().entities = entities;
                 sendEntityUpdate(ent.uuid);
                 sendEntityUpdate(uuid);

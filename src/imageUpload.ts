@@ -1,22 +1,13 @@
 import "./tools.css";
 
-import * as Matter from "matter-js";
+import * as Vector from "@graph-ts/vector2";
 import { getState } from "./state";
-let Vector = Matter.Vector;
 
 import "regenerator-runtime/runtime";
 
 import { readAndCompressImage } from "browser-image-resizer";
 import { sendEntityUpdate } from "./client";
 import { EntityLayout } from "./types";
-const config = {
-  quality: 0.8,
-  maxWidth: 1000,
-  maxHeight: 1000,
-  autoRotate: true,
-  debug: false,
-  mimeType: "image/png"
-};
 
 document.onpaste = function (event) {
   const items = event?.clipboardData?.items ?? [];
@@ -76,7 +67,7 @@ const getHeightAndWidthFromDataUrl = (dataURL: string) =>
     img.onload = () => {
       resolve({
         height: img.height,
-        width: img.width
+        width: img.width,
       });
     };
     img.src = dataURL;
@@ -100,7 +91,7 @@ function createEnt(data: {
     pos: data.position,
     scale,
     rotation: 0.0,
-    iid: entities.map((e) => e.iid).reduce((a, b) => Math.max(a, b), 1) + 1
+    iid: entities.map((e) => e.iid).reduce((a, b) => Math.max(a, b), 1) + 1,
   };
   let state = getState();
 
@@ -117,10 +108,10 @@ function uploadImageUrl(url: string, i = 0) {
     JSON.stringify(
       Vector.add(
         me.pos,
-        Vector.mult(
+        Vector.multiplyScalar(
           {
             x: 30,
-            y: 30
+            y: 30,
           },
           i
         )
@@ -134,7 +125,7 @@ function uploadImageUrl(url: string, i = 0) {
 
   fetch("/upload", {
     method: "POST",
-    body: formData
+    body: formData,
   })
     .then((bod) => {
       return bod.json();
@@ -168,10 +159,10 @@ async function uploadImageDataUrl(fileAsDataURL: string, i = 0) {
     JSON.stringify(
       Vector.add(
         me.pos,
-        Vector.mult(
+        Vector.multiplyScalar(
           {
             x: 30,
-            y: 30
+            y: 30,
           },
           i
         )
@@ -182,7 +173,7 @@ async function uploadImageDataUrl(fileAsDataURL: string, i = 0) {
     "size",
     JSON.stringify({
       x: dimensions.width,
-      y: dimensions.height
+      y: dimensions.height,
     })
   );
   formData.append("owner", me.uuid);
@@ -190,7 +181,7 @@ async function uploadImageDataUrl(fileAsDataURL: string, i = 0) {
 
   fetch("/upload", {
     method: "POST",
-    body: formData
+    body: formData,
   })
     .then((bod) => {
       return bod.json();
@@ -200,56 +191,69 @@ async function uploadImageDataUrl(fileAsDataURL: string, i = 0) {
       console.error(error);
     });
 }
-function uploadImage(file: File, i = 0) {
-  console.log(file);
 
+async function uploadPreparedImage(file: File, i = 0) {
+  const fileAsDataURL = window.URL.createObjectURL(file);
+  const dimensions = (await getHeightAndWidthFromDataUrl(fileAsDataURL)) as any;
+  const formData = new FormData();
+  formData.append("image-upload", file);
+
+  let { me } = getState();
+  formData.append(
+    "position",
+    JSON.stringify(
+      Vector.add(
+        me.pos,
+        Vector.multiplyScalar(
+          {
+            x: 30,
+            y: 30,
+          },
+          i
+        )
+      )
+    )
+  );
+  formData.append(
+    "size",
+    JSON.stringify({
+      x: dimensions.width,
+      y: dimensions.height,
+    })
+  );
+  formData.append("owner", me.uuid);
+  formData.append("name", file.name);
+
+  fetch("/upload", {
+    method: "POST",
+    body: formData,
+  })
+    .then((bod) => {
+      return bod.json();
+    })
+    .then(createEnt)
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+const config = {
+  quality: 0.8,
+  maxWidth: 1000,
+  maxHeight: 1000,
+  autoRotate: true,
+  debug: false,
+  mimeType: "image/png",
+};
+
+async function uploadImage(file: File, i = 0) {
+  if (file.type === "image/gif") {
+    uploadPreparedImage(file, i);
+    return;
+  }
   readAndCompressImage(file, { ...config, mimeType: file.type })
     .then(async (resizedImage: File) => {
-      console.log(resizedImage);
-      const fileAsDataURL = window.URL.createObjectURL(resizedImage);
-      const dimensions = (await getHeightAndWidthFromDataUrl(
-        fileAsDataURL
-      )) as any;
-      const formData = new FormData();
-      formData.append("image-upload", resizedImage);
-
-      let { me } = getState();
-      formData.append(
-        "position",
-        JSON.stringify(
-          Vector.add(
-            me.pos,
-            Vector.mult(
-              {
-                x: 30,
-                y: 30
-              },
-              i
-            )
-          )
-        )
-      );
-      formData.append(
-        "size",
-        JSON.stringify({
-          x: dimensions.width,
-          y: dimensions.height
-        })
-      );
-      formData.append("owner", me.uuid);
-      formData.append("name", file.name);
-
-      fetch("/upload", {
-        method: "POST",
-        body: formData
-      })
-        .then((bod) => {
-          return bod.json();
-        })
-        .then(createEnt)
-        .catch((error) => {
-          console.error(error);
-        });
+      uploadPreparedImage(resizedImage, i);
     })
     .catch((e: any) => console.error(e));
 }
