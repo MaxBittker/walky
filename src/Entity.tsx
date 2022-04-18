@@ -392,7 +392,7 @@ export default function Entity({
               prev = img.current.style.width;
               img.current.style.width = "1px";
               img.current.style.whiteSpace = "pre";
-              ent.size.x = Math.min(img.current.scrollWidth + 40, 2000);
+              ent.size.x = Math.min(img.current.scrollWidth + 40, 1500);
               img.current.style.width = ent.size.x + "px";
 
               img.current.style.whiteSpace = "normal";
