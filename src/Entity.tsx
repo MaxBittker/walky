@@ -260,7 +260,7 @@ export default function Entity({
 
       let maxDim = Math.max(size.x, size.y);
       let maxScale = 1000 / maxDim;
-      let minScale = type === EntityType.Text ? 0.5 : 0.1;
+      let minScale = type === EntityType.Text ? 0.2 : 0.1;
       ent.scale = clamp(newScale, minScale, maxScale);
       ent.rotation = newAngle * (180 / Math.PI);
       writeEntity(uuid, ent);
@@ -387,15 +387,25 @@ export default function Entity({
             let ent = getEntity(uuid);
             ent.value = e.target.value;
             if (img.current) {
-              let prev = img.current.style.height;
-              img.current.style.height = "1px";
-              ent.size.y = Math.min(img.current.scrollHeight, 5000);
-              img.current.style.height = prev;
+              let prev;
 
               prev = img.current.style.width;
               img.current.style.width = "1px";
-              ent.size.x = Math.min(img.current.scrollWidth + 16, 1000);
-              img.current.style.width = prev;
+              img.current.style.whiteSpace = "pre";
+              ent.size.x = Math.min(img.current.scrollWidth + 40, 2000);
+              img.current.style.width = ent.size.x + "px";
+
+              img.current.style.whiteSpace = "normal";
+              prev = img.current.scrollHeight;
+              img.current.style.height = "1px";
+              ent.size.y = Math.min(img.current.scrollHeight, 5000);
+              img.current.style.height = prev + "px";
+              // img.current.style.whiteSpace = "pre";
+
+              let maxDim = Math.max(ent.size.x, ent.size.y);
+              let maxScale = 1000 / maxDim;
+              let minScale = 0.2;
+              ent.scale = clamp(ent.scale, minScale, maxScale);
             }
             writeEntity(uuid, ent);
           }}
@@ -413,6 +423,7 @@ export default function Entity({
             display: "flex",
             zIndex: 500 + (beenSelected ? 500 : 0),
             filter: shadowFilter,
+            // whiteSpace: beenSelected ? "pre" : "normal",
           }}
           onMouseDown={imageMouseDown}
           onTouchStart={imageMouseDown}

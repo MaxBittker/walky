@@ -55,7 +55,7 @@
 
   left: 0;
   top: 0;
-  transform: translate(-50% ,-50%);
+  transform: translate(-50%, -50%);
 
   width: 25px !important;
   height: 25px !important;
@@ -70,7 +70,7 @@
 .x {
   right: 0;
   top: 0;
-  transform: translate(50% ,-50%);
+  transform: translate(50%, -50%);
   position: absolute;
   filter: drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.5))
     drop-shadow(-1px -1px 1px rgba(255, 255, 255, 0.5))
@@ -117,28 +117,27 @@
   cursor: grabbing;
 }
 
-textarea{
+textarea {
   font-size: 2rem;
-  padding: .5rem;
+  padding: 0.5rem;
   border: none;
   white-space: pre;
-  overflow: hidden ;
-  background: transparent;;
-
+  overflow: hidden;
+  background: transparent;
 }
-textarea:focus{
+textarea:focus {
   /* outline: 0; */
   /* border: .1px solid rgb(00, 0, 255,.4) */
- }
+}
 textarea::-webkit-resizer {
   display: none;
-
-  
 }
-.locked{
-  pointer-events: none;;
+.locked {
+  pointer-events: none;
 }
 
-textarea, h1{
-  text-shadow: -1px -1px 0 rgb(245,245,245), 1px -1px 0 rgb(245,245,245), -1px 1px 0 rgb(245,245,245), 1px 1px 0 rgb(245,245,245);
+textarea,
+h1 {
+  text-shadow: -1px -1px 0 rgb(245, 245, 245), 1px -1px 0 rgb(245, 245, 245),
+    -1px 1px 0 rgb(245, 245, 245), 1px 1px 0 rgb(245, 245, 245);
 }
