@@ -91,6 +91,15 @@ function startInput() {
   let right = false;
   let down = false;
   let keypoll: number;
+  window.addEventListener("wheel", (event) => {
+    let velocity = { x: event.deltaX, y: event.deltaY };
+    let state = getState();
+    let keyTarget = Vector.add(
+      state.me.pos,
+      Vector.multiplyScalar(velocity,.5 )
+    );
+    state.me.target = keyTarget;
+  });
   window.addEventListener("keydown", (event) => {
     let { key, keyCode, target } = event;
     if (event?.target?.tagName === "TEXTAREA") {
